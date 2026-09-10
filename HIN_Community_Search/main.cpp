@@ -1,351 +1,354 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <map>
-#include <set>
-#include <algorithm>
-#include <chrono>
-#include <iomanip>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-
-using namespace std;
-
-// =========================================================
-// HELPERS
-// =========================================================
-
+#include <iostream> 
+#include <fstream> 
+#include <sstream> 
+#include <string> 
+#include <vector> 
+#include <map> 
+#include <set> 
+#include <algorithm> 
+#include <chrono> 
+#include <iomanip> 
+#include <unordered_set> 
+#include <unordered_map> 
+#include <queue> 
+ 
+using namespace std; 
+ 
+// ========================================================= 
+// HELPERS 
+// ========================================================= 
+ 
+// Removes leading and trailing space from text.Trims leading and trailing space off of text. 
 string trim(const string& text)
-{
-    size_t start = text.find_first_not_of(" \t\r\n");
-
-    if (start == string::npos)
-        return "";
-
-    size_t end = text.find_last_not_of(" \t\r\n");
-
-    return text.substr(start, end - start + 1);
-}
-
+{ 
+    size_t start = text.find_first_not_of(" \t\r\n"); 
+ 
+    if (start == string::npos) 
+        return ""; 
+ 
+    size_t end = text.find_last_not_of(" \t\r\n"); 
+ 
+    return text.substr(start, end-start + 1); 
+} 
+ 
+// Splits a string into a vector of strings, using commas as the separator.This splits a string into a vector of strings, separating on commas. 
 vector<string> splitCSVLine(const string& line)
-{
-    vector<string> values;
-    string value;
-    stringstream ss(line);
-
-    while (getline(ss, value, ','))
-    {
-        values.push_back(trim(value));
-    }
-
-    return values;
-}
-
-double bytesToMB(long long bytes)
-{
-    return static_cast<double>(bytes) /
-           (1024.0 * 1024.0);
-}
-
-
-// =========================================================
-// DATA STRUCTURES
-// =========================================================
-
-struct RelationSchema
-{
-    string sourceType;
-    string relationType;
-    string targetType;
-};
-
-struct GlobalEdge
-{
-    int source;
-    int target;
-    int relationTypeID;
-};
-
-struct TypeRange
-{
-    int relationTypeID;
-    long long start;
-    long long end;
-};
-
-struct MetaPathStep
-{
-    int relationTypeID;
-
-    // true  = forward CSR
-    // false = reverse CSR
-    bool forward;
-};
-
-
-// =========================================================
-// LOCAL -> GLOBAL NODE ID
-// =========================================================
-
-long long getGlobalNodeID(
-    const string& nodeType,
-    long long localID,
+{ 
+    vector<string> values; 
+    string value; 
+    stringstream ss(line); 
+ 
+    while (getline(ss, value, ',')) 
+    { 
+        values.push_back(trim(value)); 
+    } 
+ 
+    return values; 
+} 
+ 
+double bytesToMB(long long bytes) 
+{ 
+    return static_cast<double>(bytes) / 
+           (1024.0 * 1024.0); 
+} 
+ 
+ 
+// ========================================================= 
+// DATA STRUCTURES 
+// ========================================================= 
+ 
+struct RelationSchema 
+{ 
+    string sourceType; 
+    string relationType; 
+    string targetType; 
+}; 
+ 
+struct GlobalEdge 
+{ 
+    int source; 
+    int target; 
+    int relationTypeID; 
+}; 
+ 
+struct TypeRange 
+{ 
+    int relationTypeID; 
+    long long start; 
+    long long end; 
+}; 
+ 
+struct MetaPathStep 
+{ 
+    int relationTypeID; 
+ 
+    // true  = forward CSR 
+    // false = reverse CSR 
+    bool forward; 
+}; 
+ 
+ 
+// ========================================================= 
+// A node ID from a specific node in a network to a global node ID. 
+// ========================================================= 
+ 
+long long getGlobalNodeID( 
+    const string& nodeType, 
+    long long localID, 
     const map<string, long long>& nodeTypeOffsets)
-{
-    auto it = nodeTypeOffsets.find(nodeType);
-
-    if (it == nodeTypeOffsets.end())
-        return -1;
-
-    return it->second + localID;
-}
-
-
-// =========================================================
-// META-PATH TRAVERSAL
-// =========================================================
-
-vector<int> followMetaPath(
-    int startNode,
-    const vector<MetaPathStep>& path,
+{ 
+    auto it = nodeTypeOffsets.find(nodeType); 
+ 
+    if (it == nodeTypeOffsets.end()) 
+        return -1; 
+ 
+    return it->second + localID; 
+} 
+ 
+ 
+// ========================================================= 
+// META-PATH TRAVERSAL 
+// ========================================================= 
+ 
+vector<int> followMetaPath( 
+    int startNode, 
+    const vector<MetaPathStep>& path, 
     const vector<long long>& rowPointers,
-    const vector<int>& columnIndices,
-    const vector<int>& relationTypeIDs,
+    const vector<int>& columnIndices, 
+    const vector<int>& relationTypeIDs, 
     const vector<long long>& reverseRowPointers,
-    const vector<int>& reverseColumnIndices,
-    const vector<int>& reverseRelationTypeIDs)
-{
-    vector<int> currentNodes;
-    currentNodes.push_back(startNode);
-
-    for (const MetaPathStep& step : path)
-    {
-        unordered_set<int> nextSet;
-
-        for (int node : currentNodes)
-        {
-            if (step.forward)
-            {
-                long long start =
-                    rowPointers[node];
-
-                long long end =
-                    rowPointers[node + 1];
-
-                for (long long i = start;
-                     i < end;
-                     i++)
-                {
-                    if (relationTypeIDs[i] ==
-                        step.relationTypeID)
-                    {
-                        nextSet.insert(
-                            columnIndices[i]);
-                    }
-                }
-            }
-            else
-            {
-                long long start =
-                    reverseRowPointers[node];
-
-                long long end =
-                    reverseRowPointers[node + 1];
-
-                for (long long i = start;
-                     i < end;
-                     i++)
-                {
-                    if (reverseRelationTypeIDs[i] ==
-                        step.relationTypeID)
-                    {
-                        nextSet.insert(
-                            reverseColumnIndices[i]);
-                    }
-                }
-            }
-        }
-
-        currentNodes.assign(
-            nextSet.begin(),
-            nextSet.end());
-
-        if (currentNodes.empty())
-            break;
-    }
-
-    // Remove start node if meta-path returns to same type
-    currentNodes.erase(
-        remove(
-            currentNodes.begin(),
-            currentNodes.end(),
-            startNode),
-        currentNodes.end());
-
-    sort(
-        currentNodes.begin(),
-        currentNodes.end());
-
-    return currentNodes;
-}
-
-
-
-// =========================================================
-// BUILD QUERY-CENTRED META-PATH DERIVED GRAPH
-// =========================================================
-
-void buildDerivedGraph(
-    int queryNode,
-    const vector<int>& queryNeighbours,
-    const vector<MetaPathStep>& metaPath,
+    const vector<int>& reverseColumnIndices, 
+    const vector<int>& reverseRelationTypeIDs) 
+{ 
+    vector<int> currentNodes; 
+    currentNodes.push_back(startNode); 
+ 
+    for (const auto step: path) 
+    { 
+        unordered_set<int> nextSet; 
+ 
+        for (int node : currentNodes) 
+        { 
+            if (step.forward) 
+            { 
+                long long start = 
+                    rowPointers[node]; 
+ 
+                long long end = 
+                    rowPointers[node + 1]; 
+ 
+                for (long long i = start; 
+                     i < end; 
+                     i++) 
+                { 
+                    if (relationTypeIDs[i] == 
+                        step.relationTypeID) 
+                    { 
+                        nextSet.insert( 
+                            columnIndices[i]); 
+                    } 
+                } 
+            } 
+            else 
+            { 
+                long long start = 
+                    reverseRowPointers[node]; 
+ 
+                long long end = 
+                    reverseRowPointers[node + 1]; 
+ 
+                for (long long i = start; 
+                     i < end; 
+                     i++) 
+                { 
+                    if (reverseRelationTypeIDs[i] == 
+                        step.relationTypeID) 
+                    { 
+                        nextSet.insert( 
+                            reverseColumnIndices[i]); 
+                    } 
+                } 
+            } 
+        } 
+ 
+        currentNodes.assign( 
+            nextSet.begin(), 
+            nextSet.end()); 
+ 
+        if (currentNodes.empty()) 
+            break; 
+    } 
+ 
+    // if the metapath is the same type as the start node, remove the start node from the graph. 
+    currentNodes.erase( 
+        remove( 
+            currentNodes.begin(), 
+            currentNodes.end(), 
+            startNode), 
+        currentNodes.end()); 
+ 
+    sort( 
+        currentNodes.begin(), 
+        currentNodes.end()); 
+ 
+    return currentNodes; 
+} 
+ 
+ 
+ 
+// ========================================================= 
+// We build query-centred meta-path derived graph.We construct query-centred Meta-path derived graph. 
+// ========================================================= 
+ 
+void buildDerivedGraph( 
+    int queryNode, 
+    const vector<int>& queryNeighbours, 
+    const vector<MetaPathStep>& metaPath, 
     const vector<long long>& rowPointers,
-    const vector<int>& columnIndices,
-    const vector<int>& relationTypeIDs,
+    const vector<int>& columnIndices, 
+    const vector<int>& relationTypeIDs, 
     const vector<long long>& reverseRowPointers,
-    const vector<int>& reverseColumnIndices,
-    const vector<int>& reverseRelationTypeIDs,
-    vector<int>& derivedNodes,
-    vector<vector<int>>& derivedAdjacency,
-    unordered_map<int, int>& globalToDerived)
-{
-    derivedNodes.clear();
-    derivedNodes.push_back(queryNode);
-
-    for (int neighbour : queryNeighbours)
-    {
-        if (neighbour != queryNode)
-            derivedNodes.push_back(neighbour);
-    }
-
-    sort(derivedNodes.begin(), derivedNodes.end());
-    derivedNodes.erase(unique(derivedNodes.begin(), derivedNodes.end()), derivedNodes.end());
-
-    globalToDerived.clear();
-    for (size_t i = 0; i < derivedNodes.size(); i++)
-        globalToDerived[derivedNodes[i]] = static_cast<int>(i);
-
-    vector<unordered_set<int>> adjacencySets(derivedNodes.size());
-
-    for (size_t i = 0; i < derivedNodes.size(); i++)
-    {
-        int globalNode = derivedNodes[i];
-
-        vector<int> neighbours = followMetaPath(
-            globalNode,
-            metaPath,
-            rowPointers,
-            columnIndices,
-            relationTypeIDs,
-            reverseRowPointers,
-            reverseColumnIndices,
-            reverseRelationTypeIDs);
-
+    const vector<int>& reverseColumnIndices, 
+    const vector<int>& reverseRelationTypeIDs, 
+    vector<int>& derivedNodes, 
+    vector<vector<int>>& derivedAdjacency, 
+    unordered_map<int, int>& globalToDerived) 
+{ 
+    derivedNodes.clear(); 
+    derivedNodes.push_back(queryNode); 
+ 
+    for (int neighbour: queryNeighbours) 
+    { 
+        if (neighbour != queryNode) 
+            derivedNodes.push_back(neighbour); 
+    } 
+ 
+    sort(derivedNodes.begin(), derivedNodes.end()); 
+    derivedNodes.erase(unique(derivedNodes.begin(), derivedNodes.end()), derivedNodes.end()); 
+ 
+    globalToDerived.clear(); 
+    for (size_t i = 0; i < derivedNodes.size(); i++) 
+        globalToDerived[derivedNodes[i]] = static_cast<int>(i); 
+ 
+    vector<unordered_set<int>> adjacencySets(derivedNodes.size()); 
+ 
+    for (size_t i = 0; i < derivedNodes.size(); i++) 
+    { 
+        int globalNode = derivedNodes[i]; 
+ 
+        vector<int> neighbours = followMetaPath( 
+            globalNode, 
+            metaPath, 
+            rowPointers, 
+            columnIndices, 
+            relationTypeIDs, 
+            reverseRowPointers, 
+            reverseColumnIndices, 
+            reverseRelationTypeIDs); 
+ 
+        // Each neighbour in neighbours do the following: 
         for (int globalNeighbour : neighbours)
-        {
-            auto it = globalToDerived.find(globalNeighbour);
-            if (it == globalToDerived.end())
-                continue;
-
-            int neighbourIndex = it->second;
-            if (neighbourIndex == static_cast<int>(i))
-                continue;
-
-            // APA is symmetric, so the derived graph is treated as undirected.
-            adjacencySets[i].insert(neighbourIndex);
-            adjacencySets[neighbourIndex].insert(static_cast<int>(i));
-        }
-    }
-
-    derivedAdjacency.assign(derivedNodes.size(), {});
-    for (size_t i = 0; i < adjacencySets.size(); i++)
-    {
-        derivedAdjacency[i].assign(adjacencySets[i].begin(), adjacencySets[i].end());
-        sort(derivedAdjacency[i].begin(), derivedAdjacency[i].end());
-    }
-}
-
-
-// =========================================================
-// ITERATIVE K-CORE PEELING
-// =========================================================
-
-vector<bool> performKCorePeeling(
-    const vector<vector<int>>& adjacency,
-    int k,
-    vector<int>& finalDegrees,
-    int& removedCount)
-{
-    int n = static_cast<int>(adjacency.size());
-
-    vector<int> degree(n, 0);
-    vector<bool> removed(n, false);
-    vector<bool> inQueue(n, false);
-    queue<int> Q;
-
-    for (int i = 0; i < n; i++)
-    {
-        degree[i] = static_cast<int>(adjacency[i].size());
-
-        if (degree[i] < k)
-        {
-            Q.push(i);
-            inQueue[i] = true;
-        }
-    }
-
-    removedCount = 0;
-
-    while (!Q.empty())
-    {
-        int u = Q.front();
-        Q.pop();
-        inQueue[u] = false;
-
-        if (removed[u])
-            continue;
-
-        removed[u] = true;
-        removedCount++;
-
+        { 
+            auto it = globalToDerived.find(globalNeighbour); 
+            if (it == globalToDerived.end()) 
+                continue; 
+ 
+            int neighbourIndex = it->second; 
+            if (neighbourIndex == static_cast<int>(i)) 
+                continue; 
+ 
+            // The derived graph is assumed to be undirected if the graph is symmetric, as in the case of a graph from APA. 
+            adjacencySets[i].insert(neighbourIndex); 
+            adjacencySets[neighbourIndex].insert(static_cast<int>(i)); 
+        } 
+    } 
+ 
+    derivedAdjacency.assign(derivedNodes.size(), {}); 
+    for (size_t i = 0; i < adjacencySets.size(); i++) 
+    { 
+        derivedAdjacency[i].assign(adjacencySets[i].begin(), adjacencySets[i].end()); 
+        sort(derivedAdjacency[i].begin(), derivedAdjacency[i].end()); 
+    } 
+} 
+ 
+ 
+// ========================================================= 
+// ITERATIVE K-CORE PEELING 
+// ========================================================= 
+ 
+vector<bool> performKCorePeeling( 
+    const vector<vector<int>>& adjacency, 
+    int k, 
+    vector<int>& finalDegrees, 
+    int& removedCount) 
+{ 
+    int n = static_cast<int>(adjacency.size()); 
+ 
+    vector<int> degree(n, 0); 
+    vector<bool> removed(n, false); 
+    vector<bool> inQueue(n, false); 
+    queue<int> Q; 
+ 
+    for (int i = 0; i < n; i++) 
+    { 
+        degree[i] = static_cast<int>(adjacency[i].size()); 
+ 
+        if (degree[i] < k) 
+        { 
+            Q.push(i); 
+            inQueue[i] = true; 
+        } 
+    } 
+ 
+    removedCount = 0; 
+ 
+    while (!Q.empty()) 
+    { 
+        int u = Q.front(); 
+        Q.pop(); 
+        inQueue[u] = false; 
+ 
+        if (removed[u]) 
+            continue; 
+ 
+        removed[u] = true; 
+        removedCount++; 
+ 
+        // for all vertices, v, adjacent to u 
         for (int v : adjacency[u])
-        {
-            if (removed[v])
-                continue;
-
-            degree[v]--;
-
-            if (degree[v] < k && !inQueue[v])
-            {
-                Q.push(v);
-                inQueue[v] = true;
-            }
-        }
-    }
-
-    // Recalculate final active degrees so displayed degrees are exact.
-    finalDegrees.assign(n, 0);
-    for (int u = 0; u < n; u++)
-    {
-        if (removed[u])
-            continue;
-
-        for (int v : adjacency[u])
-        {
-            if (!removed[v])
-                finalDegrees[u]++;
-        }
-    }
-
-    return removed;
+        { 
+            if (removed[v]) 
+                continue; 
+ 
+            degree[v]--; 
+ 
+            if (degree[v] < k && !inQueue[v]) 
+            { 
+                Q.push(v); 
+                inQueue[v] = true; 
+            } 
+        } 
+    } 
+ 
+    // If displayed degrees are not equal to final active degrees, then recalculate the final active degrees. 
+    finalDegrees.assign(n, 0); 
+    for (int u = 0; u < n; u++) 
+    { 
+        if (removed[u]) 
+            continue; 
+ 
+        // Loop over all of u's neighbors.
+        for (int v : adjacency[u]) 
+        { 
+            if (!removed[v]) 
+                finalDegrees[u]++; 
+        } 
+    } 
+ 
+    return removed; 
 }
-
-
 // =========================================================
-// EXTRACT QUERY'S CONNECTED K-CORE COMMUNITY
+// Locating the k-core community for a query.
 // =========================================================
 
 vector<int> extractQueryCommunity(
@@ -355,6 +358,7 @@ vector<int> extractQueryCommunity(
 {
     vector<int> community;
 
+    // This question is likely the most frequent asked in a project.Perhaps you cannot separate the question of "why" from the question of "how".
     if (queryIndex < 0 || queryIndex >= static_cast<int>(adjacency.size()))
         return community;
 
@@ -374,6 +378,7 @@ vector<int> extractQueryCommunity(
 
         community.push_back(u);
 
+        // Each element of 'v' in the for loop: = v0, v1, ..., vN (as N ne in his domain)
         for (int v : adjacency[u])
         {
             if (removed[v])
@@ -395,14 +400,14 @@ vector<int> extractQueryCommunity(
 // MAIN
 // =========================================================
 
-int main(int argc, char* argv[])
+int main( int argc, char* argv[] )
 {
     auto programStart =
         chrono::high_resolution_clock::now();
 
     cout << "========================================\n";
-    cout << " HIN COMMUNITY SEARCH SYSTEM\n";
-    cout << " Modified CSR + Meta-Path Engine\n";
+    cout <<" HIN COMMUNITY SEARCH SYSTEM\n ";
+    printf(" Modified CSR + Meta-Path Engine\n");
     cout << "========================================\n\n";
 
 
@@ -420,7 +425,8 @@ int main(int argc, char* argv[])
 
     if (!nodeFile.is_open())
     {
-        cout << "ERROR: Could not open "
+        // std::cerr is used to show errors.cerr is used to display errors.
+        cerr << "ERROR: Could not open "
              << nodeFilePath
              << endl;
 
@@ -431,6 +437,7 @@ int main(int argc, char* argv[])
 
     if (!getline(nodeFile, line))
     {
+        // Using cout instead of cerr: cout << "ERROR: Node type row missing. \n";
         cout << "ERROR: Node type row missing.\n";
         return 1;
     }
@@ -440,7 +447,7 @@ int main(int argc, char* argv[])
 
     if (!getline(nodeFile, line))
     {
-        cout << "ERROR: Node count row missing.\n";
+        cout << "ERROR: Node count row is missing.\n";
         return 1;
     }
 
@@ -452,11 +459,11 @@ int main(int argc, char* argv[])
     if (nodeTypeNames.size() !=
         nodeCounts.size())
     {
-        cout << "ERROR: Node type/count mismatch.\n";
+        cout << "ERROR: Non-matching type and count of the nodes .\n";
         return 1;
     }
 
-    map<string, long long> nodeTypeCounts;
+    map< string, long long > nodeTypeCounts;
 
     for (size_t i = 0;
          i < nodeTypeNames.size();
@@ -468,8 +475,8 @@ int main(int argc, char* argv[])
 
     long long totalNodes = 0;
 
-    for (const auto& entry :
-         nodeTypeCounts)
+    // For each of the entries in: nodeTypeCounts
+    for (const auto& entry : nodeTypeCounts)
     {
         cout << entry.first
              << " -> "
@@ -500,7 +507,8 @@ int main(int argc, char* argv[])
 
     if (!tripletFile.is_open())
     {
-        cout << "ERROR: Could not open "
+        // std::cerr is used to show errors.cerr is used to display errors.
+        cerr << "ERROR: Could not open "
              << tripletFilePath
              << endl;
 
@@ -547,8 +555,8 @@ int main(int argc, char* argv[])
 
     int nextRelationID = 0;
 
-    for (const string& relationName :
-         relationNames)
+    // for all the relation names in relationNames
+    for (const string& relationName : relationNames)
     {
         relationTypeToID[
             relationName] =
@@ -569,8 +577,8 @@ int main(int argc, char* argv[])
 
     cout << "\nDetected Triplets:\n";
 
-    for (const RelationSchema& r :
-         relations)
+    // For each RelationSchema r in relations
+    for (const RelationSchema& r : relations)
     {
         cout << r.sourceType
              << " --["
@@ -580,19 +588,19 @@ int main(int argc, char* argv[])
              << endl;
     }
 
-
     // =====================================================
-    // STAGE 3 - GLOBAL NODE IDS
+    // To incorporate an ability to globally determine the node Ids.To be able to identify nodeIDs around the world.
     // =====================================================
 
-    cout << "\n\nSTAGE 3 - GLOBAL NODE ID SPACE\n";
+    cout << "    STAGE 3 - GLOBAL NODE ID SPACE\n";
     cout << "----------------------------------------\n";
 
+    // Array that contains offset of every node type.A map of offsets of each node type.
     map<string, long long> nodeTypeOffsets;
 
     long long offset = 0;
 
-    for (const auto& entry :
+    for (auto& entry :
          nodeTypeCounts)
     {
         nodeTypeOffsets[
@@ -613,16 +621,16 @@ int main(int argc, char* argv[])
 
     if (offset != totalNodes)
     {
-        cout << "ERROR: Global ID mismatch.\n";
+        printf("ERROR: GlobalID mismatch.\n");
         return 1;
     }
 
 
     // =====================================================
-    // STAGE 4 - LOAD GLOBAL EDGES
+    // Apply a global edge to stage.Place a "globs" edge on the stage.
     // =====================================================
 
-    cout << "\n\nSTAGE 4 - LOAD GLOBAL EDGES\n";
+    cout<< "\n\nSTAGE 4 - LOAD GLOBAL EDGES";
     cout << "========================================\n";
 
     vector<GlobalEdge> edges;
@@ -634,7 +642,8 @@ int main(int argc, char* argv[])
     auto loadStart =
         chrono::high_resolution_clock::now();
 
-    for (const RelationSchema& relation :
+    // LIFE2: Loop over each of the relations:
+    for (auto& relation :
          relations)
     {
         string folderName =
@@ -662,7 +671,7 @@ int main(int argc, char* argv[])
 
         if (!edgeFile.is_open())
         {
-            cout << "ERROR: Cannot open "
+            cout << "ERROR: Doing the following things puts you: "
                  << edgeFilePath
                  << endl;
 
@@ -771,7 +780,7 @@ int main(int argc, char* argv[])
         chrono::duration<double>(
             loadEnd - loadStart).count();
 
-    cout << "\nTotal Loaded Edges: "
+    cout << "Total loaded Edges: \n: "
          << edges.size()
          << endl;
 
@@ -826,10 +835,10 @@ int main(int argc, char* argv[])
 
 
     // =====================================================
-    // STAGE 6 - FORWARD MODIFIED CSR
+    // Rewrite the formula as a forward formula, and obtain t in terms of r.
     // =====================================================
 
-    cout << "\n\nSTAGE 6 - BUILD FORWARD MODIFIED CSR\n";
+    cout << "STAGE 6 - BUILD FORWARD MODIFIED CSR \n\n";
     cout << "========================================\n";
 
     auto csrStart =
@@ -839,7 +848,7 @@ int main(int argc, char* argv[])
         totalNodes + 1,
         0);
 
-    for (const GlobalEdge& edge :
+    for (GlobalEdge& edge :
          edges)
     {
         rowPointers[
@@ -864,7 +873,7 @@ int main(int argc, char* argv[])
     relationTypeIDs.reserve(
         edges.size());
 
-    for (const GlobalEdge& edge :
+    for (GlobalEdge& edge :
          edges)
     {
         columnIndices.push_back(
@@ -932,7 +941,6 @@ int main(int argc, char* argv[])
     cout << "Forward CSR Complete: "
          << csrSeconds
          << " sec\n";
-
 
     // =====================================================
     // STAGE 7 - FORWARD VALIDATION
@@ -1465,17 +1473,17 @@ int main(int argc, char* argv[])
          << kCoreSeconds << " sec\n";
 
 
-    // =====================================================
-    // STAGE 16 - FINAL QUERY COMMUNITY + VALIDATION
+     // =====================================================
+    // At STAGE 16, the final query community + validation will be in a sample of the community.
     // =====================================================
 
-    cout << "\n\nSTAGE 16 - FINAL QUERY COMMUNITY\n";
+    cout << "\n\nStage 16 – FINAL QUERY COMMUNITY\n";
     cout << "========================================\n";
 
     auto queryIndexIt = globalToDerived.find(queryNode);
     if (queryIndexIt == globalToDerived.end())
     {
-        cout << "[ERROR] Query node missing from derived graph.\n";
+        cout<< "There is no query node in the derived graph. \n";
         return 1;
     }
 
@@ -1484,13 +1492,13 @@ int main(int argc, char* argv[])
 
     if (communityIndices.empty())
     {
-        cout << "Query node does NOT survive " << k << "-core peeling.\n";
+        cout << "Query node did NOT live after being peeled by k cores.\n";
         cout << "Final query-centred community is empty.\n";
     }
     else
     {
         cout << "[VALID] Query survives " << k << "-core peeling.\n";
-        cout << "Final Community Size: " << communityIndices.size() << endl;
+        std::cout << "Final Community Size: " << communityIndices.size() << std::endl;
         cout << "\nCommunity Members:\n";
 
         for (size_t x = 0; x < communityIndices.size() && x < 30; x++)
@@ -1498,7 +1506,7 @@ int main(int argc, char* argv[])
             int idx = communityIndices[x];
             int globalID = derivedNodes[idx];
             cout << "  " << startType << " Global ID: " << globalID
-                 << " | Local ID: " << globalID - startTypeOffset
+                 << " Unique ID: " << globalID - startTypeOffset
                  << " | Final Degree: " << finalDegrees[idx];
             if (globalID == queryNode) cout << "  <-- QUERY";
             cout << endl;
@@ -1521,38 +1529,39 @@ int main(int argc, char* argv[])
 
     if (!kCoreValid)
     {
-        cout << "[ERROR] K-core validation failed.\n";
+        cout << "[ERROR] K-core validation failed. \n";
         return 1;
     }
 
     if (survivingNodes == 0)
         cout << "[VALID] No nodes survive k=" << k
-             << "; peeling correctly removed the complete candidate graph.\n";
+             << "; Please see that the candidate graph (in its entirety) was removed in an acceptable way.\n";
     else
         cout << "[VALID] Every surviving node satisfies degree >= " << k << ".\n";
-    cout << "[VALID] Iterative k-core peeling is consistent.\n";
+    cout << "[VALID] Iterative k-core peeling is consistent." << endl;
 
 
     // =====================================================
-    // STAGE 17 - ADDITIONAL META-PATH TEST
+    // In this stage, you will learn about other meta-path tests.During this phase you will learn about other types of meta-path testing.
     // =====================================================
 
-    cout << "\n\nSTAGE 17 - ADDITIONAL META-PATH TEST\n";
+    cout << "\n\nSTAGE 17 – ADDITIONAL META-PATH TEST\n";
     cout << "========================================\n";
 
     string additionalSpec;
     string additionalName;
 
-    // For MAG author queries, AIA provides a second semantic relationship:
+    // Illinois is aware that there are author queries, which is why they include a second relationship for MAG.
     // Author -> Institution -> Author.
-    if (startType == "author" && relationTypeToID.count("affiliated_with"))
+    if (startType == "author" &&
+        relationTypeToID.find("affiliated_with") != relationTypeToID.end())
     {
         additionalSpec = "affiliated_with:F,affiliated_with:R";
         additionalName = "AIA";
     }
     else
     {
-        // Generic fallback: re-use selected runtime path as an engine consistency test.
+        // Use the selected paths for Engine consistency test – generic fallback.
         additionalSpec = pathSpec;
         additionalName = "Runtime Path Re-test";
     }
@@ -1572,8 +1581,8 @@ int main(int argc, char* argv[])
     {
         auto additionalStart = chrono::high_resolution_clock::now();
 
-        // First try the selected query. If it has no neighbours for the second
-        // semantic path, search a bounded prefix for a demonstrable query.
+        // Try the specified query, first. If no neighbour is found for a sector for the second time, put X in the box.If there is no neighbour for a sector for the second time, then mark X in the box.
+        // We need a query which can be shown in a bounded prefix with the help of // semantic path.We need a query that can be proven in a bounded prefix on the basis of // semantic path.
         additionalQuery = queryNode;
         additionalNeighbours = followMetaPath(
             additionalQuery, additionalPath,
@@ -1583,13 +1592,19 @@ int main(int argc, char* argv[])
         if (additionalNeighbours.empty())
         {
             long long searchLimit = min<long long>(startTypeCount, 1000);
+
+            // In case startTypeCount is more than 1000, use min<long long>(startTypeCount, 1000) to set searchLimit.
+            // While searchLimit is not reached, we go through the localIDs starting with 0.
             for (long long localID = 0; localID < searchLimit; localID++)
             {
+                // [JAWS] The startTypeOffset number is a number of seconds.The startTypeOffset number is a number of seconds.
                 int candidate = static_cast<int>(startTypeOffset + localID);
+
                 vector<int> result = followMetaPath(
                     candidate, additionalPath,
                     rowPointers, columnIndices, relationTypeIDs,
                     reverseRowPointers, reverseColumnIndices, reverseRelationTypeIDs);
+
                 if (!result.empty())
                 {
                     additionalQuery = candidate;
@@ -1605,19 +1620,21 @@ int main(int argc, char* argv[])
 
         cout << "Additional Path: " << additionalName << endl;
         cout << "  " << additionalReadable << endl;
-        cout << "Query Local ID: " << additionalQuery - startTypeOffset << endl;
-        cout << "Neighbours Found: " << additionalNeighbours.size() << endl;
-        cout << "Query Time: " << fixed << setprecision(6)
+        cout << "additionalQuery - startTypeOffset = " << additionalQuery - startTypeOffset << endl;
+        // Note: a cout is used to print the number of additionalNeighbours.
+        cout << "Additional Neighbours: " << additionalNeighbours.size() << endl;
+        cout << "Query Time: "
+             << fixed << setprecision(6)
              << additionalSeconds << " sec\n";
 
         if (!additionalNeighbours.empty())
-            cout << "[VALID] Additional meta-path traversal returned semantic neighbours.\n";
+            cout << "[VALID] Retrieved Semantic Neighbours via Additional Meta-path Traversal.\n";
         else
-            cout << "[WARNING] Additional path is schema-valid but bounded test found no neighbours.\n";
+            cout << "[WARNING] schema-valid but bounded test did not find any neighbours in the additional path.\n";
     }
     else
     {
-        cout << "[WARNING] No suitable additional same-type meta-path available.\n";
+        cout << "[WARNING] No other appropriate consistent meta-path found. \n" << endl;
     }
 
 
