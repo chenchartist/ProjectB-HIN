@@ -1108,10 +1108,30 @@ int main( int argc, char* argv[] )
     // The algorithm does not contain Author/Paper-specific traversal logic.
     // Relation names and directions are resolved against the discovered schema.
 
+    //----------------------------------------------------
+    //string startType = (argc > 1) ? argv[1] : "author";
+    //string queryArg = (argc > 2) ? argv[2] : "auto";
+    //int k = (argc > 3) ? stoi(argv[3]) : 5;
+    //string pathSpec = (argc > 4) ? argv[4] : "writes:F,writes:R";
+
+    //if (nodeTypeCounts.find(startType) == nodeTypeCounts.end())
+    //{
+    //    cout << "ERROR: Unknown start node type: " << startType << endl;
+    //    return 1;
+    //}
+
+    //if (k < 1)
+    //{
+    //    cout << "ERROR: k must be >= 1.\n";
+    //    return 1;
+    //}
+    //------------------------------------------------------
+
     string startType = (argc > 1) ? argv[1] : "author";
     string queryArg = (argc > 2) ? argv[2] : "auto";
     int k = (argc > 3) ? stoi(argv[3]) : 5;
     string pathSpec = (argc > 4) ? argv[4] : "writes:F,writes:R";
+    int p = (argc > 5) ? stoi(argv[5]) : 1;
 
     if (nodeTypeCounts.find(startType) == nodeTypeCounts.end())
     {
@@ -1124,6 +1144,13 @@ int main( int argc, char* argv[] )
         cout << "ERROR: k must be >= 1.\n";
         return 1;
     }
+
+    if (p < 1)
+    {
+        cout << "ERROR: p must be >= 1.\n";
+        return 1;
+    }
+
 
     auto parsePath = [&](const string& spec,
                          const string& initialType,
@@ -1490,6 +1517,31 @@ int main( int argc, char* argv[] )
     vector<int> communityIndices = extractQueryCommunity(
         queryIndexIt->second, derivedAdjacency, removed);
 
+    //-------------------------------------
+    //if (communityIndices.empty())
+    //{
+    //    cout << "Query node did NOT live after being peeled by k cores.\n";
+    //    cout << "Final query-centred community is empty.\n";
+    //}
+    //else
+    //{
+    //   cout << "[VALID] Query survives " << k << "-core peeling.\n";
+    //   std::cout << "Final Community Size: " << communityIndices.size() << std::endl;
+    //   cout << "\nCommunity Members:\n";
+
+    //   for (size_t x = 0; x < communityIndices.size() && x < 30; x++)
+    //   {
+    //       int idx = communityIndices[x];
+    //       int globalID = derivedNodes[idx];
+    //       cout << "  " << startType << " Global ID: " << globalID
+    //            << " Unique ID: " << globalID - startTypeOffset
+    //            << " | Final Degree: " << finalDegrees[idx];
+    //       if (globalID == queryNode) cout << "  <-- QUERY";
+    //       cout << endl;
+    //   }
+    //}
+    //----------------------------------------
+
     if (communityIndices.empty())
     {
         cout << "Query node did NOT live after being peeled by k cores.\n";
@@ -1498,20 +1550,46 @@ int main( int argc, char* argv[] )
     else
     {
         cout << "[VALID] Query survives " << k << "-core peeling.\n";
-        std::cout << "Final Community Size: " << communityIndices.size() << std::endl;
-        cout << "\nCommunity Members:\n";
+        cout << "K-Core Community Size: " << communityIndices.size() << endl;
 
-        for (size_t x = 0; x < communityIndices.size() && x < 30; x++)
+        // ─────────────────────────────────────────────────
+        // KP-CORE SIZE CONSTRAINT CHECK
+        // ─────────────────────────────────────────────────
+        cout << "\nKP-CORE SIZE CONSTRAINT CHECK\n";
+        cout << "----------------------------------------\n";
+        cout << "Community Size: " << communityIndices.size() << endl;
+        cout << "Minimum Size p: " << p << endl;
+
+        if ((int)communityIndices.size() >= p)
         {
-            int idx = communityIndices[x];
-            int globalID = derivedNodes[idx];
-            cout << "  " << startType << " Global ID: " << globalID
-                 << " Unique ID: " << globalID - startTypeOffset
-                 << " | Final Degree: " << finalDegrees[idx];
-            if (globalID == queryNode) cout << "  <-- QUERY";
-            cout << endl;
+            cout << "[PASS] Community satisfies KP-Core constraint.\n";
+            cout << "       Size " << communityIndices.size()
+                << " >= p=" << p << "\n";
+            cout << "\nFinal KP-Core Community Members:\n";
+
+            for (size_t x = 0; x < communityIndices.size() && x < 30; x++)
+            {
+                int idx = communityIndices[x];
+                int globalID = derivedNodes[idx];
+                cout << "  " << startType
+                    << " Global ID: " << globalID
+                    << " | Local ID: " << globalID - startTypeOffset
+                    << " | Final Degree: " << finalDegrees[idx];
+                if (globalID == queryNode) cout << "  <-- QUERY";
+                cout << endl;
+            }
+        }
+        else
+        {
+            cout << "[FAIL] Community does NOT satisfy KP-Core constraint.\n";
+            cout << "       Size " << communityIndices.size()
+                << " < p=" << p << "\n";
+            cout << "Community rejected — too small to be meaningful.\n";
+
+            communityIndices.clear();
         }
     }
+
 
     bool kCoreValid = true;
     for (size_t i = 0; i < derivedAdjacency.size(); i++)
@@ -1715,9 +1793,26 @@ int main( int argc, char* argv[] )
     cout << ((!additionalNeighbours.empty()) ? "[PASS] " : "[INFO] ")
          << "Additional meta-path test\n";
 
+    //bool allCriticalTests = forwardCSRValid && reverseCSRValid &&
+    //                        edgeCountValid && runtimePathValid &&
+    //                        derivedGraphValid && kCoreValid;
+
+
+
+    // If community is empty due to k-core peeling,
+    // KP-Core constraint is not applicable — mark as true.
+    // KP-Core only filters communities that exist but are too small.
+    bool kpCoreValid = communityIndices.empty()
+        ? true
+        : (int)communityIndices.size() >= p;
+
+    cout << (kpCoreValid ? "[PASS] " : "[FAIL] ")
+         << "KP-Core size constraint (p=" << p << ")\n";
+
     bool allCriticalTests = forwardCSRValid && reverseCSRValid &&
                             edgeCountValid && runtimePathValid &&
-                            derivedGraphValid && kCoreValid;
+                            derivedGraphValid && kCoreValid &&
+                            kpCoreValid;
 
     if (!allCriticalTests)
     {
@@ -1748,6 +1843,7 @@ int main( int argc, char* argv[] )
     cout << "  Query Global ID: " << queryNode << endl;
     cout << "  Path Spec: " << pathSpec << endl;
     cout << "  k: " << k << endl;
+    cout << "  p: " << p << endl;
 
     cout << "\nDerived Graph:\n";
     cout << "  Nodes: " << derivedNodes.size() << endl;
@@ -1780,10 +1876,11 @@ int main( int argc, char* argv[] )
     cout << "[DONE] Final Validation / Demo Checklist\n";
 
     cout << "\nUSAGE EXAMPLES:\n";
-    cout << "  Default APA: ./main.exe\n";
-    cout << "  APA custom:  ./main.exe author 0 4 writes:F,writes:R\n";
-    cout << "  AIA custom:  ./main.exe author auto 3 affiliated_with:F,affiliated_with:R\n";
-
+    cout << "  Default APA:       ./main.exe\n";
+    cout << "  APA custom:        ./main.exe author 0 4 writes:F,writes:R\n";
+    cout << "  AIA custom:        ./main.exe author auto 3 affiliated_with:F,affiliated_with:R\n";
+    cout << "  KP-Core (p=5):     ./main.exe author auto 2 writes:F,writes:R 5\n";
+    cout << "  KP-Core (p=10):    ./main.exe author auto 2 writes:F,writes:R 10\n";
     cout << "========================================\n";
     return 0;
 }
