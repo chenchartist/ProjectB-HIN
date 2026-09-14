@@ -1,21 +1,21 @@
-#include <iostream> 
-#include <fstream> 
-#include <sstream> 
-#include <string> 
-#include <vector> 
-#include <map> 
-#include <set> 
-#include <algorithm> 
-#include <chrono> 
-#include <iomanip> 
-#include <unordered_set> 
-#include <unordered_map> 
-#include <queue> 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <chrono>
+#include <iomanip>
+#include <unordered_set>
+#include <unordered_map>
+#include <queue>
  
 using namespace std; 
  
 // ========================================================= 
-// HELPERS 
+// HELPERS Functions
 // ========================================================= 
  
 // Removes leading and trailing space from text.Trims leading and trailing space off of text. 
@@ -46,6 +46,7 @@ vector<string> splitCSVLine(const string& line)
     return values; 
 } 
  
+// Converts bytes to megabytes for memory reporting.
 double bytesToMB(long long bytes) 
 { 
     return static_cast<double>(bytes) / 
@@ -56,6 +57,8 @@ double bytesToMB(long long bytes)
 // ========================================================= 
 // DATA STRUCTURES 
 // ========================================================= 
+// Defines one valid relationship in the HIN schema.
+// Loaded from triplet-type-list.csv in Stage 2.
  
 struct RelationSchema 
 { 
@@ -64,6 +67,10 @@ struct RelationSchema
     string targetType; 
 }; 
  
+// Stores one edge with global integer node IDs.
+// Used during loading (Stage 4) and CSR construction (Stage 6).
+// Released from memory after the CSR is built.
+
 struct GlobalEdge 
 { 
     int source; 
@@ -71,148 +78,184 @@ struct GlobalEdge
     int relationTypeID; 
 }; 
  
+// Stores the start and end positions of one relation type
+// within a node's block in Column_Indices.
+// Enables O(1) typed neighbour access via Type_Offset_Index.
+
 struct TypeRange 
 { 
     int relationTypeID; 
-    long long start; 
-    long long end; 
+    int start; 
+    int end; 
 }; 
  
+// Defines one hop in a meta-path.
+    // true  = forward CSR 
+    // false = reverse CSR 
+
 struct MetaPathStep 
 { 
     int relationTypeID; 
- 
-    // true  = forward CSR 
-    // false = reverse CSR 
     bool forward; 
 }; 
+
+
+// =========================================================
+// HIN DATA STRUCTURE
+// =========================================================
+
+// Encapsulates all components of the Heterogeneous
+// Information Network as designed in the Alpha phase
+
+// Modified CSR achieves:
+//   O(1) typed neighbour access via typeOffsetIndex
+//   O(V+E) total memory
+//   O(V+E) k-core peeling complexity
+
+
+struct HIN
+{
+    // Node Information
+    // Populated in Stage 1 and Stage 3
+    int totalNodes;
+    map<string, int> nodeTypeCounts;
+    map<string, int> nodeTypeOffsets;
  
+    // HIN Schema
+    // Populated in Stage 2
+    // Defines what relationships are valid in the HIN
+    // Loaded from triplet-type-list.csv
+    vector<RelationSchema> relations;
+    map<string, int> relationTypeToID;
+    map<int, string> idToRelationType;
+ 
+    // Forward Modified CSR 
+    // Built in Stage 6
+    // rowPointers[u]     = start of node u in columnIndices
+    // columnIndices      = flat array of all target node IDs
+    // relationTypeIDs    = relation type per edge
+    // typeOffsetIndex[u] = where each relation type starts within node u's block
+                     
+    vector<int> rowPointers;
+    vector<int> columnIndices;
+    vector<int> relationTypeIDs;
+    vector<vector<TypeRange>> typeOffsetIndex;
+ 
+    // Reverse CSR
+    // Built in Stage 8
+    // Same structure as forward CSR but edges are flipped
+    // Enables reverse hop traversal for meta-paths
+    // e.g. APA: writes FORWARD then writes REVERSE
+    vector<int> reverseRowPointers;
+    vector<int> reverseColumnIndices;
+    vector<int> reverseRelationTypeIDs;
+};
+
  
 // ========================================================= 
-// A node ID from a specific node in a network to a global node ID. 
+// Convert node ID from a specific node in a network to a global node ID. 
 // ========================================================= 
  
-long long getGlobalNodeID( 
-    const string& nodeType, 
-    long long localID, 
-    const map<string, long long>& nodeTypeOffsets)
-{ 
-    auto it = nodeTypeOffsets.find(nodeType); 
+int getGlobalNodeID(
+    const string& nodeType,
+    int localID,
+    const map<string, int>& nodeTypeOffsets)
+{
+    auto it = nodeTypeOffsets.find(nodeType);
+    if (it == nodeTypeOffsets.end())
+        return -1;
+    return it->second + localID;
+}
  
-    if (it == nodeTypeOffsets.end()) 
-        return -1; 
- 
-    return it->second + localID; 
-} 
- 
- 
+
 // ========================================================= 
 // META-PATH TRAVERSAL 
 // ========================================================= 
+// Follows a meta-path from a start node and returns all reachable end nodes.
+
+//For each step in the path:
+//   forward=true  reads from hin.rowPointers (outgoing edges)
+//   forward=false reads from hin.reverseRowPointers (incoming)
+
+vector<int> followMetaPath(
+    int startNode,
+    const vector<MetaPathStep>& path,
+    const HIN& hin)
+{
+    vector<int> currentNodes;
+    currentNodes.push_back(startNode);
  
-vector<int> followMetaPath( 
-    int startNode, 
-    const vector<MetaPathStep>& path, 
-    const vector<long long>& rowPointers,
-    const vector<int>& columnIndices, 
-    const vector<int>& relationTypeIDs, 
-    const vector<long long>& reverseRowPointers,
-    const vector<int>& reverseColumnIndices, 
-    const vector<int>& reverseRelationTypeIDs) 
-{ 
-    vector<int> currentNodes; 
-    currentNodes.push_back(startNode); 
+    for (const MetaPathStep& step : path)
+    {
+        unordered_set<int> nextSet;
  
-    for (const auto step: path) 
-    { 
-        unordered_set<int> nextSet; 
+        for (int node : currentNodes)
+        {
+            if (step.forward)
+            {
+                // Traverse forward CSR
+                int start = hin.rowPointers[node];
+                int end   = hin.rowPointers[node + 1];
  
-        for (int node : currentNodes) 
-        { 
-            if (step.forward) 
-            { 
-                long long start = 
-                    rowPointers[node]; 
+                for (int i = start; i < end; i++)
+                {
+                    if (hin.relationTypeIDs[i] == step.relationTypeID)
+                        nextSet.insert(hin.columnIndices[i]);
+                }
+            }
+            else
+            {
+                // Traverse reverse CSR
+                int start = hin.reverseRowPointers[node];
+                int end   = hin.reverseRowPointers[node + 1];
  
-                long long end = 
-                    rowPointers[node + 1]; 
+                for (int i = start; i < end; i++)
+                {
+                    if (hin.reverseRelationTypeIDs[i] == step.relationTypeID)
+                        nextSet.insert(hin.reverseColumnIndices[i]);
+                }
+            }
+        }
  
-                for (long long i = start; 
-                     i < end; 
-                     i++) 
-                { 
-                    if (relationTypeIDs[i] == 
-                        step.relationTypeID) 
-                    { 
-                        nextSet.insert( 
-                            columnIndices[i]); 
-                    } 
-                } 
-            } 
-            else 
-            { 
-                long long start = 
-                    reverseRowPointers[node]; 
+        currentNodes.assign(nextSet.begin(), nextSet.end());
  
-                long long end = 
-                    reverseRowPointers[node + 1]; 
+        if (currentNodes.empty())
+            break;
+    }
  
-                for (long long i = start; 
-                     i < end; 
-                     i++) 
-                { 
-                    if (reverseRelationTypeIDs[i] == 
-                        step.relationTypeID) 
-                    { 
-                        nextSet.insert( 
-                            reverseColumnIndices[i]); 
-                    } 
-                } 
-            } 
-        } 
+    // Remove start node if meta-path returns to same type
+    currentNodes.erase(
+        remove(currentNodes.begin(), currentNodes.end(), startNode),
+        currentNodes.end());
  
-        currentNodes.assign( 
-            nextSet.begin(), 
-            nextSet.end()); 
+    sort(currentNodes.begin(), currentNodes.end());
  
-        if (currentNodes.empty()) 
-            break; 
-    } 
+    return currentNodes;
+}
  
-    // if the metapath is the same type as the start node, remove the start node from the graph. 
-    currentNodes.erase( 
-        remove( 
-            currentNodes.begin(), 
-            currentNodes.end(), 
-            startNode), 
-        currentNodes.end()); 
- 
-    sort( 
-        currentNodes.begin(), 
-        currentNodes.end()); 
- 
-    return currentNodes; 
-} 
- 
- 
+
  
 // ========================================================= 
-// We build query-centred meta-path derived graph.We construct query-centred Meta-path derived graph. 
+// BUILD QUERY-CENTRED META-PATH DERIVED GRAPH
 // ========================================================= 
+
+// The derived graph is the input to k-core peeling.
+// It is NOT the raw HIN — it is a virtual graph where
+// edges represent meta-path connections, not physical edges.
+//
+// Steps:
+//   1. Collect query node and all meta-path neighbours
+//   2. For each candidate node find its meta-path neighbours
+//   3. Build undirected adjacency list from shared connections
  
 void buildDerivedGraph( 
     int queryNode, 
-    const vector<int>& queryNeighbours, 
-    const vector<MetaPathStep>& metaPath, 
-    const vector<long long>& rowPointers,
-    const vector<int>& columnIndices, 
-    const vector<int>& relationTypeIDs, 
-    const vector<long long>& reverseRowPointers,
-    const vector<int>& reverseColumnIndices, 
-    const vector<int>& reverseRelationTypeIDs, 
-    vector<int>& derivedNodes, 
-    vector<vector<int>>& derivedAdjacency, 
-    unordered_map<int, int>& globalToDerived) 
+   const vector<int>& queryNeighbours,
+    const vector<MetaPathStep>& metaPath,
+    const HIN& hin,
+    vector<int>& derivedNodes,
+    vector<vector<int>>& derivedAdjacency,
+    unordered_map<int, int>& globalToDerived)
 { 
     derivedNodes.clear(); 
     derivedNodes.push_back(queryNode); 
@@ -224,7 +267,9 @@ void buildDerivedGraph(
     } 
  
     sort(derivedNodes.begin(), derivedNodes.end()); 
-    derivedNodes.erase(unique(derivedNodes.begin(), derivedNodes.end()), derivedNodes.end()); 
+    derivedNodes.erase(
+        unique(derivedNodes.begin(), derivedNodes.end()), 
+        derivedNodes.end()); 
  
     globalToDerived.clear(); 
     for (size_t i = 0; i < derivedNodes.size(); i++) 
@@ -232,35 +277,27 @@ void buildDerivedGraph(
  
     vector<unordered_set<int>> adjacencySets(derivedNodes.size()); 
  
-    for (size_t i = 0; i < derivedNodes.size(); i++) 
-    { 
-        int globalNode = derivedNodes[i]; 
+    for (size_t i = 0; i < derivedNodes.size(); i++)
+    {
+        int globalNode = derivedNodes[i];
  
-        vector<int> neighbours = followMetaPath( 
-            globalNode, 
-            metaPath, 
-            rowPointers, 
-            columnIndices, 
-            relationTypeIDs, 
-            reverseRowPointers, 
-            reverseColumnIndices, 
-            reverseRelationTypeIDs); 
+        vector<int> neighbours = followMetaPath(
+            globalNode, metaPath, hin);
  
-        // Each neighbour in neighbours do the following: 
         for (int globalNeighbour : neighbours)
-        { 
-            auto it = globalToDerived.find(globalNeighbour); 
-            if (it == globalToDerived.end()) 
-                continue; 
+        {
+            auto it = globalToDerived.find(globalNeighbour);
+            if (it == globalToDerived.end())
+                continue;
  
-            int neighbourIndex = it->second; 
-            if (neighbourIndex == static_cast<int>(i)) 
-                continue; 
+            int neighbourIndex = it->second;
+            if (neighbourIndex == static_cast<int>(i))
+                continue;
  
-            // The derived graph is assumed to be undirected if the graph is symmetric, as in the case of a graph from APA. 
-            adjacencySets[i].insert(neighbourIndex); 
-            adjacencySets[neighbourIndex].insert(static_cast<int>(i)); 
-        } 
+            // APA is symmetric — derived graph is undirected
+            adjacencySets[i].insert(neighbourIndex);
+            adjacencySets[neighbourIndex].insert(static_cast<int>(i));
+        }
     } 
  
     derivedAdjacency.assign(derivedNodes.size(), {}); 
@@ -275,6 +312,7 @@ void buildDerivedGraph(
 // ========================================================= 
 // ITERATIVE K-CORE PEELING 
 // ========================================================= 
+// Removes all nodes whose degree falls below k.
  
 vector<bool> performKCorePeeling( 
     const vector<vector<int>>& adjacency, 
@@ -289,6 +327,7 @@ vector<bool> performKCorePeeling(
     vector<bool> inQueue(n, false); 
     queue<int> Q; 
  
+    // Initialise degree and queue weak nodes
     for (int i = 0; i < n; i++) 
     { 
         degree[i] = static_cast<int>(adjacency[i].size()); 
@@ -302,6 +341,7 @@ vector<bool> performKCorePeeling(
  
     removedCount = 0; 
  
+    // Peel weak nodes and cascade
     while (!Q.empty()) 
     { 
         int u = Q.front(); 
@@ -348,8 +388,9 @@ vector<bool> performKCorePeeling(
     return removed; 
 }
 // =========================================================
-// Locating the k-core community for a query.
+//EXTRACT QUERY-CENTRED COMMUNITY
 // =========================================================
+// After k-core peeling, uses BFS from the query node to find all surviving nodes connected to it.
 
 vector<int> extractQueryCommunity(
     int queryIndex,
@@ -359,7 +400,8 @@ vector<int> extractQueryCommunity(
     vector<int> community;
 
     // This question is likely the most frequent asked in a project.Perhaps you cannot separate the question of "why" from the question of "how".
-    if (queryIndex < 0 || queryIndex >= static_cast<int>(adjacency.size()))
+    if (queryIndex < 0 || 
+        queryIndex >= static_cast<int>(adjacency.size()))
         return community;
 
     if (removed[queryIndex])
@@ -375,20 +417,16 @@ vector<int> extractQueryCommunity(
     {
         int u = Q.front();
         Q.pop();
-
         community.push_back(u);
 
         // Each element of 'v' in the for loop: = v0, v1, ..., vN (as N ne in his domain)
         for (int v : adjacency[u])
         {
-            if (removed[v])
+            if (removed[v] || visited[v])
                 continue;
-
-            if (!visited[v])
-            {
-                visited[v] = true;
-                Q.push(v);
-            }
+            visited[v] = true;
+            Q.push(v);
+            
         }
     }
 
@@ -402,34 +440,43 @@ vector<int> extractQueryCommunity(
 
 int main( int argc, char* argv[] )
 {
-    auto programStart =
-        chrono::high_resolution_clock::now();
-
+    auto programStart = chrono::high_resolution_clock::now();
+ 
     cout << "========================================\n";
-    cout <<" HIN COMMUNITY SEARCH SYSTEM\n ";
-    printf(" Modified CSR + Meta-Path Engine\n");
+    cout << " HIN COMMUNITY SEARCH SYSTEM\n";
+    cout << " Modified CSR + Meta-Path Engine\n";
     cout << "========================================\n\n";
-
-
+ 
+    // The primary HIN data structure.
+    // Populated progressively across Stages 1 to 8.
+    HIN hin;
+ 
+ 
+    // =====================================================
+    // PHASE 1 - HIN SCHEMA DEFINITION
+    // Stages 1 to 3
+    // Discovers node types, relationship rules, and
+    // assigns global integer IDs to all nodes.
+    // =====================================================
+ 
+ 
     // =====================================================
     // STAGE 1 - NODE TYPE DISCOVERY
-    // =====================================================
+    // Reads num-node-dict.csv
+    // Identifies all node types and their counts.
+    // Populates hin.nodeTypeCounts and hin.totalNodes.
+    // ====================================================
 
     cout << "STAGE 1 - NODE TYPE DISCOVERY\n";
     cout << "----------------------------------------\n";
 
-    string nodeFilePath =
-        "data/mag/raw/num-node-dict.csv";
-
+    string nodeFilePath = "data/mag/raw/num-node-dict.csv";
     ifstream nodeFile(nodeFilePath);
 
     if (!nodeFile.is_open())
     {
         // std::cerr is used to show errors.cerr is used to display errors.
-        cerr << "ERROR: Could not open "
-             << nodeFilePath
-             << endl;
-
+        cerr << "ERROR: Could not open " << nodeFilePath << endl;
         return 1;
     }
 
@@ -437,280 +484,197 @@ int main( int argc, char* argv[] )
 
     if (!getline(nodeFile, line))
     {
-        // Using cout instead of cerr: cout << "ERROR: Node type row missing. \n";
-        cout << "ERROR: Node type row missing.\n";
+        cerr << "ERROR: Node type row missing.\n";
         return 1;
     }
 
-    vector<string> nodeTypeNames =
-        splitCSVLine(line);
+    vector<string> nodeTypeNames = splitCSVLine(line);
 
     if (!getline(nodeFile, line))
     {
-        cout << "ERROR: Node count row is missing.\n";
+        cerr << "ERROR: Node count row is missing.\n";
         return 1;
     }
 
-    vector<string> nodeCounts =
-        splitCSVLine(line);
-
+    vector<string> nodeCounts = splitCSVLine(line);
     nodeFile.close();
 
-    if (nodeTypeNames.size() !=
-        nodeCounts.size())
+    if (nodeTypeNames.size() != nodeCounts.size())
     {
-        cout << "ERROR: Non-matching type and count of the nodes .\n";
+        cerr << "ERROR: Non-matching type and count of the nodes .\n";
         return 1;
     }
 
-    map< string, long long > nodeTypeCounts;
-
-    for (size_t i = 0;
-         i < nodeTypeNames.size();
-         i++)
+    for (size_t i = 0; i < nodeTypeNames.size(); i++)
+        hin.nodeTypeCounts[nodeTypeNames[i]] = stoi(nodeCounts[i]);
+ 
+    hin.totalNodes = 0;
+    for (const auto& entry : hin.nodeTypeCounts)
     {
-        nodeTypeCounts[nodeTypeNames[i]] =
-            stoll(nodeCounts[i]);
+        cout << entry.first << " -> " << entry.second << " nodes\n";
+        hin.totalNodes += entry.second;
     }
-
-    long long totalNodes = 0;
-
-    // For each of the entries in: nodeTypeCounts
-    for (const auto& entry : nodeTypeCounts)
-    {
-        cout << entry.first
-             << " -> "
-             << entry.second
-             << " nodes\n";
-
-        totalNodes +=
-            entry.second;
-    }
-
-    cout << "\nTotal Nodes: "
-         << totalNodes
-         << endl;
+ 
+    cout << "\nTotal Nodes: " << hin.totalNodes << endl;
 
 
     // =====================================================
     // STAGE 2 - SCHEMA DISCOVERY
+    // Reads triplet-type-list.csv
+    // Defines what relationships are valid in the HIN.
+    // This IS the HIN schema — source, relation, target.
+    // Populates hin.relations, hin.relationTypeToID.
     // =====================================================
 
     cout << "\n\nSTAGE 2 - HIN SCHEMA DISCOVERY\n";
     cout << "----------------------------------------\n";
 
-    string tripletFilePath =
-        "data/mag/raw/triplet-type-list.csv";
-
-    ifstream tripletFile(
-        tripletFilePath);
+    string tripletFilePath = "data/mag/raw/triplet-type-list.csv";
+    ifstream tripletFile(tripletFilePath);
 
     if (!tripletFile.is_open())
     {
-        // std::cerr is used to show errors.cerr is used to display errors.
-        cerr << "ERROR: Could not open "
-             << tripletFilePath
-             << endl;
-
+        cerr << "ERROR: Could not open " << tripletFilePath << endl;
         return 1;
     }
 
-    vector<RelationSchema> relations;
     set<string> relationNames;
 
     while (getline(tripletFile, line))
     {
         line = trim(line);
-
-        if (line.empty())
-            continue;
-
-        vector<string> values =
-            splitCSVLine(line);
-
-        if (values.size() < 3)
-            continue;
-
+        if (line.empty()) continue;
+ 
+        vector<string> values = splitCSVLine(line);
+        if (values.size() < 3) continue;
+ 
         RelationSchema r;
-
-        r.sourceType =
-            values[0];
-
-        r.relationType =
-            values[1];
-
-        r.targetType =
-            values[2];
-
-        relations.push_back(r);
-
-        relationNames.insert(
-            r.relationType);
+        r.sourceType   = values[0];
+        r.relationType = values[1];
+        r.targetType   = values[2];
+ 
+        hin.relations.push_back(r);
+        relationNames.insert(r.relationType);
     }
 
     tripletFile.close();
 
-    map<string, int> relationTypeToID;
-    map<int, string> idToRelationType;
-
     int nextRelationID = 0;
-
     // for all the relation names in relationNames
     for (const string& relationName : relationNames)
     {
-        relationTypeToID[
-            relationName] =
-            nextRelationID;
-
-        idToRelationType[
-            nextRelationID] =
-            relationName;
-
-        cout << "Relation ID "
-             << nextRelationID
-             << ": "
-             << relationName
-             << endl;
-
+        hin.relationTypeToID[relationName] = nextRelationID;
+        hin.idToRelationType[nextRelationID] = relationName;
+        cout << "Relation ID " << nextRelationID << ": " << relationName << endl;
         nextRelationID++;
     }
 
     cout << "\nDetected Triplets:\n";
 
     // For each RelationSchema r in relations
-    for (const RelationSchema& r : relations)
+    for (const RelationSchema& r : hin.relations)
     {
         cout << r.sourceType
-             << " --["
-             << r.relationType
-             << "]--> "
-             << r.targetType
-             << endl;
+             << " --[" << r.relationType << "]--> "
+             << r.targetType << endl;
     }
 
     // =====================================================
-    // To incorporate an ability to globally determine the node Ids.To be able to identify nodeIDs around the world.
+    // STAGE 3 - GLOBAL NODE ID ASSIGNMENT
+    // Assigns contiguous integer ID ranges per node type.
+    // All IDs of the same type are grouped together
+    // for cache efficiency during typed queries.
+    // Populates hin.nodeTypeOffsets.
     // =====================================================
 
-    cout << "    STAGE 3 - GLOBAL NODE ID SPACE\n";
+    cout << "\nSTAGE 3 - GLOBAL NODE ID SPACE\n";
     cout << "----------------------------------------\n";
 
     // Array that contains offset of every node type.A map of offsets of each node type.
-    map<string, long long> nodeTypeOffsets;
+    map<string, int> nodeTypeOffsets;
 
     long long offset = 0;
 
-    for (auto& entry :
-         nodeTypeCounts)
+    for (const auto& entry : hin.nodeTypeCounts)
     {
-        nodeTypeOffsets[
-            entry.first] =
-            offset;
-
+        hin.nodeTypeOffsets[entry.first] = offset;
         cout << entry.first
-             << ": "
-             << offset
-             << " -> "
-             << offset +
-                    entry.second - 1
+             << ": " << offset
+             << " -> " << offset + entry.second - 1
              << endl;
-
-        offset +=
-            entry.second;
+        offset += entry.second;
     }
 
-    if (offset != totalNodes)
+    if (offset != hin.totalNodes)
     {
-        printf("ERROR: GlobalID mismatch.\n");
+        cerr << "ERROR: Global ID mismatch.\n";
         return 1;
     }
 
 
     // =====================================================
-    // Apply a global edge to stage.Place a "globs" edge on the stage.
+    // STAGE 4 - LOAD GLOBAL EDGES
+    // Loads all valid edges from each relation folder.
+    // Each edge is validated against the HIN schema.
+    // Local node IDs are converted to global IDs. 
     // =====================================================
 
-    cout<< "\n\nSTAGE 4 - LOAD GLOBAL EDGES";
+    cout<< "\n\nSTAGE 4 - LOAD GLOBAL EDGES\n";
     cout << "========================================\n";
 
     vector<GlobalEdge> edges;
     edges.reserve(22000000);
 
-    long long totalValidEdges = 0;
-    long long totalInvalidEdges = 0;
+    int totalValidEdges = 0;
+    int totalInvalidEdges = 0;
 
-    auto loadStart =
-        chrono::high_resolution_clock::now();
+    auto loadStart = chrono::high_resolution_clock::now();
 
     // LIFE2: Loop over each of the relations:
-    for (auto& relation :
-         relations)
+    for (auto& relation : hin.relations)
     {
         string folderName =
-            relation.sourceType +
-            "___" +
-            relation.relationType +
-            "___" +
+            relation.sourceType + "___" +
+            relation.relationType + "___" +
             relation.targetType;
 
         string edgeFilePath =
-            "data/mag/raw/relations/" +
-            folderName +
-            "/edge.csv";
+            "data/mag/raw/relations/" + folderName + "/edge.csv";
 
         cout << "\nLoading "
-             << relation.sourceType
-             << " --["
-             << relation.relationType
-             << "]--> "
-             << relation.targetType
-             << endl;
+             << relation.sourceType 
+             << " --[" << relation.relationType << "]--> "
+             << relation.targetType << endl;
 
-        ifstream edgeFile(
-            edgeFilePath);
-
+        ifstream edgeFile(edgeFilePath);
         if (!edgeFile.is_open())
         {
-            cout << "ERROR: Doing the following things puts you: "
-                 << edgeFilePath
-                 << endl;
-
+            cerr << "ERROR: Doing the following things puts you: " << edgeFilePath << endl;
             return 1;
         }
 
-        long long sourceLimit =
-            nodeTypeCounts[
-                relation.sourceType];
+        int sourceLimit = hin.nodeTypeCounts[relation.sourceType];
+        int targetLimit = hin.nodeTypeCounts[relation.targetType];
+        int relationID = hin.relationTypeToID[relation.relationType];
 
-        long long targetLimit =
-            nodeTypeCounts[
-                relation.targetType];
-
-        int relationID =
-            relationTypeToID[
-                relation.relationType];
-
-        long long valid = 0;
-        long long invalid = 0;
+        int valid = 0;
+        int invalid = 0;
 
         while (getline(edgeFile, line))
         {
             line = trim(line);
 
-            if (line.empty())
-                continue;
+            if (line.empty()) continue;
 
-            vector<string> values =
-                splitCSVLine(line);
-
+            vector<string> values = splitCSVLine(line);
             if (values.size() < 2)
             {
                 invalid++;
                 continue;
             }
 
-            long long localSource;
-            long long localTarget;
+            int localSource;
+            int localTarget;
 
             try
             {
@@ -726,36 +690,21 @@ int main( int argc, char* argv[] )
                 continue;
             }
 
-            if (localSource < 0 ||
-                localSource >= sourceLimit ||
-                localTarget < 0 ||
-                localTarget >= targetLimit)
+            if (localSource < 0 || localSource >= sourceLimit ||
+                localTarget < 0 || localTarget >= targetLimit)
             {
                 invalid++;
                 continue;
             }
 
             GlobalEdge edge;
-
-            edge.source =
-                static_cast<int>(
-                    getGlobalNodeID(
-                        relation.sourceType,
-                        localSource,
-                        nodeTypeOffsets));
-
-            edge.target =
-                static_cast<int>(
-                    getGlobalNodeID(
-                        relation.targetType,
-                        localTarget,
-                        nodeTypeOffsets));
-
-            edge.relationTypeID =
-                relationID;
-
+            edge.source = getGlobalNodeID(
+                relation.sourceType, localSource, hin.nodeTypeOffsets);
+            edge.target = getGlobalNodeID(
+                relation.targetType, localTarget, hin.nodeTypeOffsets);
+            edge.relationTypeID = relationID;
+ 
             edges.push_back(edge);
-
             valid++;
         }
 
@@ -764,293 +713,194 @@ int main( int argc, char* argv[] )
         totalValidEdges += valid;
         totalInvalidEdges += invalid;
 
-        cout << "  Valid Edges: "
-             << valid
-             << endl;
+        cout << "  Valid Edges: " << valid << endl;
 
-        cout << "  Invalid Edges: "
-             << invalid
-             << endl;
+        cout << "  Invalid Edges: " << invalid << endl;
     }
 
-    auto loadEnd =
-        chrono::high_resolution_clock::now();
+    auto loadEnd = chrono::high_resolution_clock::now();
 
-    double loadSeconds =
-        chrono::duration<double>(
-            loadEnd - loadStart).count();
+    double loadSeconds = chrono::duration<double>(loadEnd - loadStart).count();
 
-    cout << "Total loaded Edges: \n: "
-         << edges.size()
-         << endl;
+    cout << "Total loaded Edges: \n: " << edges.size() << endl;
 
-    cout << "Loading Time: "
-         << fixed
-         << setprecision(2)
-         << loadSeconds
-         << " sec\n";
+    cout << "Loading Time: " << fixed << setprecision(2) << loadSeconds  << " sec\n";
 
 
     // =====================================================
     // STAGE 5 - SORT
+    // Sorts edges by source node, then relation type,
+    // then target node.
+    // This ordering is required for correct CSR
+    // and Type_Offset_Index construction.
     // =====================================================
 
     cout << "\n\nSTAGE 5 - SORT EDGES\n";
     cout << "========================================\n";
 
-    auto sortStart =
-        chrono::high_resolution_clock::now();
+    auto sortStart = chrono::high_resolution_clock::now();
 
-    sort(
-        edges.begin(),
-        edges.end(),
-
-        [](const GlobalEdge& a,
-           const GlobalEdge& b)
+    sort(edges.begin(), edges.end(),
+        [](const GlobalEdge& a, const GlobalEdge& b)
         {
             if (a.source != b.source)
                 return a.source < b.source;
-
-            if (a.relationTypeID !=
-                b.relationTypeID)
-            {
-                return a.relationTypeID <
-                       b.relationTypeID;
-            }
-
-            return a.target <
-                   b.target;
+            if (a.relationTypeID != b.relationTypeID)
+                return a.relationTypeID < b.relationTypeID;
+            return a.target < b.target;
         });
 
-    auto sortEnd =
-        chrono::high_resolution_clock::now();
+    auto sortEnd = chrono::high_resolution_clock::now();
 
-    double sortSeconds =
-        chrono::duration<double>(
-            sortEnd - sortStart).count();
+    double sortSeconds = chrono::duration<double>(sortEnd - sortStart).count();
 
-    cout << "Sorting Complete: "
-         << sortSeconds
-         << " sec\n";
+    cout << "Sorting Complete: " << sortSeconds << " sec\n";
 
 
     // =====================================================
-    // Rewrite the formula as a forward formula, and obtain t in terms of r.
+    // STAGE 6 - BUILD FORWARD MODIFIED CSR
+    // Three arrays built here:
+    //   rowPointers[u]  = start of node u in columnIndices
+    //   columnIndices   = flat array of all target node IDs
+    //   relationTypeIDs = relation type per edge
+    //
+    // Type_Offset_Index built alongside:
+    //   For each node u and each relation type t:
+    //   typeOffsetIndex[u][t] = (start, end)
+    //   enables O(1) typed neighbour access
+    //
+    // Populates hin.rowPointers, hin.columnIndices,
+    //           hin.relationTypeIDs, hin.typeOffsetIndex
     // =====================================================
 
     cout << "STAGE 6 - BUILD FORWARD MODIFIED CSR \n\n";
     cout << "========================================\n";
 
-    auto csrStart =
-        chrono::high_resolution_clock::now();
+    auto csrStart = chrono::high_resolution_clock::now();
 
-    vector<long long> rowPointers(
-        totalNodes + 1,
-        0);
+     // Build Row_Pointers
+    // Build Row_Pointers
+    hin.rowPointers.assign(hin.totalNodes + 1, 0);
 
-    for (GlobalEdge& edge :
-         edges)
+    for (const GlobalEdge& edge : edges)
+        hin.rowPointers[edge.source + 1]++;
+
+    for (int i = 1; i <= hin.totalNodes; i++)
+        hin.rowPointers[i] += hin.rowPointers[i - 1];
+
+    // Build Column_Indices and Relation_Type_IDs
+    hin.columnIndices.reserve(edges.size());
+    hin.relationTypeIDs.reserve(edges.size());
+
+    for (const GlobalEdge& edge : edges)
     {
-        rowPointers[
-            static_cast<size_t>(
-                edge.source) + 1]++;
+        hin.columnIndices.push_back(edge.target);
+        hin.relationTypeIDs.push_back(edge.relationTypeID);
     }
 
-    for (long long i = 1;
-         i <= totalNodes;
-         i++)
+    // Build Type_Offset_Index
+    hin.typeOffsetIndex.resize(hin.totalNodes);
+    for (int node = 0; node < hin.totalNodes; node++)
     {
-        rowPointers[i] +=
-            rowPointers[i - 1];
-    }
-
-    vector<int> columnIndices;
-    vector<int> relationTypeIDs;
-
-    columnIndices.reserve(
-        edges.size());
-
-    relationTypeIDs.reserve(
-        edges.size());
-
-    for (GlobalEdge& edge :
-         edges)
-    {
-        columnIndices.push_back(
-            edge.target);
-
-        relationTypeIDs.push_back(
-            edge.relationTypeID);
-    }
-
-    vector<vector<TypeRange>>
-        typeOffsetIndex(
-            totalNodes);
-
-    for (long long node = 0;
-         node < totalNodes;
-         node++)
-    {
-        long long start =
-            rowPointers[node];
-
-        long long end =
-            rowPointers[node + 1];
-
-        long long pos =
-            start;
-
+        int start = hin.rowPointers[node];
+        int end   = hin.rowPointers[node + 1];
+        int pos   = start;
+ 
         while (pos < end)
         {
-            int type =
-                relationTypeIDs[pos];
-
-            long long typeStart =
-                pos;
-
-            while (pos < end &&
-                   relationTypeIDs[pos] ==
-                       type)
-            {
+            int type      = hin.relationTypeIDs[pos];
+            int typeStart = pos;
+ 
+            while (pos < end && hin.relationTypeIDs[pos] == type)
                 pos++;
-            }
-
+ 
             TypeRange range;
-
-            range.relationTypeID =
-                type;
-
-            range.start =
-                typeStart;
-
-            range.end =
-                pos;
-
-            typeOffsetIndex[node].
-                push_back(range);
+            range.relationTypeID = type;
+            range.start          = typeStart;
+            range.end            = pos;
+ 
+            hin.typeOffsetIndex[node].push_back(range);
         }
     }
 
-    auto csrEnd =
-        chrono::high_resolution_clock::now();
+    auto csrEnd = chrono::high_resolution_clock::now();
+    double csrSeconds = chrono::duration<double>( csrEnd - csrStart).count();
 
-    double csrSeconds =
-        chrono::duration<double>(
-            csrEnd - csrStart).count();
-
-    cout << "Forward CSR Complete: "
-         << csrSeconds
-         << " sec\n";
+    cout << "Forward CSR Complete: " << csrSeconds << " sec\n";
 
     // =====================================================
     // STAGE 7 - FORWARD VALIDATION
+    // Confirms rowPointers.back() == columnIndices.size()
+    // If these do not match the CSR is corrupt.
     // =====================================================
 
     cout << "\n\nSTAGE 7 - FORWARD CSR VALIDATION\n";
     cout << "========================================\n";
 
-    if (rowPointers.back() !=
-        static_cast<long long>(
-            columnIndices.size()))
+    if (hin.rowPointers.back() != static_cast<int>(hin.columnIndices.size()))
     {
-        cout << "[ERROR] Forward CSR invalid.\n";
+        cerr << "[ERROR] Forward CSR invalid.\n";
         return 1;
     }
-
+ 
     cout << "[VALID] Forward Modified CSR consistent.\n";
 
 
     // =====================================================
     // STAGE 8 - REVERSE CSR
+    // target becomes source, source becomes target.
+    // Required for reverse hop traversal in meta-paths.
+    // e.g. APA needs writes FORWARD then writes REVERSE.
+    // Populates hin.reverseRowPointers, etc.
     // =====================================================
 
     cout << "\n\nSTAGE 8 - BUILD REVERSE CSR\n";
     cout << "========================================\n";
 
-    auto reverseStart =
-        chrono::high_resolution_clock::now();
+    auto reverseStart = chrono::high_resolution_clock::now();
 
-    vector<long long> reverseRowPointers(
-        totalNodes + 1,
-        0);
-
-    for (long long source = 0;
-         source < totalNodes;
-         source++)
+    hin.reverseRowPointers.assign(hin.totalNodes + 1, 0);
+ 
+    // For each outgoing edge (source -> target),
+    // increment the count at reverseRowPointers[target + 1]
+    for (int source = 0; source < hin.totalNodes; source++)
     {
-        for (long long i =
-                 rowPointers[source];
-             i <
-                 rowPointers[source + 1];
-             i++)
+        for (int i = hin.rowPointers[source];
+             i < hin.rowPointers[source + 1]; i++)
         {
-            int target =
-                columnIndices[i];
+            int target = hin.columnIndices[i];
+            hin.reverseRowPointers[target + 1]++;
+        }
+    }
+ 
+    // convert counts to cumulative start positions
+    for (int i = 1; i <= hin.totalNodes; i++)
+        hin.reverseRowPointers[i] += hin.reverseRowPointers[i - 1];
+ 
+    hin.reverseColumnIndices.resize(hin.columnIndices.size());
+    hin.reverseRelationTypeIDs.resize(hin.relationTypeIDs.size());
+ 
+    vector<int> cursor = hin.reverseRowPointers;
 
-            reverseRowPointers[
-                static_cast<size_t>(
-                    target) + 1]++;
+    for (int source = 0; source < hin.totalNodes; source++)
+    {
+        for (int i = hin.rowPointers[source];
+             i < hin.rowPointers[source + 1]; i++)
+        {
+            int target   = hin.columnIndices[i];
+            int position = cursor[target]++;
+ 
+            hin.reverseColumnIndices[position]   = source;
+            hin.reverseRelationTypeIDs[position] = hin.relationTypeIDs[i];
         }
     }
 
-    for (long long i = 1;
-         i <= totalNodes;
-         i++)
-    {
-        reverseRowPointers[i] +=
-            reverseRowPointers[i - 1];
-    }
-
-    vector<int> reverseColumnIndices(
-        columnIndices.size());
-
-    vector<int> reverseRelationTypeIDs(
-        relationTypeIDs.size());
-
-    vector<long long> cursor =
-        reverseRowPointers;
-
-    for (long long source = 0;
-         source < totalNodes;
-         source++)
-    {
-        for (long long i =
-                 rowPointers[source];
-             i <
-                 rowPointers[source + 1];
-             i++)
-        {
-            int target =
-                columnIndices[i];
-
-            long long position =
-                cursor[target]++;
-
-            reverseColumnIndices[
-                position] =
-                static_cast<int>(
-                    source);
-
-            reverseRelationTypeIDs[
-                position] =
-                relationTypeIDs[i];
-        }
-    }
-
-    vector<long long>().swap(cursor);
-
-    auto reverseEnd =
-        chrono::high_resolution_clock::now();
-
-    double reverseSeconds =
-        chrono::duration<double>(
-            reverseEnd -
-            reverseStart).count();
-
-    cout << "Reverse CSR Complete: "
-         << reverseSeconds
-         << " sec\n";
-
+    vector<int>().swap(cursor);
+ 
+    auto reverseEnd = chrono::high_resolution_clock::now();
+    double reverseSeconds = chrono::duration<double>(reverseEnd - reverseStart).count();
+ 
+    cout << "Reverse CSR Complete: " << reverseSeconds << " sec\n";
 
     // =====================================================
     // STAGE 9 - REVERSE VALIDATION
@@ -1059,125 +909,138 @@ int main( int argc, char* argv[] )
     cout << "\n\nSTAGE 9 - REVERSE CSR VALIDATION\n";
     cout << "========================================\n";
 
-    if (reverseRowPointers.back() !=
-        static_cast<long long>(
-            reverseColumnIndices.size()))
+    if (hin.reverseRowPointers.back() !=
+        static_cast<int>(hin.reverseColumnIndices.size()))
     {
-        cout << "[ERROR] Reverse CSR invalid.\n";
+        cerr << "[ERROR] Reverse CSR invalid.\n";
         return 1;
     }
-
+ 
     cout << "[VALID] Reverse CSR consistent.\n";
 
 
     // =====================================================
     // FREE TEMPORARY EDGE VECTOR
+    // The edges vector is no longer needed after CSR is built.
+    // Release memory before community search begins.
     // =====================================================
 
     long long temporaryEdgeMemory =
-        static_cast<long long>(
-            edges.capacity()) *
-        sizeof(GlobalEdge);
-
+        static_cast<long long>(edges.capacity()) * sizeof(GlobalEdge);
+ 
     cout << "\nFreeing temporary edge vector...\n";
 
     vector<GlobalEdge>().swap(edges);
 
     cout << "Released approximately "
-         << fixed
-         << setprecision(2)
-         << bytesToMB(
-                temporaryEdgeMemory)
+         << fixed << setprecision(2)
+         << bytesToMB(temporaryEdgeMemory)
          << " MB temporary edge memory.\n";
 
 
     // =====================================================
-    // STAGE 10 - GENERIC RUNTIME META-PATH CONFIGURATION
+    // HIN DATA STRUCTURE COMPLETE
+    // All components of the HIN are now built and ready.
+    // =====================================================
+ 
+    cout << "\n\nHIN DATA STRUCTURE COMPLETE\n";
+    cout << "========================================\n";
+    cout << "Total Nodes:    " << hin.totalNodes << endl;
+    cout << "Node Types:     " << hin.nodeTypeCounts.size() << endl;
+    cout << "Relation Types: " << hin.relationTypeToID.size() << endl;
+    cout << "Total Edges:    " << hin.columnIndices.size() << endl;
+ 
+    cout << "\nNode Type Ranges (Global ID Space):\n";
+    for (const auto& entry : hin.nodeTypeOffsets)
+    {
+        cout << "  " << entry.first
+             << ": ID " << entry.second
+             << " to " << entry.second + hin.nodeTypeCounts.at(entry.first) - 1
+             << endl;
+    }
+ 
+    cout << "\nRelation Types:\n";
+    for (const auto& entry : hin.relationTypeToID)
+    {
+        cout << "  ID " << entry.second
+             << " = " << entry.first << endl;
+    }
+ 
+    cout << "\nData Structure Status:\n";
+    cout << "  [DONE] HIN Schema           (Stage 2)\n";
+    cout << "  [DONE] Global Node IDs      (Stage 3)\n";
+    cout << "  [DONE] Forward Modified CSR (Stage 6)\n";
+    cout << "  [DONE] Type_Offset_Index    (Stage 6)\n";
+    cout << "  [DONE] Reverse CSR          (Stage 8)\n";
+    cout << "\nHIN is ready for community search.\n";
+
+
+    // =====================================================
+    // STAGE 10 - RUNTIME META-PATH CONFIGURATION
+    //Reads command line arguments for:
+    //   startType  = node type to search (e.g. author)
+    //   queryArg   = local node ID or auto
+    //   k          = minimum degree for k-core
+    //   pathSpec   = meta-path definition (e.g. writes:F,writes:R)
+    //   p          = minimum community size for KP-Core
+    //
+    // Validates meta-path against the discovered HIN schema.
     // =====================================================
 
     cout << "\n\nSTAGE 10 - GENERIC RUNTIME CONFIGURATION\n";
     cout << "========================================\n";
 
-    // Runtime usage (all optional):
-    //   ./main.exe <start_type> <local_query_id|auto> <k> <path_spec>
-    // Example APA:
-    //   ./main.exe author 0 5 writes:F,writes:R
-    // Example AIA:
-    //   ./main.exe author auto 3 affiliated_with:F,affiliated_with:R
-    //
-    // The algorithm does not contain Author/Paper-specific traversal logic.
-    // Relation names and directions are resolved against the discovered schema.
-
-    //----------------------------------------------------
-    //string startType = (argc > 1) ? argv[1] : "author";
-    //string queryArg = (argc > 2) ? argv[2] : "auto";
-    //int k = (argc > 3) ? stoi(argv[3]) : 5;
-    //string pathSpec = (argc > 4) ? argv[4] : "writes:F,writes:R";
-
-    //if (nodeTypeCounts.find(startType) == nodeTypeCounts.end())
-    //{
-    //    cout << "ERROR: Unknown start node type: " << startType << endl;
-    //    return 1;
-    //}
-
-    //if (k < 1)
-    //{
-    //    cout << "ERROR: k must be >= 1.\n";
-    //    return 1;
-    //}
-    //------------------------------------------------------
-
     string startType = (argc > 1) ? argv[1] : "author";
-    string queryArg = (argc > 2) ? argv[2] : "auto";
-    int k = (argc > 3) ? stoi(argv[3]) : 5;
-    string pathSpec = (argc > 4) ? argv[4] : "writes:F,writes:R";
-    int p = (argc > 5) ? stoi(argv[5]) : 1;
+    string queryArg  = (argc > 2) ? argv[2] : "auto";
+    int k            = (argc > 3) ? stoi(argv[3]) : 5;
+    string pathSpec  = (argc > 4) ? argv[4] : "writes:F,writes:R";
+    int p            = (argc > 5) ? stoi(argv[5]) : 1;
 
-    if (nodeTypeCounts.find(startType) == nodeTypeCounts.end())
+    if (hin.nodeTypeCounts.find(startType) == hin.nodeTypeCounts.end())
     {
-        cout << "ERROR: Unknown start node type: " << startType << endl;
+        cerr << "ERROR: Unknown start node type: " << startType << endl;
         return 1;
     }
 
     if (k < 1)
     {
-        cout << "ERROR: k must be >= 1.\n";
+        cerr << "ERROR: k must be >= 1.\n";
         return 1;
     }
 
     if (p < 1)
     {
-        cout << "ERROR: p must be >= 1.\n";
+        cerr<< "ERROR: p must be >= 1.\n";
         return 1;
     }
 
-
-    auto parsePath = [&](const string& spec,
-                         const string& initialType,
-                         vector<MetaPathStep>& outPath,
-                         string& endType,
-                         string& readable) -> bool
+// Parse and validate meta-path against discovered schema
+    auto parsePath = [&](
+        const string& spec,
+        const string& initialType,
+        vector<MetaPathStep>& outPath,
+        string& endType,
+        string& readable) -> bool
     {
         outPath.clear();
         readable = initialType;
         string currentType = initialType;
         string token;
         stringstream ss(spec);
-
+ 
         while (getline(ss, token, ','))
         {
             token = trim(token);
-            if (token.empty())
-                continue;
-
+            if (token.empty()) continue;
+ 
             size_t colon = token.find(':');
-            if (colon == string::npos)
-                return false;
-
+            if (colon == string::npos) return false;
+ 
             string relationName = trim(token.substr(0, colon));
-            string direction = trim(token.substr(colon + 1));
-            transform(direction.begin(), direction.end(), direction.begin(), ::toupper);
-
+            string direction    = trim(token.substr(colon + 1));
+            transform(direction.begin(), direction.end(),
+                      direction.begin(), ::toupper);
+ 
             bool forward;
             if (direction == "F" || direction == "FORWARD")
                 forward = true;
@@ -1185,26 +1048,23 @@ int main( int argc, char* argv[] )
                 forward = false;
             else
                 return false;
-
-            auto relationIDIt = relationTypeToID.find(relationName);
-            if (relationIDIt == relationTypeToID.end())
+ 
+            auto relationIDIt = hin.relationTypeToID.find(relationName);
+            if (relationIDIt == hin.relationTypeToID.end())
                 return false;
-
+ 
             bool schemaMatch = false;
             string nextType;
-
-            for (const RelationSchema& r : relations)
+ 
+            for (const RelationSchema& r : hin.relations)
             {
-                if (r.relationType != relationName)
-                    continue;
-
+                if (r.relationType != relationName) continue;
                 if (forward && r.sourceType == currentType)
                 {
                     nextType = r.targetType;
                     schemaMatch = true;
                     break;
                 }
-
                 if (!forward && r.targetType == currentType)
                 {
                     nextType = r.sourceType;
@@ -1212,22 +1072,21 @@ int main( int argc, char* argv[] )
                     break;
                 }
             }
-
-            if (!schemaMatch)
-                return false;
-
+ 
+            if (!schemaMatch) return false;
+ 
             MetaPathStep step;
             step.relationTypeID = relationIDIt->second;
-            step.forward = forward;
+            step.forward        = forward;
             outPath.push_back(step);
-
+ 
             readable += " --[" + relationName +
                         (forward ? " FORWARD" : " REVERSE") +
                         "]--> " + nextType;
-
+ 
             currentType = nextType;
         }
-
+ 
         endType = currentType;
         return !outPath.empty();
     };
@@ -1238,36 +1097,39 @@ int main( int argc, char* argv[] )
 
     if (!parsePath(pathSpec, startType, metaPath, endType, readablePath))
     {
-        cout << "ERROR: Invalid path specification or path does not match discovered HIN schema.\n";
-        cout << "Format example: writes:F,writes:R\n";
+        cerr << "ERROR: Invalid path specification or path does not match discovered HIN schema.\n";
+        cerr << "Format example: writes:F,writes:R\n";
         return 1;
     }
 
     if (endType != startType)
     {
-        cout << "ERROR: For query-centred k-core, the selected meta-path must return\n";
-        cout << "to the same node type. Start=" << startType
+        cerr << "ERROR: For query-centred k-core, the selected meta-path must return\n";
+        cerr << "to the same node type. Start=" << startType
              << ", End=" << endType << endl;
         return 1;
     }
 
     cout << "Start Node Type: " << startType << endl;
-    cout << "Selected k: " << k << endl;
-    cout << "Path Specification: " << pathSpec << endl;
-    cout << "Resolved Meta-Path:\n  " << readablePath << endl;
-    cout << "Number of Steps: " << metaPath.size() << endl;
+    cout << "Selected k:      " << k << endl;
+    cout << "Selected p:      " << p << " (minimum community size)\n";
+    cout << "Path Spec:       " << pathSpec << endl;
+    cout << "Resolved Path:\n  " << readablePath << endl;
+    cout << "Steps:           " << metaPath.size() << endl;
     cout << "[VALID] Runtime meta-path matches discovered HIN schema.\n";
 
 
     // =====================================================
     // STAGE 11 - META-PATH QUERY
+    // Executes the meta-path traversal for the query node.
+    // Returns all nodes reachable via the full meta-path.
     // =====================================================
 
     cout << "\n\nSTAGE 11 - META-PATH QUERY\n";
     cout << "========================================\n";
 
-    long long startTypeOffset = nodeTypeOffsets[startType];
-    long long startTypeCount = nodeTypeCounts[startType];
+    int startTypeOffset = hin.nodeTypeOffsets[startType];
+    int startTypeCount = hin.nodeTypeCounts[startType];
 
     int queryNode = -1;
     vector<int> metaPathNeighbours;
@@ -1276,42 +1138,33 @@ int main( int argc, char* argv[] )
 
     if (queryArg != "auto")
     {
-        long long localID;
-        try
-        {
-            localID = stoll(queryArg);
-        }
+        int localID;
+        try { localID = stoll(queryArg); }
         catch (...)
         {
-            cout << "ERROR: Query local ID must be an integer or 'auto'.\n";
+            cerr << "ERROR: Query local ID must be an integer or 'auto'.\n";
             return 1;
         }
 
         if (localID < 0 || localID >= startTypeCount)
         {
-            cout << "ERROR: Query local ID is outside the selected node type range.\n";
+            cerr << "ERROR: Query local ID is outside the selected node type range.\n";
             return 1;
         }
 
-        queryNode = static_cast<int>(startTypeOffset + localID);
-        metaPathNeighbours = followMetaPath(
-            queryNode, metaPath,
-            rowPointers, columnIndices, relationTypeIDs,
-            reverseRowPointers, reverseColumnIndices, reverseRelationTypeIDs);
+        queryNode = startTypeOffset + localID;
+        metaPathNeighbours = followMetaPath(queryNode, metaPath, hin);
     }
     else
     {
         // Search a bounded prefix for a useful demonstration query.
-        long long searchLimit = min<long long>(startTypeCount, 1000);
-
-        for (long long localID = 0; localID < searchLimit; localID++)
+        int searchLimit = min(startTypeCount, 1000);
+ 
+        for (int localID = 0; localID < searchLimit; localID++)
         {
-            int candidate = static_cast<int>(startTypeOffset + localID);
-            vector<int> result = followMetaPath(
-                candidate, metaPath,
-                rowPointers, columnIndices, relationTypeIDs,
-                reverseRowPointers, reverseColumnIndices, reverseRelationTypeIDs);
-
+            int candidate = startTypeOffset + localID;
+            vector<int> result = followMetaPath(candidate, metaPath, hin);
+ 
             if (!result.empty())
             {
                 queryNode = candidate;
@@ -1326,14 +1179,14 @@ int main( int argc, char* argv[] )
 
     if (queryNode == -1)
     {
-        cout << "No suitable query node with meta-path neighbours found.\n";
+        cerr << "No suitable query node with meta-path neighbours found.\n";
         return 1;
     }
 
     cout << "Query Node:\n";
-    cout << "  Type: " << startType << endl;
+    cout << "  Type:     " << startType << endl;
     cout << "  Local ID: " << queryNode - startTypeOffset << endl;
-    cout << "  Global ID: " << queryNode << endl;
+    cout << "  Global ID:" << queryNode << endl;
     cout << "\nMeta-Path Neighbours Found: " << metaPathNeighbours.size() << endl;
     cout << "First Neighbours:\n";
 
@@ -1350,12 +1203,14 @@ int main( int argc, char* argv[] )
         cout << endl;
     }
 
-    cout << "\nMeta-Path Query Time: " << fixed << setprecision(6)
-         << querySeconds << " sec\n";
+    cout << "\nMeta-Path Query Time: " 
+        << fixed << setprecision(6) << querySeconds << " sec\n";
 
 
     // =====================================================
     // STAGE 12 - META-PATH VALIDATION
+    // Confirms forward and reverse traversal executed.
+    // Confirms duplicates and self-node removed.
     // =====================================================
 
     cout << "\n\nSTAGE 12 - META-PATH VALIDATION\n";
@@ -1378,6 +1233,10 @@ int main( int argc, char* argv[] )
 
     // =====================================================
     // STAGE 13 - BUILD QUERY-CENTRED DERIVED GRAPH
+    // Constructs the query-centred derived graph.
+    // This is a virtual graph — edges represent meta-path
+    // connections not physical HIN edges.
+    // K-core peeling runs on this derived graph.
     // =====================================================
 
     cout << "\n\nSTAGE 13 - BUILD META-PATH DERIVED GRAPH\n";
@@ -1390,42 +1249,46 @@ int main( int argc, char* argv[] )
     unordered_map<int, int> globalToDerived;
 
     buildDerivedGraph(
-        queryNode, metaPathNeighbours, metaPath,
-        rowPointers, columnIndices, relationTypeIDs,
-        reverseRowPointers, reverseColumnIndices, reverseRelationTypeIDs,
+        queryNode, metaPathNeighbours, metaPath, hin,
         derivedNodes, derivedAdjacency, globalToDerived);
 
     auto derivedEnd = chrono::high_resolution_clock::now();
     double derivedSeconds = chrono::duration<double>(derivedEnd - derivedStart).count();
-
-    long long derivedEdgeReferences = 0;
-    for (const vector<int>& neighbours : derivedAdjacency)
-        derivedEdgeReferences += static_cast<long long>(neighbours.size());
-    long long derivedEdges = derivedEdgeReferences / 2;
-
-    cout << "Candidate Nodes: " << derivedNodes.size() << endl;
-    cout << "Derived Undirected Edges: " << derivedEdges << endl;
-    cout << "Derived Graph Construction Time: " << fixed << setprecision(6)
-         << derivedSeconds << " sec\n";
-
+ 
+    long long derivedEdgeRefs = 0;
+    for (const vector<int>& n : derivedAdjacency)
+        derivedEdgeRefs += static_cast<long long>(n.size());
+    long long derivedEdges = derivedEdgeRefs / 2;
+ 
+    cout << "Candidate Nodes:           " << derivedNodes.size() << endl;
+    cout << "Derived Undirected Edges:  " << derivedEdges << endl;
+    cout << "Construction Time:         "
+         << fixed << setprecision(6) << derivedSeconds << " sec\n";
+ 
     cout << "\nDerived Graph Sample:\n";
     for (size_t i = 0; i < derivedNodes.size() && i < 20; i++)
     {
-        cout << "  " << startType << " Global " << derivedNodes[i]
+        cout << "  " << startType
+             << " Global " << derivedNodes[i]
              << " | Local " << derivedNodes[i] - startTypeOffset
-             << " | Meta-Path Degree " << derivedAdjacency[i].size() << endl;
+             << " | Meta-Path Degree " << derivedAdjacency[i].size()
+             << endl;
     }
-
+ 
     if (derivedNodes.empty())
     {
-        cout << "[ERROR] Derived graph is empty.\n";
+        cerr << "[ERROR] Derived graph is empty.\n";
         return 1;
     }
+ 
     cout << "\n[VALID] Query-centred meta-path derived graph created.\n";
 
 
     // =====================================================
     // STAGE 14 - MULTIPLE K-CORE TESTING
+    // Tests k-core peeling across k=2 to k=6.
+    // The community size should decrease monotonically as k increases — this is a fundamental property
+    // of k-cores and validates the algorithm is correct.
     // =====================================================
 
     cout << "\n\nSTAGE 14 - MULTIPLE K-CORE TESTING\n";
@@ -1453,19 +1316,21 @@ int main( int argc, char* argv[] )
         int testRemovedCount = 0;
         vector<bool> testRemoved = performKCorePeeling(
             derivedAdjacency, testK, testFinalDegrees, testRemovedCount);
-
+ 
         int testSurviving = 0;
         for (bool r : testRemoved) if (!r) testSurviving++;
-
+ 
         vector<int> testCommunity;
         auto qIt = globalToDerived.find(queryNode);
         if (qIt != globalToDerived.end())
-            testCommunity = extractQueryCommunity(qIt->second, derivedAdjacency, testRemoved);
-
+            testCommunity = extractQueryCommunity(
+                qIt->second, derivedAdjacency, testRemoved);
+ 
         auto testEnd = chrono::high_resolution_clock::now();
         double testSeconds = chrono::duration<double>(testEnd - testStart).count();
-
-        cout << left << setw(8) << testK
+ 
+        cout << left
+             << setw(8)  << testK
              << setw(18) << derivedNodes.size()
              << setw(18) << testRemovedCount
              << setw(18) << testSurviving
@@ -1476,6 +1341,7 @@ int main( int argc, char* argv[] )
 
     // =====================================================
     // STAGE 15 - DETAILED RUNTIME K-CORE
+    // Runs k-core peeling at the selected k value.
     // =====================================================
 
     cout << "\n\nSTAGE 15 - DETAILED K-CORE DEMO (k = " << k << ")\n";
@@ -1500,8 +1366,12 @@ int main( int argc, char* argv[] )
          << kCoreSeconds << " sec\n";
 
 
-     // =====================================================
-    // At STAGE 16, the final query community + validation will be in a sample of the community.
+    // =====================================================
+    // STAGE 16 - FINAL QUERY COMMUNITY + KP-CORE CHECK
+    // Extracts the community connected to the query node.
+    // Applies the KP-Core size constraint:
+    //   if community size >= p -> PASS -> return community
+    //   if community size <  p -> FAIL -> reject community
     // =====================================================
 
     cout << "\n\nStage 16 – FINAL QUERY COMMUNITY\n";
@@ -1510,37 +1380,12 @@ int main( int argc, char* argv[] )
     auto queryIndexIt = globalToDerived.find(queryNode);
     if (queryIndexIt == globalToDerived.end())
     {
-        cout<< "There is no query node in the derived graph. \n";
+        cerr<< "There is no query node in the derived graph. \n";
         return 1;
     }
 
     vector<int> communityIndices = extractQueryCommunity(
         queryIndexIt->second, derivedAdjacency, removed);
-
-    //-------------------------------------
-    //if (communityIndices.empty())
-    //{
-    //    cout << "Query node did NOT live after being peeled by k cores.\n";
-    //    cout << "Final query-centred community is empty.\n";
-    //}
-    //else
-    //{
-    //   cout << "[VALID] Query survives " << k << "-core peeling.\n";
-    //   std::cout << "Final Community Size: " << communityIndices.size() << std::endl;
-    //   cout << "\nCommunity Members:\n";
-
-    //   for (size_t x = 0; x < communityIndices.size() && x < 30; x++)
-    //   {
-    //       int idx = communityIndices[x];
-    //       int globalID = derivedNodes[idx];
-    //       cout << "  " << startType << " Global ID: " << globalID
-    //            << " Unique ID: " << globalID - startTypeOffset
-    //            << " | Final Degree: " << finalDegrees[idx];
-    //       if (globalID == queryNode) cout << "  <-- QUERY";
-    //       cout << endl;
-    //   }
-    //}
-    //----------------------------------------
 
     if (communityIndices.empty())
     {
@@ -1591,6 +1436,7 @@ int main( int argc, char* argv[] )
     }
 
 
+    // Validate k-core correctness — every survivor must have degree >= k
     bool kCoreValid = true;
     for (size_t i = 0; i < derivedAdjacency.size(); i++)
     {
@@ -1607,20 +1453,24 @@ int main( int argc, char* argv[] )
 
     if (!kCoreValid)
     {
-        cout << "[ERROR] K-core validation failed. \n";
+        cerr << "[ERROR] K-core validation failed.\n";
         return 1;
     }
-
+ 
     if (survivingNodes == 0)
         cout << "[VALID] No nodes survive k=" << k
-             << "; Please see that the candidate graph (in its entirety) was removed in an acceptable way.\n";
+             << "; peeling correctly removed the complete candidate graph.\n";
     else
         cout << "[VALID] Every surviving node satisfies degree >= " << k << ".\n";
-    cout << "[VALID] Iterative k-core peeling is consistent." << endl;
-
+ 
+    cout << "[VALID] Iterative k-core peeling is consistent.\n";
 
     // =====================================================
-    // In this stage, you will learn about other meta-path tests.During this phase you will learn about other types of meta-path testing.
+     // STAGE 17 - ADDITIONAL META-PATH TEST
+    // Tests a second meta-path on the same query node
+    // to confirm the engine works across different
+    // semantic relationships.
+    // For author queries: AIA (Author->Institution->Author)
     // =====================================================
 
     cout << "\n\nSTAGE 17 – ADDITIONAL META-PATH TEST\n";
@@ -1629,17 +1479,14 @@ int main( int argc, char* argv[] )
     string additionalSpec;
     string additionalName;
 
-    // Illinois is aware that there are author queries, which is why they include a second relationship for MAG.
-    // Author -> Institution -> Author.
     if (startType == "author" &&
-        relationTypeToID.find("affiliated_with") != relationTypeToID.end())
+        hin.relationTypeToID.count("affiliated_with"))
     {
         additionalSpec = "affiliated_with:F,affiliated_with:R";
         additionalName = "AIA";
     }
     else
     {
-        // Use the selected paths for Engine consistency test – generic fallback.
         additionalSpec = pathSpec;
         additionalName = "Runtime Path Re-test";
     }
@@ -1659,29 +1506,20 @@ int main( int argc, char* argv[] )
     {
         auto additionalStart = chrono::high_resolution_clock::now();
 
-        // Try the specified query, first. If no neighbour is found for a sector for the second time, put X in the box.If there is no neighbour for a sector for the second time, then mark X in the box.
-        // We need a query which can be shown in a bounded prefix with the help of // semantic path.We need a query that can be proven in a bounded prefix on the basis of // semantic path.
         additionalQuery = queryNode;
         additionalNeighbours = followMetaPath(
-            additionalQuery, additionalPath,
-            rowPointers, columnIndices, relationTypeIDs,
-            reverseRowPointers, reverseColumnIndices, reverseRelationTypeIDs);
+            additionalQuery, additionalPath, hin);
 
         if (additionalNeighbours.empty())
         {
-            long long searchLimit = min<long long>(startTypeCount, 1000);
-
-            // In case startTypeCount is more than 1000, use min<long long>(startTypeCount, 1000) to set searchLimit.
-            // While searchLimit is not reached, we go through the localIDs starting with 0.
-            for (long long localID = 0; localID < searchLimit; localID++)
+            int searchLimit = min(startTypeCount, 1000);
+            for (int localID = 0; localID < searchLimit; localID++)
             {
                 // [JAWS] The startTypeOffset number is a number of seconds.The startTypeOffset number is a number of seconds.
                 int candidate = static_cast<int>(startTypeOffset + localID);
 
                 vector<int> result = followMetaPath(
-                    candidate, additionalPath,
-                    rowPointers, columnIndices, relationTypeIDs,
-                    reverseRowPointers, reverseColumnIndices, reverseRelationTypeIDs);
+                    candidate, additionalPath, hin);
 
                 if (!result.empty())
                 {
@@ -1723,103 +1561,96 @@ int main( int argc, char* argv[] )
     cout << "\n\nSTAGE 18 - MEMORY AND PERFORMANCE EVALUATION\n";
     cout << "========================================\n";
 
-    long long forwardRowBytes = static_cast<long long>(rowPointers.capacity()) * sizeof(long long);
-    long long forwardColumnBytes = static_cast<long long>(columnIndices.capacity()) * sizeof(int);
-    long long forwardTypeBytes = static_cast<long long>(relationTypeIDs.capacity()) * sizeof(int);
-    long long reverseRowBytes = static_cast<long long>(reverseRowPointers.capacity()) * sizeof(long long);
-    long long reverseColumnBytes = static_cast<long long>(reverseColumnIndices.capacity()) * sizeof(int);
-    long long reverseTypeBytes = static_cast<long long>(reverseRelationTypeIDs.capacity()) * sizeof(int);
+    long long forwardRowBytes  = static_cast<long long>(hin.rowPointers.capacity()) * sizeof(int);
+    long long forwardColBytes  = static_cast<long long>(hin.columnIndices.capacity()) * sizeof(int);
+    long long forwardTypeBytes = static_cast<long long>(hin.relationTypeIDs.capacity()) * sizeof(int);
+    long long reverseRowBytes  = static_cast<long long>(hin.reverseRowPointers.capacity()) * sizeof(int);
+    long long reverseColBytes  = static_cast<long long>(hin.reverseColumnIndices.capacity()) * sizeof(int);
+    long long reverseTypeBytes = static_cast<long long>(hin.reverseRelationTypeIDs.capacity()) * sizeof(int);
 
     long long typeRangeCount = 0;
-    for (const auto& ranges : typeOffsetIndex)
+    for (const auto& ranges : hin.typeOffsetIndex)
         typeRangeCount += static_cast<long long>(ranges.size());
-    long long typeRangePayloadBytes = typeRangeCount * sizeof(TypeRange);
-
+    long long typeRangeBytes = typeRangeCount * sizeof(TypeRange);
+ 
     long long derivedNodeBytes = static_cast<long long>(derivedNodes.capacity()) * sizeof(int);
-    long long derivedAdjacencyPayloadBytes = 0;
+    long long derivedAdjBytes  = 0;
     for (const auto& a : derivedAdjacency)
-        derivedAdjacencyPayloadBytes += static_cast<long long>(a.capacity()) * sizeof(int);
-
-    long long forwardMainBytes = forwardRowBytes + forwardColumnBytes + forwardTypeBytes;
-    long long reverseMainBytes = reverseRowBytes + reverseColumnBytes + reverseTypeBytes;
-    long long combinedCSRBytes = forwardMainBytes + reverseMainBytes;
-
-    cout << "Forward Row Pointers: " << bytesToMB(forwardRowBytes) << " MB\n";
-    cout << "Forward Columns: " << bytesToMB(forwardColumnBytes) << " MB\n";
-    cout << "Forward Relation IDs: " << bytesToMB(forwardTypeBytes) << " MB\n";
-    cout << "Reverse Row Pointers: " << bytesToMB(reverseRowBytes) << " MB\n";
-    cout << "Reverse Columns: " << bytesToMB(reverseColumnBytes) << " MB\n";
-    cout << "Reverse Relation IDs: " << bytesToMB(reverseTypeBytes) << " MB\n";
-    cout << "Forward Main CSR Arrays: " << bytesToMB(forwardMainBytes) << " MB\n";
-    cout << "Reverse Main CSR Arrays: " << bytesToMB(reverseMainBytes) << " MB\n";
-    cout << "Combined Main CSR Arrays: " << bytesToMB(combinedCSRBytes) << " MB\n";
-    cout << "Type_Offset_Index Ranges: " << typeRangeCount
-         << " (~" << bytesToMB(typeRangePayloadBytes) << " MB payload)\n";
-    cout << "Derived Graph Payload: ~"
-         << bytesToMB(derivedNodeBytes + derivedAdjacencyPayloadBytes) << " MB\n";
-    cout << "Temporary Edge Vector Released Earlier: "
-         << bytesToMB(temporaryEdgeMemory) << " MB\n";
-
+        derivedAdjBytes += static_cast<long long>(a.capacity()) * sizeof(int);
+ 
+    long long forwardMainBytes  = forwardRowBytes + forwardColBytes + forwardTypeBytes;
+    long long reverseMainBytes  = reverseRowBytes + reverseColBytes + reverseTypeBytes;
+    long long combinedCSRBytes  = forwardMainBytes + reverseMainBytes;
+ 
+    cout << "Forward Row Pointers:     " << bytesToMB(forwardRowBytes)  << " MB\n";
+    cout << "Forward Columns:          " << bytesToMB(forwardColBytes)  << " MB\n";
+    cout << "Forward Relation IDs:     " << bytesToMB(forwardTypeBytes) << " MB\n";
+    cout << "Reverse Row Pointers:     " << bytesToMB(reverseRowBytes)  << " MB\n";
+    cout << "Reverse Columns:          " << bytesToMB(reverseColBytes)  << " MB\n";
+    cout << "Reverse Relation IDs:     " << bytesToMB(reverseTypeBytes) << " MB\n";
+    cout << "Forward Main CSR:         " << bytesToMB(forwardMainBytes) << " MB\n";
+    cout << "Reverse Main CSR:         " << bytesToMB(reverseMainBytes) << " MB\n";
+    cout << "Combined CSR Arrays:      " << bytesToMB(combinedCSRBytes) << " MB\n";
+    cout << "Type_Offset_Index:        " << typeRangeCount
+         << " ranges (~" << bytesToMB(typeRangeBytes) << " MB)\n";
+    cout << "Derived Graph Payload:    ~"
+         << bytesToMB(derivedNodeBytes + derivedAdjBytes) << " MB\n";
+    cout << "Temporary Edge Memory:    "
+         << bytesToMB(temporaryEdgeMemory) << " MB (released)\n";
+ 
     cout << "\nPerformance Summary:\n";
-    cout << "  Edge Loading: " << loadSeconds << " sec\n";
-    cout << "  Edge Sorting: " << sortSeconds << " sec\n";
-    cout << "  Forward CSR: " << csrSeconds << " sec\n";
-    cout << "  Reverse CSR: " << reverseSeconds << " sec\n";
-    cout << "  Selected Meta-Path Query: " << querySeconds << " sec\n";
-    cout << "  Derived Graph: " << derivedSeconds << " sec\n";
-    cout << "  K-Core Peeling: " << kCoreSeconds << " sec\n";
-    cout << "  Additional Meta-Path Test: " << additionalSeconds << " sec\n";
+    cout << "  Edge Loading:           " << loadSeconds    << " sec\n";
+    cout << "  Edge Sorting:           " << sortSeconds    << " sec\n";
+    cout << "  Forward CSR Build:      " << csrSeconds     << " sec\n";
+    cout << "  Reverse CSR Build:      " << reverseSeconds << " sec\n";
+    cout << "  Meta-Path Query:        " << querySeconds   << " sec\n";
+    cout << "  Derived Graph Build:    " << derivedSeconds << " sec\n";
+    cout << "  K-Core Peeling:         " << kCoreSeconds   << " sec\n";
+    cout << "  Additional Meta-Path:   " << additionalSeconds << " sec\n";
 
 
     // =====================================================
     // STAGE 19 - FINAL TEST / DEMO CHECKLIST
     // =====================================================
 
-    cout << "\n\nSTAGE 19 - FINAL TEST AND DEMO CHECKLIST\n";
+    cout << "\n\nSTAGE 19 - FINAL VALIDATION CHECKLIST\n";
     cout << "========================================\n";
-
-    bool forwardCSRValid = rowPointers.back() == static_cast<long long>(columnIndices.size());
-    bool reverseCSRValid = reverseRowPointers.back() == static_cast<long long>(reverseColumnIndices.size());
-    bool edgeCountValid = totalValidEdges == static_cast<long long>(columnIndices.size());
+ 
+    bool forwardCSRValid  = hin.rowPointers.back() ==
+                            static_cast<int>(hin.columnIndices.size());
+    bool reverseCSRValid  = hin.reverseRowPointers.back() ==
+                            static_cast<int>(hin.reverseColumnIndices.size());
+    bool edgeCountValid   = totalValidEdges ==
+                            static_cast<int>(hin.columnIndices.size());
     bool runtimePathValid = !metaPath.empty() && endType == startType;
-    bool derivedGraphValid = !derivedNodes.empty() && globalToDerived.count(queryNode);
-
-    cout << (forwardCSRValid ? "[PASS] " : "[FAIL] ") << "Forward CSR consistency\n";
-    cout << (reverseCSRValid ? "[PASS] " : "[FAIL] ") << "Reverse CSR consistency\n";
-    cout << (edgeCountValid ? "[PASS] " : "[FAIL] ") << "Loaded edge count consistency\n";
-    cout << (runtimePathValid ? "[PASS] " : "[FAIL] ") << "Runtime meta-path schema validation\n";
-    cout << (derivedGraphValid ? "[PASS] " : "[FAIL] ") << "Query-centred derived graph\n";
-    cout << (kCoreValid ? "[PASS] " : "[FAIL] ") << "Iterative k-core validation\n";
-    cout << ((!additionalNeighbours.empty()) ? "[PASS] " : "[INFO] ")
-         << "Additional meta-path test\n";
-
-    //bool allCriticalTests = forwardCSRValid && reverseCSRValid &&
-    //                        edgeCountValid && runtimePathValid &&
-    //                        derivedGraphValid && kCoreValid;
-
-
-
-    // If community is empty due to k-core peeling,
-    // KP-Core constraint is not applicable — mark as true.
-    // KP-Core only filters communities that exist but are too small.
+    bool derivedGraphValid= !derivedNodes.empty() && globalToDerived.count(queryNode);
+ 
     bool kpCoreValid = communityIndices.empty()
         ? true
         : (int)communityIndices.size() >= p;
-
-    cout << (kpCoreValid ? "[PASS] " : "[FAIL] ")
+ 
+    cout << (forwardCSRValid   ? "[PASS] " : "[FAIL] ") << "Forward CSR consistency\n";
+    cout << (reverseCSRValid   ? "[PASS] " : "[FAIL] ") << "Reverse CSR consistency\n";
+    cout << (edgeCountValid    ? "[PASS] " : "[FAIL] ") << "Loaded edge count consistency\n";
+    cout << (runtimePathValid  ? "[PASS] " : "[FAIL] ") << "Runtime meta-path schema validation\n";
+    cout << (derivedGraphValid ? "[PASS] " : "[FAIL] ") << "Query-centred derived graph\n";
+    cout << (kCoreValid        ? "[PASS] " : "[FAIL] ") << "Iterative k-core validation\n";
+    cout << (kpCoreValid       ? "[PASS] " : "[FAIL] ")
          << "KP-Core size constraint (p=" << p << ")\n";
+    cout << ((!additionalNeighbours.empty()) ? "[PASS] " : "[INFO] ")
+         << "Additional meta-path test\n";
 
-    bool allCriticalTests = forwardCSRValid && reverseCSRValid &&
-                            edgeCountValid && runtimePathValid &&
-                            derivedGraphValid && kCoreValid &&
+    bool allCriticalTests = forwardCSRValid  && reverseCSRValid  &&
+                            edgeCountValid   && runtimePathValid &&
+                            derivedGraphValid && kCoreValid      && 
                             kpCoreValid;
-
+ 
     if (!allCriticalTests)
     {
-        cout << "\n[ERROR] One or more critical final tests failed.\n";
+        cerr << "\n[ERROR] One or more critical tests failed.\n";
         return 1;
     }
-
+ 
     cout << "\n[VALID] All critical implementation tests passed.\n";
 
 
@@ -1829,58 +1660,59 @@ int main( int argc, char* argv[] )
 
     auto programEnd = chrono::high_resolution_clock::now();
     double totalSeconds = chrono::duration<double>(programEnd - programStart).count();
-
+ 
     cout << "\n\n========================================\n";
     cout << " FINAL IMPLEMENTATION SUMMARY\n";
     cout << "========================================\n";
-    cout << "Total Nodes: " << totalNodes << endl;
-    cout << "Total Valid Edges: " << totalValidEdges << endl;
-    cout << "Total Invalid Edges: " << totalInvalidEdges << endl;
-
+    cout << "Total Nodes:        " << hin.totalNodes     << endl;
+    cout << "Total Valid Edges:  " << totalValidEdges    << endl;
+    cout << "Total Invalid Edges:" << totalInvalidEdges  << endl;
+ 
     cout << "\nRuntime Configuration:\n";
-    cout << "  Start Type: " << startType << endl;
-    cout << "  Query Local ID: " << queryNode - startTypeOffset << endl;
-    cout << "  Query Global ID: " << queryNode << endl;
-    cout << "  Path Spec: " << pathSpec << endl;
-    cout << "  k: " << k << endl;
-    cout << "  p: " << p << endl;
-
+    cout << "  Start Type:   " << startType << endl;
+    cout << "  Query Local:  " << queryNode - startTypeOffset << endl;
+    cout << "  Query Global: " << queryNode << endl;
+    cout << "  Path Spec:    " << pathSpec  << endl;
+    cout << "  k:            " << k         << endl;
+    cout << "  p:            " << p         << endl;
+ 
     cout << "\nDerived Graph:\n";
-    cout << "  Nodes: " << derivedNodes.size() << endl;
-    cout << "  Edges: " << derivedEdges << endl;
-    cout << "  Surviving Nodes: " << survivingNodes << endl;
-    cout << "  Query Community Size: " << communityIndices.size() << endl;
-
+    cout << "  Nodes:           " << derivedNodes.size()      << endl;
+    cout << "  Edges:           " << derivedEdges             << endl;
+    cout << "  Surviving Nodes: " << survivingNodes           << endl;
+    cout << "  Community Size:  " << communityIndices.size()  << endl;
+ 
     cout << "\nAdditional Meta-Path:\n";
-    cout << "  Name: " << additionalName << endl;
-    cout << "  Spec: " << additionalSpec << endl;
-    cout << "  Neighbours: " << additionalNeighbours.size() << endl;
-
+    cout << "  Name:       " << additionalName                << endl;
+    cout << "  Spec:       " << additionalSpec                << endl;
+    cout << "  Neighbours: " << additionalNeighbours.size()   << endl;
+ 
     cout << "\nTotal Program Time: " << totalSeconds << " sec\n";
-
+ 
     cout << "\nStatus:\n";
     cout << "[DONE] Real MAG Dataset\n";
     cout << "[DONE] Dynamic Schema Discovery\n";
-    cout << "[DONE] Runtime Relation Mapping\n";
-    cout << "[DONE] Global Node IDs\n";
+    cout << "[DONE] struct HIN Data Structure\n";
+    cout << "[DONE] Global Node ID Assignment\n";
     cout << "[DONE] Forward Modified CSR + Type_Offset_Index\n";
     cout << "[DONE] Reverse CSR\n";
     cout << "[DONE] Generic Runtime Meta-Path Configuration\n";
     cout << "[DONE] Query-Centred Derived Graph\n";
-    cout << "[DONE] Multiple k Testing\n";
+    cout << "[DONE] Multiple K Testing\n";
     cout << "[DONE] Iterative K-Core Peeling\n";
+    cout << "[DONE] KP-Core Size Constraint\n";
     cout << "[DONE] Final Query Community Extraction\n";
-    cout << "[DONE] Additional Meta-Path Test\n";
-    cout << "[DONE] Memory Evaluation\n";
-    cout << "[DONE] Performance Evaluation\n";
-    cout << "[DONE] Final Validation / Demo Checklist\n";
-
+    cout << "[DONE] Additional Meta-Path Test (AIA)\n";
+    cout << "[DONE] Memory and Performance Evaluation\n";
+    cout << "[DONE] Final Validation Checklist\n";
+ 
     cout << "\nUSAGE EXAMPLES:\n";
-    cout << "  Default APA:       ./main.exe\n";
-    cout << "  APA custom:        ./main.exe author 0 4 writes:F,writes:R\n";
-    cout << "  AIA custom:        ./main.exe author auto 3 affiliated_with:F,affiliated_with:R\n";
-    cout << "  KP-Core (p=5):     ./main.exe author auto 2 writes:F,writes:R 5\n";
-    cout << "  KP-Core (p=10):    ./main.exe author auto 2 writes:F,writes:R 10\n";
+    cout << "  Default APA:    ./main.exe\n";
+    cout << "  APA custom:     ./main.exe author 0 4 writes:F,writes:R\n";
+    cout << "  AIA custom:     ./main.exe author auto 3 affiliated_with:F,affiliated_with:R\n";
+    cout << "  KP-Core (p=5):  ./main.exe author auto 2 writes:F,writes:R 5\n";
+    cout << "  KP-Core (p=10): ./main.exe author auto 2 writes:F,writes:R 10\n";
+ 
     cout << "========================================\n";
     return 0;
 }
