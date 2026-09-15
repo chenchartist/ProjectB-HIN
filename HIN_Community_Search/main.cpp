@@ -434,6 +434,89 @@ vector<int> extractQueryCommunity(
 }
 
 
+// ========================================================= 
+// PARSE META-PATH SPECIFICATION
+// ========================================================= 
+// Parses a comma-separated meta-path string (e.g. "writes:F,writes:R")
+// and validates it against the discovered HIN schema.
+bool parseMetaPath(
+    const string& spec,
+    const string& initialType,
+    const HIN& hin,
+    vector<MetaPathStep>& outPath,
+    string& endType,
+    string& readable)
+{
+    outPath.clear();
+    readable = initialType;
+    string currentType = initialType;
+    string token;
+    stringstream ss(spec);
+
+    while (getline(ss, token, ','))
+    {
+        token = trim(token);
+        if (token.empty()) continue;
+
+        size_t colon = token.find(':');
+        if (colon == string::npos) return false;
+
+        string relationName = trim(token.substr(0, colon));
+        string direction    = trim(token.substr(colon + 1));
+        transform(direction.begin(), direction.end(),
+                  direction.begin(), ::toupper);
+
+        bool forward;
+        if (direction == "F" || direction == "FORWARD")
+            forward = true;
+        else if (direction == "R" || direction == "REVERSE")
+            forward = false;
+        else
+            return false;
+
+        auto relationIDIt = hin.relationTypeToID.find(relationName);
+        if (relationIDIt == hin.relationTypeToID.end())
+            return false;
+
+        bool schemaMatch = false;
+        string nextType;
+
+        for (const RelationSchema& r : hin.relations)
+        {
+            if (r.relationType != relationName) continue;
+            if (forward && r.sourceType == currentType)
+            {
+                nextType = r.targetType;
+                schemaMatch = true;
+                break;
+            }
+            if (!forward && r.targetType == currentType)
+            {
+                nextType = r.sourceType;
+                schemaMatch = true;
+                break;
+            }
+        }
+
+        if (!schemaMatch) return false;
+
+        MetaPathStep step;
+        step.relationTypeID = relationIDIt->second;
+        step.forward        = forward;
+        outPath.push_back(step);
+
+        readable += " --[" + relationName +
+                    (forward ? " FORWARD" : " REVERSE") +
+                    "]--> " + nextType;
+
+        currentType = nextType;
+    }
+
+    endType = currentType;
+    return !outPath.empty();
+}
+
+
 // =========================================================
 // MAIN
 // =========================================================
@@ -1014,88 +1097,12 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-// Parse and validate meta-path against discovered schema
-    auto parsePath = [&](
-        const string& spec,
-        const string& initialType,
-        vector<MetaPathStep>& outPath,
-        string& endType,
-        string& readable) -> bool
-    {
-        outPath.clear();
-        readable = initialType;
-        string currentType = initialType;
-        string token;
-        stringstream ss(spec);
- 
-        while (getline(ss, token, ','))
-        {
-            token = trim(token);
-            if (token.empty()) continue;
- 
-            size_t colon = token.find(':');
-            if (colon == string::npos) return false;
- 
-            string relationName = trim(token.substr(0, colon));
-            string direction    = trim(token.substr(colon + 1));
-            transform(direction.begin(), direction.end(),
-                      direction.begin(), ::toupper);
- 
-            bool forward;
-            if (direction == "F" || direction == "FORWARD")
-                forward = true;
-            else if (direction == "R" || direction == "REVERSE")
-                forward = false;
-            else
-                return false;
- 
-            auto relationIDIt = hin.relationTypeToID.find(relationName);
-            if (relationIDIt == hin.relationTypeToID.end())
-                return false;
- 
-            bool schemaMatch = false;
-            string nextType;
- 
-            for (const RelationSchema& r : hin.relations)
-            {
-                if (r.relationType != relationName) continue;
-                if (forward && r.sourceType == currentType)
-                {
-                    nextType = r.targetType;
-                    schemaMatch = true;
-                    break;
-                }
-                if (!forward && r.targetType == currentType)
-                {
-                    nextType = r.sourceType;
-                    schemaMatch = true;
-                    break;
-                }
-            }
- 
-            if (!schemaMatch) return false;
- 
-            MetaPathStep step;
-            step.relationTypeID = relationIDIt->second;
-            step.forward        = forward;
-            outPath.push_back(step);
- 
-            readable += " --[" + relationName +
-                        (forward ? " FORWARD" : " REVERSE") +
-                        "]--> " + nextType;
- 
-            currentType = nextType;
-        }
- 
-        endType = currentType;
-        return !outPath.empty();
-    };
-
     vector<MetaPathStep> metaPath;
     string endType;
     string readablePath;
 
-    if (!parsePath(pathSpec, startType, metaPath, endType, readablePath))
+    // Pass hin explicitly to parseMetaPath
+    if (!parseMetaPath(pathSpec, startType, hin, metaPath, endType, readablePath))
     {
         cerr << "ERROR: Invalid path specification or path does not match discovered HIN schema.\n";
         cerr << "Format example: writes:F,writes:R\n";
@@ -1495,7 +1502,7 @@ int main( int argc, char* argv[] )
     string additionalEndType;
     string additionalReadable;
     bool additionalPathValid = parsePath(
-        additionalSpec, startType, additionalPath,
+        additionalSpec, startType, hin, additionalPath,
         additionalEndType, additionalReadable);
 
     vector<int> additionalNeighbours;
