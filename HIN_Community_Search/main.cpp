@@ -1175,7 +1175,7 @@ int main( int argc, char* argv[] )
             if (!result.empty())
             {
                 queryNode = candidate;
-                metaPathNeighbours = move(result);
+                metaPathNeighbours = std::move(result);
                 break;
             }
         }
@@ -1501,7 +1501,7 @@ int main( int argc, char* argv[] )
     vector<MetaPathStep> additionalPath;
     string additionalEndType;
     string additionalReadable;
-    bool additionalPathValid = parsePath(
+    bool additionalPathValid = parseMetaPath(
         additionalSpec, startType, hin, additionalPath,
         additionalEndType, additionalReadable);
 
@@ -1531,7 +1531,7 @@ int main( int argc, char* argv[] )
                 if (!result.empty())
                 {
                     additionalQuery = candidate;
-                    additionalNeighbours = move(result);
+                    additionalNeighbours = std::move(result);
                     break;
                 }
             }

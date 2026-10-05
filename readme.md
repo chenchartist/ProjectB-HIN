@@ -1,85 +1,143 @@
-What is This Project?
+# HIN Community Search System
 
-This project finds groups of doctors who work together and treat many patients.
+This project is a C++ program for finding strong communities in a Heterogeneous Information Network (HIN).
 
-Example:
+The dataset contains:
 
-Doctor Smith treats patients A, B, C, D (treats 4 patients)
-Doctor Johnson treats patients B, C, D, E (treats 4 patients)
-They work together and form a community
+- Authors
+- Papers
+- Institutions
+- Fields of Study
 
-The technical name is K-Core Community Search on Heterogeneous Information Networks (HINs).
+The relationships include:
 
-The project analyzes hospital data including:
+- `author --writes--> paper`
+- `author --affiliated_with--> institution`
+- `paper --cites--> paper`
+- `paper --has_topic--> field_of_study`
 
-Patients (people being treated)
-Doctors (healthcare providers)
-Conditions (diseases/illnesses)
-Medications (treatments)
-Departments (where doctors work)
-Setup Instructions
+The program uses meta-path search and k-core community search to find strongly connected groups.
 
-Step 1: Install Python
+## Dataset Path
 
-Go to: https://www.python.org/downloads/ Click the Download Python button Run the installer Check "Add Python to PATH" - this is important Click "Install Now" Restart your computer
+The dataset must be placed here:
 
-Step 2: Download Project Files
+```text
+HIN_Community_Search/data/mag/raw/
+```
 
-Download these files from the project folder:
+Required files:
 
-hin_kcore_search.py (main code)
-hospital_data.csv (hospital data)
-test_basic.py (simple example)
-run_hospital.py (full hospital test)
+```text
+data/mag/raw/num-node-dict.csv
+data/mag/raw/triplet-type-list.csv
+data/mag/raw/relations/.../edge.csv
+```
 
-Step 3: Verify Setup
+The dataset is ignored by Git because it is too large.
 
-Open PowerShell or Terminal and type:
+## Compile
 
-python --version
+Go to the C++ folder:
 
-You should see: Python 3.x.x
+```bash
+cd HIN_Community_Search
+```
 
-File Explanations
-hin_kcore_search.py - MAIN CODE
+Compile the program:
 
-This is the core algorithm that finds doctor communities. It takes patient-doctor relationships as input and finds groups of doctors who work together. You just use it, do not modify it. It has about 400 lines of code.
+```bash
+g++ main.cpp -o main.exe
+```
 
-How to use it:
+## Run
 
-from hin_kcore_search import HINKCoreSearch
+Run with default settings:
 
-hin = HINKCoreSearch()
+```bash
+./main.exe
+```
 
-use it
-hospital_data.csv - DATASET
+Run with custom settings:
 
-This is the hospital patient and doctor data file.
+```bash
+./main.exe startType queryNode k metaPath p
+```
 
-Example of what is inside:
+Meaning:
 
-source,target,edge_type,source_type,target_type Patient_001,Doctor_Smith,treated_by,Patient,Doctor Patient_001,Condition_Diabetes,diagnosed_with,Patient,Condition Doctor_Smith,Department_Endocrinology,works_in,Doctor,Department
+```text
+startType = node type to search from
+queryNode = local node ID or auto
+k = minimum degree for k-core
+metaPath = relationship path
+p = minimum community size
+```
 
-The columns are:
+## Example Commands
 
-source: First person or thing
-target: Second person or thing
-edge_type: Type of relationship (treated_by, diagnosed_with, works_in)
-source_type: What kind of thing source is (Patient, Doctor, Condition, etc.)
-target_type: What kind of thing target is
+Find author communities through papers:
 
-Data included:
+```bash
+./main.exe author auto 2 writes:F,writes:R 1
+```
 
-12 Patients
-4 Doctors
-6 Conditions
-8 Medications
-3 Departments
-40 total relationships
-test_basic.py - SIMPLE EXAMPLE
+Find author communities through institutions:
 
-This is a learning example with small data (only 5 edges). Use this first to understand how the code works. It shows step by step how to use the project.
+```bash
+./main.exe author auto 2 affiliated_with:F,affiliated_with:R 1
+```
 
-run_hospital.py - FULL TEST
+Find paper communities through citations:
 
-This runs the algorithm on the hospital_data.csv file. It loads hospital data, shows network statistics, finds doctor communities, and prints results.
+```bash
+./main.exe paper auto 2 cites:F,cites:R 1
+```
+
+Search using a specific author local ID:
+
+```bash
+./main.exe author 10 2 writes:F,writes:R 1
+```
+
+Use a stronger k-core requirement:
+
+```bash
+./main.exe author auto 5 writes:F,writes:R 1
+```
+
+## Meta-Path Examples
+
+APA means:
+
+```text
+Author -> Paper -> Author
+```
+
+In this program, APA is written as:
+
+```text
+writes:F,writes:R
+```
+
+Other useful meta-paths:
+
+```text
+APA: Author -> Paper -> Author
+writes:F,writes:R
+
+AIA: Author -> Institution -> Author
+affiliated_with:F,affiliated_with:R
+
+PCP: Paper -> Paper -> Paper through citations
+cites:F,cites:R
+
+PFP: Paper -> Field of Study -> Paper
+has_topic:F,has_topic:R
+```
+
+## Notes
+
+A k-core community means every node in the final group has at least `k` connections inside the group.
+
+The current main implementation is C++. The Python files are older reference/demo files and are not required to run the main project.
