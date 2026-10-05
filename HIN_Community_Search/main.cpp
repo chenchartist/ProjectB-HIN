@@ -11,6 +11,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <queue>
+#include <iterator>
  
 using namespace std; 
  
@@ -180,59 +181,53 @@ int getGlobalNodeID(
 vector<int> followMetaPath(
     int startNode,
     const vector<MetaPathStep>& path,
-    const HIN& hin)
+    const HIN& hin,
+    int maxFanout = 0)            // 0 = unlimited
 {
     vector<int> currentNodes;
     currentNodes.push_back(startNode);
- 
-    for (const MetaPathStep& step : path)
+
+    for (size_t s = 0; s < path.size(); s++)
     {
+        const MetaPathStep& step = path[s];
+        const vector<int>& rp = step.forward ? hin.rowPointers        : hin.reverseRowPointers;
+        const vector<int>& ci = step.forward ? hin.columnIndices      : hin.reverseColumnIndices;
+        const vector<int>& rt = step.forward ? hin.relationTypeIDs    : hin.reverseRelationTypeIDs;
+
         unordered_set<int> nextSet;
- 
+
         for (int node : currentNodes)
         {
-            if (step.forward)
+            int start = rp[node];
+            int end   = rp[node + 1];
+
+            // Hub filter: skip intermediate nodes (not the start node)
+            // whose fan-out on this relation exceeds the limit
+            if (maxFanout > 0 && s > 0)
             {
-                // Traverse forward CSR
-                int start = hin.rowPointers[node];
-                int end   = hin.rowPointers[node + 1];
- 
+                int fanout = 0;
                 for (int i = start; i < end; i++)
-                {
-                    if (hin.relationTypeIDs[i] == step.relationTypeID)
-                        nextSet.insert(hin.columnIndices[i]);
-                }
+                    if (rt[i] == step.relationTypeID) fanout++;
+                if (fanout > maxFanout)
+                    continue;
             }
-            else
-            {
-                // Traverse reverse CSR
-                int start = hin.reverseRowPointers[node];
-                int end   = hin.reverseRowPointers[node + 1];
- 
-                for (int i = start; i < end; i++)
-                {
-                    if (hin.reverseRelationTypeIDs[i] == step.relationTypeID)
-                        nextSet.insert(hin.reverseColumnIndices[i]);
-                }
-            }
+
+            for (int i = start; i < end; i++)
+                if (rt[i] == step.relationTypeID)
+                    nextSet.insert(ci[i]);
         }
- 
+
         currentNodes.assign(nextSet.begin(), nextSet.end());
- 
         if (currentNodes.empty())
             break;
     }
- 
-    // Remove start node if meta-path returns to same type
+
     currentNodes.erase(
         remove(currentNodes.begin(), currentNodes.end(), startNode),
         currentNodes.end());
- 
     sort(currentNodes.begin(), currentNodes.end());
- 
     return currentNodes;
 }
- 
 
  
 // ========================================================= 
@@ -248,14 +243,15 @@ vector<int> followMetaPath(
 //   2. For each candidate node find its meta-path neighbours
 //   3. Build undirected adjacency list from shared connections
  
-void buildDerivedGraph( 
-    int queryNode, 
-   const vector<int>& queryNeighbours,
+void buildDerivedGraph(
+    int queryNode,
+    const vector<int>& queryNeighbours,
     const vector<MetaPathStep>& metaPath,
     const HIN& hin,
     vector<int>& derivedNodes,
     vector<vector<int>>& derivedAdjacency,
-    unordered_map<int, int>& globalToDerived)
+    unordered_map<int, int>& globalToDerived,
+    int maxFanout = 0)
 { 
     derivedNodes.clear(); 
     derivedNodes.push_back(queryNode); 
@@ -281,8 +277,7 @@ void buildDerivedGraph(
     {
         int globalNode = derivedNodes[i];
  
-        vector<int> neighbours = followMetaPath(
-            globalNode, metaPath, hin);
+        vector<int> neighbours = followMetaPath(globalNode, metaPath, hin, maxFanout);
  
         for (int globalNeighbour : neighbours)
         {
@@ -431,89 +426,6 @@ vector<int> extractQueryCommunity(
     }
 
     return community;
-}
-
-
-// ========================================================= 
-// PARSE META-PATH SPECIFICATION
-// ========================================================= 
-// Parses a comma-separated meta-path string (e.g. "writes:F,writes:R")
-// and validates it against the discovered HIN schema.
-bool parseMetaPath(
-    const string& spec,
-    const string& initialType,
-    const HIN& hin,
-    vector<MetaPathStep>& outPath,
-    string& endType,
-    string& readable)
-{
-    outPath.clear();
-    readable = initialType;
-    string currentType = initialType;
-    string token;
-    stringstream ss(spec);
-
-    while (getline(ss, token, ','))
-    {
-        token = trim(token);
-        if (token.empty()) continue;
-
-        size_t colon = token.find(':');
-        if (colon == string::npos) return false;
-
-        string relationName = trim(token.substr(0, colon));
-        string direction    = trim(token.substr(colon + 1));
-        transform(direction.begin(), direction.end(),
-                  direction.begin(), ::toupper);
-
-        bool forward;
-        if (direction == "F" || direction == "FORWARD")
-            forward = true;
-        else if (direction == "R" || direction == "REVERSE")
-            forward = false;
-        else
-            return false;
-
-        auto relationIDIt = hin.relationTypeToID.find(relationName);
-        if (relationIDIt == hin.relationTypeToID.end())
-            return false;
-
-        bool schemaMatch = false;
-        string nextType;
-
-        for (const RelationSchema& r : hin.relations)
-        {
-            if (r.relationType != relationName) continue;
-            if (forward && r.sourceType == currentType)
-            {
-                nextType = r.targetType;
-                schemaMatch = true;
-                break;
-            }
-            if (!forward && r.targetType == currentType)
-            {
-                nextType = r.sourceType;
-                schemaMatch = true;
-                break;
-            }
-        }
-
-        if (!schemaMatch) return false;
-
-        MetaPathStep step;
-        step.relationTypeID = relationIDIt->second;
-        step.forward        = forward;
-        outPath.push_back(step);
-
-        readable += " --[" + relationName +
-                    (forward ? " FORWARD" : " REVERSE") +
-                    "]--> " + nextType;
-
-        currentType = nextType;
-    }
-
-    endType = currentType;
-    return !outPath.empty();
 }
 
 
@@ -694,6 +606,84 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
+    // =====================================================
+    // STAGE 3B - LOAD NODE NAMES FROM MAPPING FILES
+    // Maps global node IDs to human readable names
+    // Uses mapping files from data/mag/mapping/
+    // =====================================================
+
+    cout << "\n\nSTAGE 3B - LOAD NODE NAMES\n";
+    cout << "----------------------------------------\n";
+
+    map<int, string> nodeNames;
+
+    map<string, string> mappingFiles =
+    {
+        {"author",
+        "data/mag/mapping/author_entidx2name.csv"},
+        {"paper",
+        "data/mag/mapping/paper_entidx2name.csv"},
+        {"institution",
+        "data/mag/mapping/institution_entidx2name.csv"},
+        {"field_of_study",
+        "data/mag/mapping/field_of_study_entidx2name.csv"}
+    };
+
+    for (const auto& entry : mappingFiles)
+    {
+        string nodeType = entry.first;
+        string filePath = entry.second;
+
+        ifstream mapFile(filePath);
+
+        if (!mapFile.is_open())
+        {
+            cout << "WARNING: Could not open "
+                << filePath
+                << " — names will show as ID only\n";
+            continue;
+        }
+
+        string mapLine;
+        int loaded = 0;
+
+        while (getline(mapFile, mapLine))
+        {
+            mapLine = trim(mapLine);
+            if (mapLine.empty()) continue;
+
+            // Split on the FIRST comma only, so names containing commas stay whole
+            size_t comma = mapLine.find(',');
+            if (comma == string::npos) continue;
+
+            string idText = trim(mapLine.substr(0, comma));
+            string name   = trim(mapLine.substr(comma + 1));
+
+            int localID;
+            try
+            {
+                localID = stoi(idText);
+            }
+            catch (...)
+            {
+                continue;   // skips the header row and any malformed lines
+            }
+
+            int globalID = getGlobalNodeID(
+                nodeType, localID, hin.nodeTypeOffsets);
+
+            if (globalID >= 0)
+            {
+                nodeNames[globalID] = name;
+                loaded++;
+            }
+        }
+
+        mapFile.close();
+        cout << nodeType << ": " << loaded << " names loaded\n";
+    }
+
+    cout << "Total names loaded: " << nodeNames.size() << endl;
 
     // =====================================================
     // STAGE 4 - LOAD GLOBAL EDGES
@@ -1078,6 +1068,12 @@ int main( int argc, char* argv[] )
     int k            = (argc > 3) ? stoi(argv[3]) : 5;
     string pathSpec  = (argc > 4) ? argv[4] : "writes:F,writes:R";
     int p            = (argc > 5) ? stoi(argv[5]) : 1;
+    int maxFanout = (argc > 6) ? stoi(argv[6]) : 0;
+    if (maxFanout < 0)
+    {
+        cerr << "ERROR: maxFanout must be >= 0 (0 = unlimited).\n";
+        return 1;
+    }
 
     if (hin.nodeTypeCounts.find(startType) == hin.nodeTypeCounts.end())
     {
@@ -1097,12 +1093,88 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
+// Parse and validate meta-path against discovered schema
+    auto parsePath = [&](
+        const string& spec,
+        const string& initialType,
+        vector<MetaPathStep>& outPath,
+        string& endType,
+        string& readable) -> bool
+    {
+        outPath.clear();
+        readable = initialType;
+        string currentType = initialType;
+        string token;
+        stringstream ss(spec);
+ 
+        while (getline(ss, token, ','))
+        {
+            token = trim(token);
+            if (token.empty()) continue;
+ 
+            size_t colon = token.find(':');
+            if (colon == string::npos) return false;
+ 
+            string relationName = trim(token.substr(0, colon));
+            string direction    = trim(token.substr(colon + 1));
+            transform(direction.begin(), direction.end(),
+                      direction.begin(), ::toupper);
+ 
+            bool forward;
+            if (direction == "F" || direction == "FORWARD")
+                forward = true;
+            else if (direction == "R" || direction == "REVERSE")
+                forward = false;
+            else
+                return false;
+ 
+            auto relationIDIt = hin.relationTypeToID.find(relationName);
+            if (relationIDIt == hin.relationTypeToID.end())
+                return false;
+ 
+            bool schemaMatch = false;
+            string nextType;
+ 
+            for (const RelationSchema& r : hin.relations)
+            {
+                if (r.relationType != relationName) continue;
+                if (forward && r.sourceType == currentType)
+                {
+                    nextType = r.targetType;
+                    schemaMatch = true;
+                    break;
+                }
+                if (!forward && r.targetType == currentType)
+                {
+                    nextType = r.sourceType;
+                    schemaMatch = true;
+                    break;
+                }
+            }
+ 
+            if (!schemaMatch) return false;
+ 
+            MetaPathStep step;
+            step.relationTypeID = relationIDIt->second;
+            step.forward        = forward;
+            outPath.push_back(step);
+ 
+            readable += " --[" + relationName +
+                        (forward ? " FORWARD" : " REVERSE") +
+                        "]--> " + nextType;
+ 
+            currentType = nextType;
+        }
+ 
+        endType = currentType;
+        return !outPath.empty();
+    };
+
     vector<MetaPathStep> metaPath;
     string endType;
     string readablePath;
 
-    // Pass hin explicitly to parseMetaPath
-    if (!parseMetaPath(pathSpec, startType, hin, metaPath, endType, readablePath))
+    if (!parsePath(pathSpec, startType, metaPath, endType, readablePath))
     {
         cerr << "ERROR: Invalid path specification or path does not match discovered HIN schema.\n";
         cerr << "Format example: writes:F,writes:R\n";
@@ -1117,13 +1189,36 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-    cout << "Start Node Type: " << startType << endl;
-    cout << "Selected k:      " << k << endl;
-    cout << "Selected p:      " << p << " (minimum community size)\n";
-    cout << "Path Spec:       " << pathSpec << endl;
-    cout << "Resolved Path:\n  " << readablePath << endl;
-    cout << "Steps:           " << metaPath.size() << endl;
-    cout << "[VALID] Runtime meta-path matches discovered HIN schema.\n";
+    // Map path specifications to friendly names
+    map<string, string> metaPathNames =
+    {
+        {"writes:F,writes:R",
+        "APA (Author-Paper-Author)"},
+
+        {"affiliated_with:F,affiliated_with:R",
+        "AIA (Author-Institution-Author)"},
+
+        {"writes:F,has_topic:F,has_topic:R,writes:R",
+        "APTPA (Author-Paper-Topic-Paper-Author)"},
+
+        {"cites:F,cites:R",
+        "PCP (Paper-Citation-Paper)"},
+
+        {"writes:R,writes:F",
+        "PAP (Paper-Author-Paper)"}
+    };  
+
+    // Look up friendly name
+    string metaPathLabel = pathSpec;
+    if (metaPathNames.count(pathSpec))
+        metaPathLabel = metaPathNames[pathSpec];
+
+    cout << "Meta-Path Name:  " << metaPathLabel  << endl;
+    cout << "Start Node Type: " << startType      << endl;
+    cout << "Selected k:      " << k              << endl;
+    cout << "Selected p:      " << p              << endl;
+    cout << "Path Spec:       " << pathSpec       << endl;
+    cout << "Resolved Path:\n  " << readablePath  << endl;
 
 
     // =====================================================
@@ -1160,7 +1255,7 @@ int main( int argc, char* argv[] )
         }
 
         queryNode = startTypeOffset + localID;
-        metaPathNeighbours = followMetaPath(queryNode, metaPath, hin);
+        metaPathNeighbours = followMetaPath(queryNode, metaPath, hin, maxFanout);
     }
     else
     {
@@ -1170,7 +1265,7 @@ int main( int argc, char* argv[] )
         for (int localID = 0; localID < searchLimit; localID++)
         {
             int candidate = startTypeOffset + localID;
-            vector<int> result = followMetaPath(candidate, metaPath, hin);
+            vector<int> result = followMetaPath(candidate, metaPath, hin, maxFanout);
  
             if (!result.empty())
             {
@@ -1197,22 +1292,28 @@ int main( int argc, char* argv[] )
     cout << "\nMeta-Path Neighbours Found: " << metaPathNeighbours.size() << endl;
     cout << "First Neighbours:\n";
 
-    for (size_t i = 0; i < metaPathNeighbours.size() && i < 20; i++)
+    for (size_t i = 0;
+     i < metaPathNeighbours.size() && i < 20; i++)
     {
         int neighbour = metaPathNeighbours[i];
         cout << "  Global ID: " << neighbour;
+
         if (neighbour >= startTypeOffset &&
             neighbour < startTypeOffset + startTypeCount)
         {
-            cout << " | " << startType << " Local ID: "
-                 << neighbour - startTypeOffset;
+            cout << " | Local ID: "
+                << neighbour - startTypeOffset;
         }
+
+        // Show name if available
+        if (nodeNames.count(neighbour))
+            cout << " | Name: " << nodeNames[neighbour];
+
         cout << endl;
     }
 
     cout << "\nMeta-Path Query Time: " 
         << fixed << setprecision(6) << querySeconds << " sec\n";
-
 
     // =====================================================
     // STAGE 12 - META-PATH VALIDATION
@@ -1255,9 +1356,18 @@ int main( int argc, char* argv[] )
     vector<vector<int>> derivedAdjacency;
     unordered_map<int, int> globalToDerived;
 
+    const size_t maxCandidates = 50000;
+    if (metaPathNeighbours.size() > maxCandidates)
+    {
+        cerr << "[ERROR] " << metaPathNeighbours.size()
+            << " meta-path neighbours exceeds the limit of " << maxCandidates << ".\n"
+            << "        Use a smaller maxFanout (6th argument) to filter hub nodes.\n";
+        return 1;
+    }
+
     buildDerivedGraph(
         queryNode, metaPathNeighbours, metaPath, hin,
-        derivedNodes, derivedAdjacency, globalToDerived);
+        derivedNodes, derivedAdjacency, globalToDerived, maxFanout);
 
     auto derivedEnd = chrono::high_resolution_clock::now();
     double derivedSeconds = chrono::duration<double>(derivedEnd - derivedStart).count();
@@ -1345,7 +1455,6 @@ int main( int argc, char* argv[] )
              << fixed << setprecision(6) << testSeconds << endl;
     }
 
-
     // =====================================================
     // STAGE 15 - DETAILED RUNTIME K-CORE
     // Runs k-core peeling at the selected k value.
@@ -1394,6 +1503,8 @@ int main( int argc, char* argv[] )
     vector<int> communityIndices = extractQueryCommunity(
         queryIndexIt->second, derivedAdjacency, removed);
 
+    auto explainStart = chrono::high_resolution_clock::now();
+
     if (communityIndices.empty())
     {
         cout << "Query node did NOT live after being peeled by k cores.\n";
@@ -1415,21 +1526,126 @@ int main( int argc, char* argv[] )
         if ((int)communityIndices.size() >= p)
         {
             cout << "[PASS] Community satisfies KP-Core constraint.\n";
-            cout << "       Size " << communityIndices.size()
-                << " >= p=" << p << "\n";
-            cout << "\nFinal KP-Core Community Members:\n";
+            cout << "       Size " << communityIndices.size() << " >= p=" << p << "\n";
 
-            for (size_t x = 0; x < communityIndices.size() && x < 30; x++)
+            // ── Derive the explanation half-path from the runtime meta-path ──
+            // Symmetric if step i mirrors step n-1-i with the direction flipped.
+            size_t n = metaPath.size();
+            bool symmetric = (n % 2 == 0);
+            for (size_t i = 0; symmetric && i < n / 2; i++)
             {
-                int idx = communityIndices[x];
-                int globalID = derivedNodes[idx];
-                cout << "  " << startType
-                    << " Global ID: " << globalID
-                    << " | Local ID: " << globalID - startTypeOffset
-                    << " | Final Degree: " << finalDegrees[idx];
-                if (globalID == queryNode) cout << "  <-- QUERY";
-                cout << endl;
+                const MetaPathStep& a = metaPath[i];
+                const MetaPathStep& b = metaPath[n - 1 - i];
+                if (a.relationTypeID != b.relationTypeID || a.forward == b.forward)
+                    symmetric = false;
             }
+
+            vector<MetaPathStep> halfPath;
+            string midType, halfReadable;
+            vector<int> queryAttrs;
+
+            if (symmetric)
+            {
+                // Rebuild "writes:F,has_topic:F" from the first half of pathSpec
+                vector<string> tokens;
+                string tok;
+                stringstream ss(pathSpec);
+                while (getline(ss, tok, ','))
+                    if (!trim(tok).empty()) tokens.push_back(trim(tok));
+
+                string halfSpec;
+                for (size_t i = 0; i < tokens.size() / 2; i++)
+                    halfSpec += (i ? "," : "") + tokens[i];
+
+                if (parsePath(halfSpec, startType, halfPath, midType, halfReadable))
+                    queryAttrs = followMetaPath(queryNode, halfPath, hin, maxFanout);
+            }
+
+            auto printAttrs = [&](const vector<int>& ids, int limit)
+            {
+                for (int s = 0; s < (int)ids.size() && s < limit; s++)
+                {
+                    if (s) cout << ", ";
+                    auto it = nodeNames.find(ids[s]);
+                    if (it != nodeNames.end()) cout << it->second;
+                    else                       cout << midType << " " << ids[s];
+                }
+            };
+
+            if (!symmetric)
+                cout << "\n[INFO] Meta-path is not symmetric; shared-attribute explanation skipped.\n";
+            else
+                cout << "\nExplaining membership via: " << halfReadable << "\n";
+
+            // ── Members: explain all, print first 30 ──
+            cout << "\nFinal KP-Core Community Members:\n";
+            double jaccardSum = 0.0;
+            int withShared = 0, compared = 0;
+
+            for (size_t x = 0; x < communityIndices.size(); x++)
+            {
+                int idx      = communityIndices[x];
+                int globalID = derivedNodes[idx];
+                bool print   = x < 30;
+
+                if (print)
+                {
+                    cout << "  " << startType
+                        << " Global ID: " << globalID
+                        << " | Local ID: " << globalID - startTypeOffset
+                        << " | Final Degree: " << finalDegrees[idx];
+                    auto nm = nodeNames.find(globalID);
+                    if (nm != nodeNames.end()) cout << " | Name: " << nm->second;
+                }
+
+                if (globalID == queryNode)
+                {
+                    if (print)
+                    {
+                        cout << "  <-- QUERY";
+                        if (!queryAttrs.empty())
+                        {
+                            cout << "\n    Query " << midType << ": ";
+                            printAttrs(queryAttrs, 5);
+                        }
+                        cout << endl;
+                    }
+                    continue;
+                }
+
+                if (symmetric && !queryAttrs.empty())
+                {
+                    vector<int> memberAttrs = followMetaPath(globalID, halfPath, hin, maxFanout);
+                    vector<int> shared;
+                    set_intersection(queryAttrs.begin(), queryAttrs.end(),
+                                    memberAttrs.begin(), memberAttrs.end(),
+                                    back_inserter(shared));
+
+                    size_t uni = queryAttrs.size() + memberAttrs.size() - shared.size();
+                    double jac = uni ? (double)shared.size() / uni : 0.0;
+                    jaccardSum += jac;
+                    compared++;
+                    if (!shared.empty()) withShared++;
+
+                    if (print)
+                    {
+                        cout << "\n    Shared " << midType << " (" << shared.size()
+                            << ", Jaccard " << fixed << setprecision(3) << jac << "): ";
+                        if (shared.empty()) cout << "none";
+                        else                printAttrs(shared, 3);
+                    }
+                }
+                if (print) cout << endl;
+            }
+
+            if (communityIndices.size() > 30)
+                cout << "  ... " << communityIndices.size() - 30 << " more members\n";
+
+            if (compared > 0)
+                cout << "\nCommunity cohesion on " << midType << ": avg Jaccard "
+                    << fixed << setprecision(3) << jaccardSum / compared
+                    << " | " << withShared << "/" << compared
+                    << " members share at least one with the query\n";
         }
         else
         {
@@ -1442,6 +1658,8 @@ int main( int argc, char* argv[] )
         }
     }
 
+    auto explainEnd = chrono::high_resolution_clock::now();
+    double explainSeconds = chrono::duration<double>(explainEnd - explainStart).count();
 
     // Validate k-core correctness — every survivor must have degree >= k
     bool kCoreValid = true;
@@ -1501,7 +1719,7 @@ int main( int argc, char* argv[] )
     vector<MetaPathStep> additionalPath;
     string additionalEndType;
     string additionalReadable;
-    bool additionalPathValid = parseMetaPath(
+    bool additionalPathValid = parsePath(
         additionalSpec, startType, hin, additionalPath,
         additionalEndType, additionalReadable);
 
@@ -1614,7 +1832,7 @@ int main( int argc, char* argv[] )
     cout << "  Derived Graph Build:    " << derivedSeconds << " sec\n";
     cout << "  K-Core Peeling:         " << kCoreSeconds   << " sec\n";
     cout << "  Additional Meta-Path:   " << additionalSeconds << " sec\n";
-
+    cout << "  Community Explanation:  " << explainSeconds << " sec\n";
 
     // =====================================================
     // STAGE 19 - FINAL TEST / DEMO CHECKLIST
@@ -1682,6 +1900,7 @@ int main( int argc, char* argv[] )
     cout << "  Path Spec:    " << pathSpec  << endl;
     cout << "  k:            " << k         << endl;
     cout << "  p:            " << p         << endl;
+    cout << "  Max Fan-out:  " << (maxFanout ? to_string(maxFanout) : "unlimited") << endl;
  
     cout << "\nDerived Graph:\n";
     cout << "  Nodes:           " << derivedNodes.size()      << endl;
@@ -1712,6 +1931,7 @@ int main( int argc, char* argv[] )
     cout << "[DONE] Additional Meta-Path Test (AIA)\n";
     cout << "[DONE] Memory and Performance Evaluation\n";
     cout << "[DONE] Final Validation Checklist\n";
+    cout << "[DONE] Meta-Path-Driven Community Explanation\n";
  
     cout << "\nUSAGE EXAMPLES:\n";
     cout << "  Default APA:    ./main.exe\n";
