@@ -1463,7 +1463,7 @@ int main( int argc, char* argv[] )
             if (!result.empty())
             {
                 queryNode = candidate;
-                metaPathNeighbours = move(result);
+                metaPathNeighbours = std::move(result);
                 break;
             }
         }
@@ -1961,7 +1961,7 @@ int main( int argc, char* argv[] )
                 if (!result.empty())
                 {
                     additionalQuery = candidate;
-                    additionalNeighbours = move(result);
+                    additionalNeighbours = std::move(result);
                     break;
                 }
             }
