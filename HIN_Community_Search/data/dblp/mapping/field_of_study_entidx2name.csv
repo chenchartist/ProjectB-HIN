@@ -1,0 +1,6889 @@
+0,Knowledge extraction
+1,Data mining
+2,Threshold limit value
+3,Computer science
+4,Clickable
+5,Web page
+6,Web standards
+7,Web Accessibility Initiative
+8,Information overload
+9,Support vector machine
+10,Feature selection
+11,Particle swarm optimization
+12,Classifier (linguistics)
+13,Machine learning
+14,Recommender system
+15,Association rule learning
+16,Elastic net regularization
+17,Matrix (mathematics)
+18,Personalized learning
+19,Synchronous learning
+20,Adaptive learning
+21,Educational technology
+22,Blended learning
+23,Cluster analysis
+24,Canopy clustering algorithm
+25,Hierarchical clustering of networks
+26,CURE data clustering algorithm
+27,Correlation clustering
+28,Least squares
+29,Mean squared error
+30,Decision boundary
+31,Kernel (linear algebra)
+32,Anomaly detection
+33,Population
+34,Participatory sensing
+35,Independent component analysis
+36,Collaborative learning
+37,Intrusion detection system
+38,Anomaly-based intrusion detection system
+39,Online analytical processing
+40,Constant false alarm rate
+41,Data stream clustering
+42,Data stream mining
+43,Cardinality
+44,Pattern recognition
+45,Spatial relation
+46,Semantic similarity
+47,Geographical feature
+48,Similarity measure
+49,Natural language
+50,Latent Dirichlet allocation
+51,Topic model
+52,Microblogging
+53,Information explosion
+54,Feature vector
+55,Dimensionality reduction
+56,Relationship extraction
+57,Heterogeneous network
+58,Domain knowledge
+59,Visual analytics
+60,Application domain
+61,Theoretical computer science
+62,Tree traversal
+63,Tree structure
+64,Data structure
+65,Row
+66,Social graph
+67,Graph (abstract data type)
+68,Connectivity
+69,Social network
+70,Feature (computer vision)
+71,Feature extraction
+72,Learning analytics
+73,Analytics
+74,Formative assessment
+75,Hasse diagram
+76,Competence (human resources)
+77,Sentiment analysis
+78,Entity linking
+79,Home page
+80,Page view
+81,Named-entity recognition
+82,Data stream
+83,Data set
+84,Question answering
+85,Web resource
+86,Ranking
+87,Reciprocity (social psychology)
+88,Mobile phone
+89,Phone
+90,Ask price
+91,Joint probability distribution
+92,Constrained clustering
+93,Clustering coefficient
+94,Hierarchical clustering
+95,Rule of thumb
+96,Optimization problem
+97,Crowdsourcing
+98,Scientific literature
+99,Body of knowledge
+100,Sociology of scientific knowledge
+101,Empirical evidence
+102,Fuzzy clustering
+103,Dynamic time warping
+104,Concept drift
+105,Decision tree
+106,Ensemble forecasting
+107,Artificial intelligence
+108,Information visualization
+109,Visualization
+110,Rendering (computer graphics)
+111,Creative visualization
+112,Volume rendering
+113,Immune tolerance
+114,Autoimmunity
+115,Diabetes mellitus
+116,T cell
+117,Insulin
+118,Markov blanket
+119,Forward algorithm
+120,Variable-order Markov model
+121,Hidden Markov model
+122,Search algorithm
+123,Curse of dimensionality
+124,Metric (mathematics)
+125,Binary number
+126,Artificial neural network
+127,Computational model
+128,Genetic algorithm
+129,Universal Networking Language
+130,Language model
+131,Machine translation
+132,Natural language processing
+133,Information retrieval
+134,Ensembles of classifiers
+135,Collaborative filtering
+136,Social media
+137,Parallel coordinates
+138,Hamiltonian path problem
+139,Graph theory
+140,Cluster (physics)
+141,Social information processing
+142,Probabilistic logic
+143,Logistic distribution
+144,Pareto distribution
+145,Outlier
+146,Cumulative distribution function
+147,Equivalence class
+148,Closure operator
+149,Computational thinking
+150,Traffic flow
+151,Traffic simulation
+152,Visual programming language
+153,Human–computer interaction
+154,Perceptron
+155,Prior probability
+156,Precision and recall
+157,Lowest common ancestor
+158,XML
+159,Heuristic
+160,Matrix decomposition
+161,Statistical relational learning
+162,Relational database
+163,Relational model
+164,Information technology
+165,Video quality
+166,Testbed
+167,Wireless
+168,Communication channel
+169,Social learning
+170,Knowledge management
+171,Design elements and principles
+172,Smart learning
+173,Psychological research
+174,Vocabulary
+175,Social psychology (sociology)
+176,Novelty detection
+177,One-class classification
+178,Iterative learning control
+179,Clustering high-dimensional data
+180,Spectral clustering
+181,Iterative method
+182,Induced subgraph
+183,Factor-critical graph
+184,Butterfly graph
+185,Complement graph
+186,Graph power
+187,Open Biomedical Ontologies
+188,Ontology (information science)
+189,Upper ontology
+190,Ontology
+191,World Wide Web
+192,Regression analysis
+193,Statistical model
+194,Expectation–maximization algorithm
+195,Live migration
+196,Virtual machine
+197,Virtualization
+198,Cloud computing
+199,Downtime
+200,Home automation
+201,Usage data
+202,Correlation
+203,Hellinger distance
+204,Hyperplane
+205,Behavioral pattern
+206,Line graph
+207,Null graph
+208,Graph property
+209,Strength of a graph
+210,Influence analysis
+211,Nearest neighbour algorithm
+212,Sparse matrix
+213,Bees algorithm
+214,Flux balance analysis
+215,Hill climbing
+216,Gene knockout
+217,Saccharomyces cerevisiae
+218,Branch and bound
+219,Discriminative model
+220,Predicative expression
+221,Constraint satisfaction
+222,Solver
+223,Time complexity
+224,Subgraph isomorphism problem
+225,Induced subgraph isomorphism problem
+226,Social influence analysis
+227,Weighting
+228,Document clustering
+229,Visual perception
+230,Mathematical morphology
+231,Perception
+232,Bounding overwatch
+233,Scalability
+234,Hypergraph
+235,Constraint graph
+236,Attack model
+237,Pairwise comparison
+238,Viral marketing
+239,Social network analysis
+240,Spanning tree
+241,Joins
+242,Educational data mining
+243,Curriculum
+244,Latent variable
+245,Tensor
+246,Factorization
+247,Positioning technology
+248,Dynamical systems theory
+249,Electroencephalography
+250,Gray box testing
+251,Kernel Fisher discriminant analysis
+252,Linear discriminant analysis
+253,Kernel embedding of distributions
+254,Radial basis function kernel
+255,Consensus clustering
+256,Stochastic matrix
+257,Eigenvalues and eigenvectors
+258,Random walk
+259,Structured support vector machine
+260,Multiclass classification
+261,Linear classifier
+262,Quadratic programming
+263,Imputation (statistics)
+264,Naive Bayes classifier
+265,Instance-based learning
+266,Statistical classification
+267,Semi-structured data
+268,Response time
+269,Small number
+270,Reality mining
+271,Predictability
+272,Customer retention
+273,Performance indicator
+274,Business intelligence
+275,IBM
+276,Dissemination
+277,Human behavior
+278,Personal life
+279,Internet privacy
+280,Probability distribution
+281,Tree diagram
+282,Imprecise probability
+283,Multinomial distribution
+284,Probabilistic classification
+285,Flipped classroom
+286,Multimedia
+287,Random forest
+288,Synthetic data
+289,Block (data storage)
+290,Subspace topology
+291,Categorical variable
+292,Data cluster
+293,Data quality
+294,Dirty data
+295,Data science
+296,Markov model
+297,Trajectory
+298,Degree distribution
+299,Sampling (statistics)
+300,Automatic summarization
+301,Sentence
+302,Source document
+303,Big data
+304,Health informatics
+305,Human intelligence
+306,Dendrogram
+307,Solid oxide fuel cell
+308,Acoustic emission
+309,Content-based image retrieval
+310,Manifold alignment
+311,Ranking SVM
+312,Laplacian matrix
+313,Image retrieval
+314,Nearest neighbor search
+315,External Data Representation
+316,Evolutionary algorithm
+317,Active learning
+318,Learning environment
+319,Constructivist teaching methods
+320,Problem solving environment
+321,The Internet
+322,Information sharing
+323,Network theory
+324,Centrality
+325,Betweenness centrality
+326,Boosting (machine learning)
+327,AdaBoost
+328,Wind power
+329,Resampling
+330,Record linkage
+331,Linked data
+332,Added value
+333,Binary decision diagram
+334,Lifelog
+335,Contingency
+336,Subnetwork
+337,Semi-supervised learning
+338,Convergence (routing)
+339,Stochastic neural network
+340,Stochastic optimization
+341,Network motif
+342,Mixture model
+343,Probabilistic latent semantic analysis
+344,Tuple
+345,Graph energy
+346,Search engine indexing
+347,Almost surely
+348,Algorithm
+349,Term Discrimination
+350,Linear model
+351,Linear regression
+352,Polynomial regression
+353,Bayesian multivariate linear regression
+354,Multi-swarm optimization
+355,Computational intelligence
+356,Smart environment
+357,Database
+358,Case-based reasoning
+359,Control reconfiguration
+360,Greedy algorithm
+361,Minimum description length
+362,Minification
+363,Microdata (HTML)
+364,Inference
+365,Publication
+366,Upper and lower bounds
+367,Approximate inference
+368,Belief propagation
+369,Factor graph
+370,Motif (music)
+371,Holy Grail
+372,Advertising campaign
+373,Computer graphics (images)
+374,Satellite
+375,Categorization
+376,Oracle
+377,Frequency
+378,Generative model
+379,Quadratic classifier
+380,Differential privacy
+381,Query optimization
+382,Query expansion
+383,Histogram
+384,Bounded function
+385,Insertion time
+386,Minimum redundancy feature selection
+387,Hyper-heuristic
+388,Redundancy (engineering)
+389,Uncertain data
+390,Frequentist probability
+391,Bottleneck
+392,Binary splitting
+393,Computation
+394,Decision support system
+395,Data pre-processing
+396,Health care
+397,Vector quantization
+398,Codebook
+399,Biclustering
+400,Dual space
+401,Multi-label classification
+402,Document management system
+403,Document retrieval
+404,Knowledge transfer
+405,Swarm intelligence
+406,Web mining
+407,Singular value decomposition
+408,Preprocessor
+409,Brain–computer interface
+410,Motor imagery
+411,Interfacing
+412,Gibbs sampling
+413,Randomness
+414,Kernel method
+415,Polynomial kernel
+416,String kernel
+417,Automatic image annotation
+418,Feature detection (computer vision)
+419,Contextual image classification
+420,Ground truth
+421,Time series database
+422,Subsequence
+423,Interactivity
+424,Count data
+425,Poisson distribution
+426,Terabyte
+427,Discrete Fourier transform
+428,Local outlier factor
+429,Test data
+430,Minimum spanning tree
+431,Discretization of continuous features
+432,Discretization
+433,Supervised learning
+434,Entropy (information theory)
+435,Decision table
+436,Unsupervised learning
+437,Multi-task learning
+438,Proper noun
+439,Parsing
+440,Parse tree
+441,Fitness Trackers
+442,Adjacency matrix
+443,Lockstep
+444,Complete graph
+445,Smoothing
+446,Data point
+447,k-nearest neighbors algorithm
+448,Reciprocal
+449,Data model
+450,Exploratory data analysis
+451,Rule induction
+452,Rule-based system
+453,Adverse Event Reporting System
+454,Adverse effect
+455,Apriori algorithm
+456,Public health
+457,Disease
+458,Initialization
+459,Stochastic gradient descent
+460,Jaccard index
+461,Database transaction
+462,Hierarchical database model
+463,Shard
+464,Decision tree learning
+465,Information sensitivity
+466,User-generated content
+467,Internet slang
+468,Language identification
+469,Fluidized bed combustion
+470,Mass flow
+471,Silo
+472,System identification
+473,Process engineering
+474,Extreme value theory
+475,General linear model
+476,Conditional probability distribution
+477,Human visual system model
+478,Level of detail
+479,Noun
+480,Adjective
+481,Dependency relation
+482,Clique
+483,Clique (graph theory)
+484,Clique-sum
+485,Chordal graph
+486,Clique problem
+487,Sadness
+488,Bulletin board system
+489,Word error rate
+490,Indifference graph
+491,Pathwidth
+492,Hopcroft–Karp algorithm
+493,1-planar graph
+494,Markov chain
+495,Search tree
+496,Tree (data structure)
+497,Process mining
+498,Business process management
+499,Business process
+500,Work in process
+501,Software
+502,Biological network
+503,Model selection
+504,Censoring (statistics)
+505,Variables
+506,Preference learning
+507,Online advertising
+508,Transaction data
+509,Pattern matching
+510,Global Positioning System
+511,Missing data
+512,Uniformization (probability theory)
+513,Peer-to-peer
+514,Computer network
+515,Systems design
+516,Feature learning
+517,Conceptual clustering
+518,Dynamic Bayesian network
+519,Search engine
+520,Revenue
+521,Molecule mining
+522,Software bug
+523,Dynamic network analysis
+524,Multiple time dimensions
+525,Decision rule
+526,Classification rule
+527,Locality-sensitive hashing
+528,Dynamic perfect hashing
+529,Universal hashing
+530,2-choice hashing
+531,Mobile Web
+532,Mobile search
+533,Web service
+534,False sharing
+535,Upload
+536,Principal component analysis
+537,Blossom algorithm
+538,Information extraction
+539,Data extraction
+540,Social web
+541,Human–computer information retrieval
+542,Semantic search
+543,Concept search
+544,Stock market
+545,Stock exchange
+546,Efficient-market hypothesis
+547,Stock (geology)
+548,Composite index
+549,Random projection
+550,Empirical research
+551,Edit distance
+552,Dynamic programming
+553,Score
+554,Vertex (geometry)
+555,Graph
+556,Tree mining
+557,Signed graph
+558,Graph drawing
+559,Bipartite graph
+560,Stochastic modelling
+561,Popularity
+562,Cluster labeling
+563,Hierarchy
+564,Hash function
+565,Complex network
+566,Personal information management
+567,Workflow
+568,Margin (machine learning)
+569,Expertise finding
+570,WordNet
+571,Verb
+572,Latent semantic analysis
+573,Neural coding
+574,Projection (linear algebra)
+575,Prediction interval
+576,Computational mathematics
+577,Regression
+578,Conformal map
+579,Radar
+580,Semidefinite programming
+581,Integer programming
+582,Local search (optimization)
+583,Heuristics
+584,Triangle inequality
+585,k-means clustering
+586,SUBCLU
+587,Artificial bee colony algorithm
+588,Simulated annealing
+589,Estimation theory
+590,Nelder–Mead method
+591,Mutual information
+592,German
+593,Recall
+594,Best bin first
+595,Large margin nearest neighbor
+596,Nearest neighbor graph
+597,Web modeling
+598,Perplexity
+599,Directory
+600,Stochastic game
+601,Game theory
+602,Time delay neural network
+603,Graphical user interface
+604,Pointer (computer programming)
+605,Kalman filter
+606,Delphi method
+607,Interactive media
+608,Stakeholder
+609,Beijing
+610,Oversampling and undersampling in data analysis
+611,Oversampling
+612,Graphical model
+613,Deception
+614,Biosignal
+615,Polygraph
+616,Fault detection and isolation
+617,Gene
+618,Overfitting
+619,Rough set
+620,Knowledge-based systems
+621,Knowledge base
+622,Conversation
+623,Web intelligence
+624,Intelligent decision support system
+625,Whole Genome Amplification
+626,Multiple displacement amplification
+627,Transversion
+628,Copy-number variation
+629,Single cell sequencing
+630,PrefixSpan
+631,Latent variable model
+632,Gaussian process
+633,Latent class model
+634,Ant colony optimization algorithms
+635,Ensemble learning
+636,Spatial dependence
+637,Spatial analysis
+638,Spatial correlation
+639,Wake-sleep algorithm
+640,Variable-order Bayesian network
+641,Bayesian network
+642,Partial correlation
+643,Formal concept analysis
+644,k-anonymity
+645,Biological pathway
+646,Scad
+647,Vertex (graph theory)
+648,Community structure
+649,Combinatorics
+650,Data publishing
+651,Anonymity
+652,Temporal database
+653,Consensus forecast
+654,Time series
+655,Active learning (machine learning)
+656,Hypersphere
+657,Fuzzy set operations
+658,Fuzzy classification
+659,Neuro-fuzzy
+660,Domain decomposition methods
+661,Partial differential equation
+662,Finite element method
+663,Computer simulation
+664,Shingling
+665,Digital library
+666,Speedup
+667,Trie
+668,Web navigation
+669,Data Web
+670,Truth table
+671,Linear programming
+672,Hospital information system
+673,Decision-making
+674,Reuse
+675,Learning classifier system
+676,Influenza A virus
+677,Influenza A virus subtype H5N1
+678,Hemagglutinin (influenza)
+679,Neuraminidase
+680,Virus
+681,Fringe search
+682,Personalization
+683,Novelty
+684,Text mining
+685,Concept mining
+686,Explicit semantic analysis
+687,Text graph
+688,Hierarchical network model
+689,Learning to rank
+690,Bayesian inference
+691,PageRank
+692,Nonnegative matrix
+693,Non-negative matrix factorization
+694,Nonlinear dimensionality reduction
+695,Nonlinear system
+696,Bus bunching
+697,Headway
+698,Notice
+699,Single-linkage clustering
+700,Determining the number of clusters in a data set
+701,Sample size determination
+702,Text Retrieval Conference
+703,Notation
+704,Integrative bioinformatics
+705,Information science
+706,HITS algorithm
+707,Mobile device
+708,Sales intelligence
+709,Orchestration (computing)
+710,Linear subspace
+711,Usability
+712,End user
+713,Pattern recognition (psychology)
+714,Biological data
+715,Suspect
+716,Reference group
+717,Warrant
+718,Citation
+719,Replicate
+720,Copula (probability theory)
+721,Copula (linguistics)
+722,Reproducibility
+723,Robustness (computer science)
+724,Isomap
+725,Interactive visual analysis
+726,Phrase
+727,Personal knowledge base
+728,Unification
+729,Quantile
+730,Quantile regression
+731,Conditional expectation
+732,Isomorphism
+733,Crowds
+734,Filter (signal processing)
+735,Bootstrap aggregating
+736,Reservoir modeling
+737,Averaged one-dependence estimators
+738,Estimator
+739,Compression (physics)
+740,Profiling (computer programming)
+741,Geographic information retrieval
+742,Query language
+743,Ranking (information retrieval)
+744,Web query classification
+745,Streaming XML
+746,Efficient XML Interchange
+747,XML database
+748,XML validation
+749,XML Encryption
+750,Causality
+751,Financial crisis
+752,Mathematical economics
+753,Bankruptcy
+754,Web search query
+755,Kernel (statistics)
+756,Cross-validation
+757,Marginal likelihood
+758,Maximization
+759,Mathematical optimization
+760,Information propagation
+761,Bayes' theorem
+762,Experiential learning
+763,Learning styles
+764,Least squares support vector machine
+765,Total least squares
+766,Local regression
+767,Explained sum of squares
+768,Data classification
+769,Factor cost
+770,Gradient boosting
+771,Concatenation
+772,Side channel attack
+773,Encryption
+774,Power analysis
+775,Density estimation
+776,Chen
+777,Momentum (technical analysis)
+778,Technical analysis
+779,Actuarial science
+780,Momentum
+781,Swarm behaviour
+782,Intelligent verification
+783,Robot learning
+784,Computational learning theory
+785,Data domain
+786,Document classification
+787,Gesture recognition
+788,Calm technology
+789,Ubiquitous computing
+790,Gesture
+791,Human communication
+792,Change detection
+793,Local area network
+794,Explicit knowledge
+795,Inductive transfer
+796,Performance improvement
+797,Data mining algorithm
+798,Interval data
+799,Directed graph
+800,Computational complexity theory
+801,RDF
+802,Computer technology
+803,Symbiogenesis
+804,Computer programming
+805,Endosymbiosis
+806,Simplex graph
+807,Clique graph
+808,Comparability graph
+809,Split graph
+810,Graph database
+811,Receiver operating characteristic
+812,Matching (graph theory)
+813,Data access
+814,Quality of service
+815,Voice over IP
+816,Jitter
+817,Network packet
+818,Multilayer perceptron
+819,Private equity fund
+820,Venture capital
+821,Private equity
+822,Leverage (finance)
+823,Explanatory power
+824,Link exchange
+825,Banner
+826,Class hierarchy
+827,Uncertainty analysis
+828,Uncertainty reduction theory
+829,Sharpening
+830,Eigendecomposition of a matrix
+831,Power graph analysis
+832,Object detection
+833,Image processing
+834,Segmentation
+835,Computer vision
+836,Operability
+837,A priori and a posteriori
+838,Margin classifier
+839,Metaverse
+840,Educational research
+841,Marketing buzz
+842,Data visualization
+843,Opcode
+844,Machine code
+845,Finite-state machine
+846,Operand
+847,Parametric model
+848,Gradient descent
+849,Low-rank approximation
+850,Competitive learning
+851,Minimum message length
+852,Distance measures
+853,Information needs
+854,General-purpose computing on graphics processing units
+855,Central processing unit
+856,Motion estimation
+857,Clutter
+858,Psychological intervention
+859,Ambiguity
+860,Canonical model
+861,Exploit
+862,Laplace operator
+863,Convex combination
+864,Regularization (mathematics)
+865,Transfer of learning
+866,Evolving networks
+867,Probability density function
+868,Causal inference
+869,Rumor
+870,Network topology
+871,Euclidean distance
+872,Locality
+873,Bayesian probability
+874,Unified Medical Language System
+875,Recipe
+876,Metapopulation
+877,Infectious disease (medical specialty)
+878,Transmission (mechanics)
+879,Dynamic data
+880,Queueing theory
+881,Credit card fraud
+882,Purchasing
+883,User interface
+884,Bookmarking
+885,PharmGKB
+886,Pharmacogenomics
+887,Drug repositioning
+888,Drug discovery
+889,Drug
+890,Rank (linear algebra)
+891,Heart disease
+892,Muscle hypertrophy
+893,Gene expression
+894,Cause of death
+895,Bioinformatics
+896,Small interfering RNA
+897,Gene knockdown
+898,Argumentation theory
+899,Ordinal number
+900,Brownian bridge
+901,Extrapolation
+902,Particle filter
+903,Chinese restaurant process
+904,Importance sampling
+905,Matrix norm
+906,Logistic model tree
+907,Logistic regression
+908,Trust region
+909,Newton's method
+910,Smart card
+911,Public transport
+912,Transport engineering
+913,Recommendation model
+914,Geodetic datum
+915,Dilemma
+916,Activity recognition
+917,Ambient intelligence
+918,Drug development
+919,Literature-based discovery
+920,Variable kernel density estimation
+921,Kernel density estimation
+922,Cold start
+923,Matrix completion
+924,Data analysis
+925,Burstiness
+926,Rank correlation
+927,Gaussian
+928,DNA microarray
+929,Microarray analysis techniques
+930,Stop words
+931,Interpretability
+932,Dirichlet distribution
+933,Location-based service
+934,Decision tree model
+935,Information cascade
+936,Snapshot (computer storage)
+937,E-commerce
+938,Requirements elicitation
+939,Software evolution
+940,Constructive
+941,Keyword extraction
+942,tf–idf
+943,Unary operation
+944,Compressed data structure
+945,Constraint programming
+946,Selection algorithm
+947,Encoding (memory)
+948,Univariate
+949,Multivariate statistics
+950,Credibility
+951,K-ary tree
+952,T-tree
+953,Tree rotation
+954,Random binary tree
+955,Restricted Boltzmann machine
+956,Boltzmann machine
+957,Medical diagnosis
+958,Random variate
+959,Neighbourhood (mathematics)
+960,Collective behavior
+961,Collective intelligence
+962,Stock market index
+963,Viewpoints
+964,Semantics
+965,Fuse (electrical)
+966,Word embedding
+967,Word2vec
+968,Average path length
+969,Zipf's law
+970,Embedding
+971,Point of interest
+972,Information exchange
+973,Flourishing
+974,Discrete mathematics
+975,Data cube
+976,Distributed database
+977,SQL
+978,Conditional random field
+979,Encyclopedia
+980,Deep learning
+981,Recurrent neural network
+982,Structural health monitoring
+983,Delaunay triangulation
+984,DBSCAN
+985,Recursion
+986,Diffusion (business)
+987,Binary data
+988,Emoticon
+989,Lexicon
+990,Dirichlet process
+991,Exponential family
+992,Centroid
+993,Emergency department
+994,Causal model
+995,Kolmogorov complexity
+996,Algorithmic information theory
+997,Multiple edges
+998,Nondeterministic algorithm
+999,Social spam
+1000,Tensor factorization
+1001,Binary classification
+1002,Posterior probability
+1003,Social marketing
+1004,Social influence
+1005,Lazy learning
+1006,Geolocation
+1007,Botnet
+1008,sync
+1009,Spotting
+1010,Inverted index
+1011,Random indexing
+1012,Vector space model
+1013,Kernel principal component analysis
+1014,Speech recognition
+1015,HRHIS
+1016,Facility location problem
+1017,Engineering management
+1018,Personality psychology
+1019,Active listening
+1020,Friendship
+1021,Attractiveness
+1022,Network analysis
+1023,Computer security
+1024,Metacognition
+1025,Cognition
+1026,Intercultural communication
+1027,Discipline
+1028,Terminology
+1029,Cultural diversity
+1030,Secretary problem
+1031,Dynamic problem
+1032,Product design
+1033,FLAME clustering
+1034,Documentation
+1035,Quality management
+1036,Bloom filter
+1037,Social connectedness
+1038,Strongly connected component
+1039,Interactive Learning
+1040,Data deduplication
+1041,Panel data
+1042,Sorting
+1043,Approximation algorithm
+1044,Submodular set function
+1045,Malware
+1046,Vaccination
+1047,Sharpe ratio
+1048,Investment performance
+1049,Proactive learning
+1050,Algorithmic learning theory
+1051,Memetic algorithm
+1052,Combinatorial explosion
+1053,Permutation
+1054,Anatomy
+1055,Data transformation
+1056,Data exchange
+1057,Automated optical inspection
+1058,Automated X-ray inspection
+1059,Digital image processing
+1060,Pixel
+1061,Electronic circuit
+1062,Cross-selling
+1063,Operations research
+1064,Randomized algorithm
+1065,Interaction network
+1066,Stochastic block model
+1067,Relevance (information retrieval)
+1068,Relevance feedback
+1069,Product planning
+1070,Production line
+1071,k-medians clustering
+1072,Diffusion map
+1073,Web development
+1074,Personally identifiable information
+1075,Social psychology
+1076,Sparse approximation
+1077,K-SVD
+1078,Principle of maximum entropy
+1079,Relevance vector machine
+1080,Sufficient dimension reduction
+1081,Constraint (mathematics)
+1082,Graph kernel
+1083,Automated reasoning
+1084,Spatial network
+1085,Mizar system
+1086,Modular decomposition
+1087,Block graph
+1088,Lattice graph
+1089,Sparse PCA
+1090,Customer intelligence
+1091,Customer base
+1092,Voice of the customer
+1093,Customer reference program
+1094,Data warehouse
+1095,Cascade
+1096,Data modeling
+1097,Macro
+1098,Data definition language
+1099,Null (SQL)
+1100,Query by Example
+1101,Substring
+1102,Self-organizing map
+1103,Probabilistic database
+1104,Email filtering
+1105,Spam and Open Relay Blocking System
+1106,Bag-of-words model
+1107,Phishing
+1108,Metadata
+1109,Cloning
+1110,microRNA
+1111,Lyrics
+1112,Rhyme
+1113,Computational creativity
+1114,Similarity learning
+1115,Stability (learning theory)
+1116,Marginal distribution
+1117,Vaccine efficacy
+1118,Wearable computer
+1119,Distance transform
+1120,Diagonal
+1121,Tilde
+1122,Shewhart individuals control chart
+1123,Chart
+1124,Control chart
+1125,Hotelling's T-squared distribution
+1126,Directed acyclic graph
+1127,Semantic memory
+1128,Shapley value
+1129,Solution concept
+1130,Equilibrium selection
+1131,Implementation theory
+1132,FSA-Red Algorithm
+1133,Pattern search
+1134,Categorical distribution
+1135,Zero-inflated model
+1136,Minkowski distance
+1137,Distance matrix
+1138,Resistance distance
+1139,Fault tolerance
+1140,Customer attrition
+1141,Data transformation (statistics)
+1142,Scaling
+1143,Normalization (statistics)
+1144,Standard deviation
+1145,Webcast
+1146,Content analysis
+1147,Default gateway
+1148,Piecewise
+1149,Quantization (signal processing)
+1150,Correctness
+1151,Mews
+1152,Tacking
+1153,Legibility
+1154,Best-first search
+1155,User profile
+1156,Feature model
+1157,Fuzzy logic
+1158,Credit card
+1159,Model building
+1160,Bayes estimator
+1161,Majority rule
+1162,Predictive maintenance
+1163,Representer theorem
+1164,Random subspace method
+1165,Network monitoring
+1166,Peopleware
+1167,False positive rate
+1168,Memory buffer register
+1169,Rank (graph theory)
+1170,Regular graph
+1171,Windmill graph
+1172,Graph rewriting
+1173,Adjacency list
+1174,Topological graph theory
+1175,Tree alignment
+1176,Skyline
+1177,Multi-source
+1178,Network science
+1179,Iterated function system
+1180,Tobacco control
+1181,Regulatory science
+1182,Harmonization
+1183,SimRank
+1184,Collusion
+1185,Bayes classifier
+1186,Bayes error rate
+1187,Range query (data structures)
+1188,Spark (mathematics)
+1189,Graph partition
+1190,Spectral graph theory
+1191,Multilinear map
+1192,TrueSkill
+1193,Tournament
+1194,Tree kernel
+1195,Transduction (machine learning)
+1196,Simple Features
+1197,Heuristic (computer science)
+1198,Small set
+1199,Negativity bias
+1200,Variation of information
+1201,Information security
+1202,Plain text
+1203,Blogosphere
+1204,Compressed suffix array
+1205,Generalized suffix tree
+1206,Suffix
+1207,Complex question
+1208,Multiple choice
+1209,Data integration
+1210,Longest common subsequence problem
+1211,Wireless sensor network
+1212,Intelligent word recognition
+1213,Handwriting recognition
+1214,Handwriting
+1215,Security token
+1216,Voltage graph
+1217,Subjective logic
+1218,Proposition
+1219,Cartesian product
+1220,Activation function
+1221,Facial recognition system
+1222,Types of artificial neural networks
+1223,Similarity (geometry)
+1224,Special case
+1225,Business process discovery
+1226,Information processing
+1227,Similarity (network science)
+1228,Correlation coefficient
+1229,Piecewise linear function
+1230,Minimisation (psychology)
+1231,Implicit graph
+1232,Cograph
+1233,Web traffic
+1234,Distributed computing
+1235,Distributed algorithm
+1236,Distributed knowledge
+1237,Dynamic topic model
+1238,Hierarchical Dirichlet process
+1239,Dirichlet-multinomial distribution
+1240,Variational message passing
+1241,File sharing
+1242,Overlay network
+1243,Keyword density
+1244,Control flow graph
+1245,Application server
+1246,Semantic computing
+1247,Software mining
+1248,Weighted network
+1249,Private network
+1250,Faithful representation
+1251,Homomorphic encryption
+1252,Text corpus
+1253,Census
+1254,Sequential minimal optimization
+1255,Network simulation
+1256,Reference model
+1257,Uniform distribution (continuous)
+1258,Statistic
+1259,Annotation
+1260,Interdependence
+1261,CUDA Pinned memory
+1262,CUDA
+1263,Real-time computer graphics
+1264,Standard score
+1265,Kappa
+1266,XML Signature
+1267,Production planning
+1268,Product management
+1269,Product life-cycle management
+1270,Production manager
+1271,Product lifecycle
+1272,Incomplete Cholesky factorization
+1273,Online machine learning
+1274,Image compression
+1275,Feedforward neural network
+1276,Neural gas
+1277,Logical matrix
+1278,Social presence theory
+1279,Precision agriculture
+1280,Regularization perspectives on support vector machines
+1281,Data cleansing
+1282,Data management
+1283,Data collection
+1284,Timeline
+1285,Tensor product network
+1286,Multilinear subspace learning
+1287,Stockout
+1288,Bayesian hierarchical modeling
+1289,OMIM : Online Mendelian Inheritance in Man
+1290,Incremental decision tree
+1291,Hausdorff distance
+1292,Random variable
+1293,Streaming algorithm
+1294,Random graph
+1295,Bibliographic coupling
+1296,Detection theory
+1297,Statistical hypothesis testing
+1298,Traditional Chinese medicine
+1299,Herb
+1300,Patent medicine
+1301,Medical prescription
+1302,Traditional medicine
+1303,Censorship
+1304,Social computing
+1305,Perfect information
+1306,Artifact-centric business process model
+1307,Applications of UML
+1308,Business process modeling
+1309,Modeling language
+1310,Formal verification
+1311,Crossover
+1312,Fitness function
+1313,Evaluation function
+1314,Conditional entropy
+1315,Performance management
+1316,Performance prediction
+1317,Entertainment
+1318,Budget constraint
+1319,Path length
+1320,Android (operating system)
+1321,Context model
+1322,Storyboard
+1323,Dot product
+1324,Diamond
+1325,Semantic social network
+1326,Diabetic retinopathy
+1327,Maculopathy
+1328,Fundus (eye)
+1329,Social group
+1330,Nearest neighbour classifiers
+1331,Associative property
+1332,Information quality
+1333,Raw data
+1334,Customer relationship management
+1335,Histogram matching
+1336,Adaptive histogram equalization
+1337,Balanced histogram thresholding
+1338,User modeling
+1339,Source code
+1340,Gene regulatory network
+1341,Granger causality
+1342,Predictive power
+1343,Total cost
+1344,Hinge loss
+1345,Convex optimization
+1346,Dense graph
+1347,Orders of magnitude (numbers)
+1348,Earth system science
+1349,Earth observation
+1350,Climate change
+1351,Land cover
+1352,Complex system
+1353,Adversarial system
+1354,False alarm
+1355,Hidden semi-Markov model
+1356,Data loss
+1357,Open-source intelligence
+1358,Empirical likelihood
+1359,Observer (quantum physics)
+1360,Integrated care
+1361,Data discovery
+1362,Process modeling
+1363,Real-time bidding
+1364,Bidding
+1365,Business operations
+1366,Impression
+1367,Feature combination
+1368,Coordinate descent
+1369,Symmetric matrix
+1370,Skew-symmetric matrix
+1371,Data compression
+1372,Computer performance
+1373,Longest increasing subsequence
+1374,Longest common substring problem
+1375,Hunt–McIlroy algorithm
+1376,State space
+1377,K-optimal pattern discovery
+1378,Cohesion (chemistry)
+1379,Demand response
+1380,Automatic meter reading
+1381,Electric power industry
+1382,Electricity
+1383,Problem domain
+1384,Markov chain Monte Carlo
+1385,Image warping
+1386,Evolutionary computation
+1387,Group selection
+1388,Mars Exploration Program
+1389,Binary image
+1390,Digital image
+1391,Resource management
+1392,Software as a service
+1393,Energy conservation
+1394,Wavelet
+1395,Complex data type
+1396,Degree (graph theory)
+1397,Independent and identically distributed random variables
+1398,Complete information
+1399,Reinforcement learning
+1400,Bayesian information criterion
+1401,Akaike information criterion
+1402,Autoregressive integrated moving average
+1403,Stepwise regression
+1404,Random walk closeness centrality
+1405,Katz centrality
+1406,Domain model
+1407,Online model
+1408,Target audience
+1409,Evaluation strategy
+1410,Return on investment
+1411,Tucker decomposition
+1412,Cloud testing
+1413,Kullback–Leibler divergence
+1414,Hidden Markov random field
+1415,Context awareness
+1416,Drill down
+1417,Information system
+1418,Clinical pathway
+1419,Distributed web crawling
+1420,Web crawler
+1421,Discriminant function analysis
+1422,Genetic programming
+1423,Discriminant
+1424,September 11 Terrorist Attacks
+1425,Mood
+1426,Autoencoder
+1427,Metasearch engine
+1428,Spamdexing
+1429,Search analytics
+1430,Group method of data handling
+1431,Treewidth
+1432,Maximal independent set
+1433,Independent set
+1434,Negation
+1435,Pragmatics
+1436,Abstraction
+1437,Semantic Web
+1438,Benchmarking
+1439,Contextual advertising
+1440,Digital content
+1441,Look and feel
+1442,Beam search
+1443,Graph factorization
+1444,Distance-hereditary graph
+1445,Market research
+1446,Knowledge acquisition
+1447,Visual Basic
+1448,Truck
+1449,Automotive engineering
+1450,Entity–relationship model
+1451,Knowledge representation and reasoning
+1452,Random geometric graph
+1453,Reverse-delete algorithm
+1454,Tag SNP
+1455,Prostate cancer
+1456,Cancer
+1457,Single-nucleotide polymorphism
+1458,SNP
+1459,Monte Carlo method
+1460,Adjudication
+1461,Appeal
+1462,Completeness (statistics)
+1463,Algorithm design
+1464,Cash transfers
+1465,Extreme poverty
+1466,Poverty
+1467,Power set
+1468,Graph operations
+1469,Transitive relation
+1470,Web analytics
+1471,A* search algorithm
+1472,Semantic reasoner
+1473,Evidence-based practice
+1474,Cilostazol
+1475,Arthritis
+1476,Modularity
+1477,Test set
+1478,Sensor fusion
+1479,Share of voice
+1480,Ad serving
+1481,Generalized second-price auction
+1482,Call graph
+1483,Service-oriented architecture
+1484,Quasi-experiment
+1485,Observational study
+1486,Attendance
+1487,Login
+1488,Hyperlink
+1489,Threading (protein sequence)
+1490,Peptide bond
+1491,Amino acid
+1492,Distributional semantics
+1493,Principle of compositionality
+1494,Feature engineering
+1495,Predicate (grammar)
+1496,Data anonymization
+1497,Publishing
+1498,Tensor product
+1499,Residual
+1500,Boolean satisfiability problem
+1501,Sequential Pattern Mining
+1502,Bootstrapping
+1503,Propagation of uncertainty
+1504,Data lineage
+1505,Social media optimization
+1506,Faceted search
+1507,Lane departure warning system
+1508,Color space
+1509,Grayscale
+1510,Image segmentation
+1511,Static web page
+1512,Web search engine
+1513,Ordinal regression
+1514,Data discrimination
+1515,Mondrian
+1516,Lifting scheme
+1517,Second-generation wavelet transform
+1518,Wavelet transform
+1519,Reputation
+1520,Link analysis
+1521,XML framework
+1522,Semantic technology
+1523,Organizational network analysis
+1524,Data curation
+1525,Information management
+1526,Node (networking)
+1527,Simple random sample
+1528,Noun phrase
+1529,Specifier
+1530,Multi-document summarization
+1531,Visual Word
+1532,Thematic map
+1533,Resource allocation
+1534,Crisis management
+1535,Dependency theory (database theory)
+1536,Functional dependency
+1537,Sliding window protocol
+1538,Proof of concept
+1539,Skew
+1540,Parallel database
+1541,Shared nothing architecture
+1542,Troubleshooting
+1543,Pace
+1544,Pandemic
+1545,Sargable
+1546,Sketch
+1547,Executable
+1548,Bootstrapping (electronics)
+1549,Workload
+1550,Systems biology
+1551,Clonal selection algorithm
+1552,Unstructured data
+1553,Rare events
+1554,Prefix
+1555,Spelling
+1556,Phonetics
+1557,Boolean expression
+1558,Disjunctive normal form
+1559,Enumeration
+1560,HTML element
+1561,Document Object Model
+1562,Structured prediction
+1563,Email spam
+1564,Stackelberg competition
+1565,Communication source
+1566,Blind trust
+1567,Express trust
+1568,Business risks
+1569,Beneficial interest
+1570,Financial institution
+1571,Schema matching
+1572,Norm (mathematics)
+1573,Aviation safety
+1574,Air traffic control
+1575,Aviation
+1576,Flight simulator
+1577,Landing page
+1578,Dialog box
+1579,User analysis
+1580,Experimental economics
+1581,Determinism
+1582,Volatility (finance)
+1583,Memory management
+1584,Masking (art)
+1585,User interface design
+1586,User experience design
+1587,Influencer marketing
+1588,Word-of-mouth marketing
+1589,Spite
+1590,Feeling
+1591,Contingency table
+1592,Click-through rate
+1593,Click path
+1594,Maslow's hierarchy of needs
+1595,Mobile telephony
+1596,Mobile computing
+1597,Semantic desktop
+1598,Metadata repository
+1599,Semantic grid
+1600,Semantic integration
+1601,Demand management
+1602,Downtown
+1603,Software deployment
+1604,Occupancy
+1605,Motion planning
+1606,Customer advocacy
+1607,Customer to customer
+1608,Marketing strategy
+1609,Emergency management
+1610,Natural disaster
+1611,Government
+1612,Risk analysis (engineering)
+1613,File transfer
+1614,Stream
+1615,Network intelligence
+1616,Intelligent transportation system
+1617,Hype cycle
+1618,Nothing
+1619,Media studies
+1620,Social science
+1621,Social heuristics
+1622,Wildcard
+1623,Wildcard character
+1624,Social search
+1625,Robot
+1626,Computational finance
+1627,Many-to-many
+1628,BitTorrent
+1629,Shared resource
+1630,Situation awareness
+1631,Telephone line
+1632,Flooding (psychology)
+1633,FrameNet
+1634,Pose
+1635,Graph bandwidth
+1636,Component-oriented database
+1637,In-memory database
+1638,Intensive care
+1639,Diversification (marketing strategy)
+1640,Chain of events
+1641,User studies
+1642,Colored
+1643,Semantic analytics
+1644,Cultural analytics
+1645,Software analytics
+1646,Markov decision process
+1647,Weak consistency
+1648,Modular design
+1649,Distrust
+1650,Balance theory
+1651,Dictionary coder
+1652,Incremental encoding
+1653,String searching algorithm
+1654,Modalities
+1655,Divergence-from-randomness model
+1656,Statistical assumption
+1657,Reusability
+1658,Spatial query
+1659,Web content
+1660,RSS
+1661,Defuzzification
+1662,Fuzzy set
+1663,Electrical load
+1664,Conditional probability
+1665,Sales management
+1666,Prescriptive analytics
+1667,Sales order
+1668,Grassmannian
+1669,p-value
+1670,Subject-matter expert
+1671,Online community
+1672,Project Coordinator
+1673,Great-circle distance
+1674,Document processing
+1675,Historical document
+1676,Metaheuristic
+1677,Cyber-physical system
+1678,Engineering optimization
+1679,Test functions for optimization
+1680,Discrete optimization
+1681,Probabilistic-based design optimization
+1682,Mobile ad hoc network
+1683,Vehicular ad hoc network
+1684,Optimized Link State Routing Protocol
+1685,Wireless ad hoc network
+1686,High memory
+1687,Display advertising
+1688,Semantic network
+1689,Wireless network
+1690,Covariance
+1691,Multivariate normal distribution
+1692,Outsourcing
+1693,Online aggregation
+1694,Federated search
+1695,Data processing
+1696,Real-time computing
+1697,Energy consumption
+1698,Web server
+1699,Air quality index
+1700,News aggregator
+1701,Urban computing
+1702,Web application
+1703,Automatic label placement
+1704,Cosine similarity
+1705,Metric space
+1706,Information seeking
+1707,Readability
+1708,Monotone polygon
+1709,Data type
+1710,Targeted advertising
+1711,Profitability index
+1712,Discrete time and continuous time
+1713,Markov process
+1714,Autoregressive model
+1715,Linear system
+1716,Newspaper
+1717,Competitive advantage
+1718,Cross-language information retrieval
+1719,Cognitive models of information retrieval
+1720,Brand management
+1721,Competitive intelligence
+1722,Mainstream
+1723,Social media analytics
+1724,Scarcity
+1725,Intrinsic dimension
+1726,Method of moments (statistics)
+1727,Cause–effect graph
+1728,Patent visualisation
+1729,Emerging technologies
+1730,High tech
+1731,Business value
+1732,Distributed memory
+1733,Data-intensive computing
+1734,File system
+1735,Supercomputer
+1736,Experimental data
+1737,Predictive modelling
+1738,Kernelization
+1739,Lossless compression
+1740,Huffman coding
+1741,Generality
+1742,Plaintext
+1743,Key management
+1744,Crawling
+1745,Generalized linear mixed model
+1746,Random effects model
+1747,Small area estimation
+1748,Restricted maximum likelihood
+1749,Kernel smoother
+1750,Head-driven phrase structure grammar
+1751,Soft sensor
+1752,Process control
+1753,Factor analysis
+1754,Concreteness
+1755,Syntax
+1756,Privacy software
+1757,Grammar induction
+1758,Context-free grammar
+1759,Grammar
+1760,Object type
+1761,Specific-information
+1762,Graph embedding
+1763,Full text search
+1764,Noisy text analytics
+1765,Mobility model
+1766,Covariance matrix
+1767,Gaussian random field
+1768,Weak entity
+1769,Traffic classification
+1770,Network security
+1771,Traffic engineering
+1772,Earth mover's distance
+1773,Multimedia database
+1774,Elementary event
+1775,Time point
+1776,Secure coding
+1777,Vulnerability management
+1778,Software system
+1779,Damages
+1780,Multispectral image
+1781,Biomarker discovery
+1782,Uniqueness
+1783,Devaluation
+1784,Boredom
+1785,Sublanguage
+1786,Rule-based machine translation
+1787,Decision problem
+1788,Decision theory
+1789,Regret
+1790,Minimax
+1791,Loan
+1792,Distance education
+1793,Feature hashing
+1794,Hash table
+1795,Network planning and design
+1796,Electric power system
+1797,Electric power
+1798,Financial management
+1799,Monopoly
+1800,Moral graph
+1801,Mixed graph
+1802,SPQR tree
+1803,Ontology-based data integration
+1804,Ordinal data
+1805,Cognitive neuroscience of visual object recognition
+1806,Online health communities
+1807,Misinformation
+1808,Exploratory search
+1809,Adversary model
+1810,Information privacy
+1811,Adversary
+1812,Service provider
+1813,Services computing
+1814,Phrase search
+1815,Health communication
+1816,Tweaking
+1817,Index arbitrage
+1818,Arbitrage
+1819,Statistical arbitrage
+1820,Bootstrapping (statistics)
+1821,Null hypothesis
+1822,Online algorithm
+1823,Asynchronous communication
+1824,Queries per second
+1825,IDEF5
+1826,Web Ontology Language
+1827,Ontology components
+1828,Process ontology
+1829,Tag cloud
+1830,Metropolitan area
+1831,Urban planning
+1832,Scenario planning
+1833,Shape context
+1834,Data
+1835,Program comprehension
+1836,Intersection (set theory)
+1837,Integer
+1838,Dependency grammar
+1839,Parallel computing
+1840,Cost efficiency
+1841,Spoken language
+1842,Audio mining
+1843,n-gram
+1844,Speech corpus
+1845,Content creation
+1846,Econometrics
+1847,Premise
+1848,GLUE
+1849,Digital marketing
+1850,Automation
+1851,Web archiving
+1852,Parallel algorithm
+1853,Basis function
+1854,Business analytics
+1855,Business case
+1856,Cycle graph
+1857,Binary code
+1858,Class variable
+1859,Information Dissemination
+1860,Ordinary least squares
+1861,Compressed sensing
+1862,User information
+1863,Input/output
+1864,Array DBMS
+1865,Rasdaman
+1866,Petabyte
+1867,Drosophila melanogaster
+1868,Genome
+1869,Genomics
+1870,Topology
+1871,Gatekeeping
+1872,Framing (construction)
+1873,Politics
+1874,Email authentication
+1875,HTML email
+1876,Thread (computing)
+1877,Syntactic methods
+1878,Cooling load
+1879,Backpropagation
+1880,Bandwidth (signal processing)
+1881,Incremental heuristic search
+1882,Semantic role labeling
+1883,Matrix multiplication
+1884,Regular expression
+1885,XML schema
+1886,XML Schema Editor
+1887,Expression (mathematics)
+1888,Activities of daily living
+1889,Virtual Physiological Human
+1890,Interaction information
+1891,Petri net
+1892,Bayesian programming
+1893,Brand equity
+1894,Web community
+1895,Product category
+1896,International development
+1897,Three-valued logic
+1898,K-independent hashing
+1899,Linear hashing
+1900,Smartglasses
+1901,Privacy by Design
+1902,Wearable technology
+1903,Human resource management
+1904,Set theory
+1905,A/B testing
+1906,Web testing
+1907,Throughput
+1908,Information engineering
+1909,Volatile memory
+1910,Address space
+1911,Enterprise system
+1912,Lasso (statistics)
+1913,Legislature
+1914,Presidential system
+1915,Equivalence (measure theory)
+1916,Product design specification
+1917,Conformity
+1918,Translational research informatics
+1919,Health Administration Informatics
+1920,Biomedical text mining
+1921,Engineering informatics
+1922,Geotagging
+1923,Timestamp
+1924,Secure multi-party computation
+1925,Private information retrieval
+1926,Scrolling
+1927,Cross entropy
+1928,Hierarchical organization
+1929,Block size
+1930,Latency (engineering)
+1931,Card security code
+1932,ATM card
+1933,Point of sale
+1934,Friendship paradox
+1935,Common knowledge
+1936,Clickstream
+1937,Semantic HTML
+1938,Anchor text
+1939,Reachability
+1940,Relational database management system
+1941,Computational journalism
+1942,Constrained optimization
+1943,Vertical search
+1944,Interleaving
+1945,Voronoi diagram
+1946,Communication complexity
+1947,Topological graph
+1948,Biconnected graph
+1949,Noise measurement
+1950,Matching pursuit
+1951,Specific risk
+1952,Source data
+1953,Small data
+1954,Homogeneity (statistics)
+1955,Nonparametric statistics
+1956,TRIPS architecture
+1957,Telecommunications
+1958,Tensor (intrinsic definition)
+1959,Algebraic operation
+1960,Data manipulation language
+1961,Variome
+1962,Tokenization (data security)
+1963,Lossy compression
+1964,RDF/XML
+1965,RDF Schema
+1966,SPARQL
+1967,Flash file system
+1968,Flash memory emulator
+1969,Server
+1970,Laptop
+1971,RDF query language
+1972,Cwm
+1973,BrownBoost
+1974,Static routing
+1975,Pooling
+1976,Suite
+1977,Mesh networking
+1978,Polygon mesh
+1979,Database catalog
+1980,Database model
+1981,Database design
+1982,Video tracking
+1983,Data architecture
+1984,Agile software development
+1985,Similarity heuristic
+1986,Noisy text
+1987,Data compression ratio
+1988,Volume (compression)
+1989,Test data generation
+1990,Financial transaction
+1991,Flow network
+1992,Zombie
+1993,Ecosphere
+1994,Inverse
+1995,Scripting language
+1996,PICASSO
+1997,Modal
+1998,Hamming code
+1999,Internet Connection Sharing
+2000,Measure word
+2001,Enterprise integration
+2002,Enterprise information system
+2003,Enterprise information management
+2004,Enterprise software
+2005,Enterprise architecture
+2006,Markov logic network
+2007,Linear search
+2008,Metric tree
+2009,Minimal model
+2010,Social Semantic Web
+2011,Iteratively reweighted least squares
+2012,Inverse problem
+2013,Water supply network
+2014,Data-driven
+2015,Data sharing
+2016,Value at risk
+2017,Portfolio
+2018,Risk management
+2019,Stylized fact
+2020,Market data
+2021,CONTEST
+2022,Temptation
+2023,Knapsack problem
+2024,Cloud database
+2025,Service-level agreement
+2026,Database server
+2027,Replication (computing)
+2028,Search advertising
+2029,Keyword advertising
+2030,Native advertising
+2031,Word problem (mathematics education)
+2032,Fast Kalman filter
+2033,Extended Kalman filter
+2034,Geometric Brownian motion
+2035,Open Knowledge Base Connectivity
+2036,Binary constraint
+2037,Hybrid algorithm (constraint satisfaction)
+2038,Concurrent user
+2039,Citation analysis
+2040,Electronic publishing
+2041,App store
+2042,Semantic matching
+2043,Job analysis
+2044,Network model
+2045,Career development
+2046,Family tree
+2047,Controllability
+2048,System monitoring
+2049,Ticket
+2050,Service delivery framework
+2051,Planned maintenance
+2052,Computational trust
+2053,Gaussian noise
+2054,Value noise
+2055,Independence (probability theory)
+2056,Soft computing
+2057,Algebraic connectivity
+2058,Interdependent networks
+2059,Information flow (information theory)
+2060,Computational linguistics
+2061,Text structure
+2062,Adverbial
+2063,Wisdom of the crowd
+2064,Debiasing
+2065,Stochastic approximation
+2066,Pooled variance
+2067,Type I and type II errors
+2068,Haystack
+2069,CRFS
+2070,Exponential search
+2071,Bar chart
+2072,Presidential election
+2073,Logo
+2074,Behavioral modeling
+2075,Barcode
+2076,Transaction log
+2077,Ontology engineering
+2078,URL Subscription Architecture
+2079,Semantic URL
+2080,Smart city
+2081,Global network
+2082,Efficient energy use
+2083,Implementation
+2084,Flood forecasting
+2085,Flood myth
+2086,Precipitation
+2087,Lead time
+2088,Computational semantics
+2089,Counterfeit
+2090,Copy-on-write
+2091,Microsoft Windows
+2092,Process state
+2093,Embedded system
+2094,Information access
+2095,Schema (psychology)
+2096,Unique identifier
+2097,Text processing
+2098,Systems architecture
+2099,Factoid
+2100,Parallel manipulator
+2101,Hinge
+2102,Compliant mechanism
+2103,Kinematics
+2104,Cartesian coordinate system
+2105,Disjoint sets
+2106,Library classification
+2107,Multi-armed bandit
+2108,Proximity search
+2109,Simulation
+2110,Intuition
+2111,Confusion matrix
+2112,Utility computing
+2113,Probabilistic neural network
+2114,Contextualization
+2115,Complementarity (molecular biology)
+2116,Sequence database
+2117,Social environment
+2118,Natural language user interface
+2119,Semantic property
+2120,Web of Things
+2121,Aggregation problem
+2122,Consumer confidence index
+2123,Word of mouth
+2124,Customer satisfaction
+2125,Facet (geometry)
+2126,New business development
+2127,Business activity monitoring
+2128,Automaton
+2129,Social engagement
+2130,Semantic feature
+2131,Semantic equivalence
+2132,Parametrization
+2133,Taxis
+2134,Gumbel distribution
+2135,Generalized linear model
+2136,Service level objective
+2137,Service design
+2138,Service level requirement
+2139,Service catalog
+2140,Data profiling
+2141,Official statistics
+2142,XPath
+2143,TRECVID
+2144,Scala
+2145,Python (programming language)
+2146,Affinity propagation
+2147,Longest path problem
+2148,Turing machine
+2149,Collaborative intelligence
+2150,Topological space
+2151,Property testing
+2152,Mean reciprocal rank
+2153,Quantum algorithm
+2154,Quantum probability
+2155,Range query (database)
+2156,Result set
+2157,Full table scan
+2158,Real-time web
+2159,Toolbar
+2160,Boolean function
+2161,Media system dependency theory
+2162,Linear combination
+2163,Internetworking
+2164,Internet protocol suite
+2165,Mitochondrion
+2166,Nuclear protein
+2167,Oxidative phosphorylation
+2168,Atrophy
+2169,Cell
+2170,Audit
+2171,Passive learning
+2172,Sampling bias
+2173,Supply chain management
+2174,Supply chain
+2175,Analytic hierarchy process
+2176,Maximum cut
+2177,Internet television
+2178,Advertising research
+2179,Happiness
+2180,Affect (psychology)
+2181,Disappointment
+2182,Convolutional neural network
+2183,Laser power scaling
+2184,Laser
+2185,High-pass filter
+2186,Semiconductor laser theory
+2187,Optical filter
+2188,Information theory
+2189,Observable
+2190,Link farm
+2191,Map matching
+2192,Grid
+2193,Binary relation
+2194,Unobservable
+2195,Socioeconomic status
+2196,Tree decomposition
+2197,Random tree
+2198,Covariate
+2199,Zoom
+2200,Disease surveillance
+2201,Focused crawler
+2202,Alias
+2203,SIMD
+2204,Decoding methods
+2205,Measles
+2206,Converse
+2207,Plagiarism detection
+2208,Stationary distribution
+2209,Robust principal component analysis
+2210,Augmented Lagrangian method
+2211,Multiple kernel learning
+2212,Mass media
+2213,Competitor analysis
+2214,Traffic congestion reconstruction with Kerner's three-phase theory
+2215,Extreme weather
+2216,Semantic Web Stack
+2217,DICOM
+2218,Computer data storage
+2219,Genealogy
+2220,New product development
+2221,Document-term matrix
+2222,Connected component
+2223,Commonsense knowledge
+2224,Domain theory
+2225,SemEval
+2226,Boolean algebras canonically defined
+2227,Tensor contraction
+2228,Two-element Boolean algebra
+2229,Boolean algebra
+2230,Discrete choice
+2231,Quality Score
+2232,Parameterized complexity
+2233,Computer user satisfaction
+2234,Assortativity
+2235,Complete set of invariants
+2236,Systems management
+2237,Bidirectional search
+2238,Market segmentation
+2239,Food safety
+2240,Food security
+2241,Food processing
+2242,Security management
+2243,Load balancing (computing)
+2244,S-attributed grammar
+2245,Bottom-up parsing
+2246,Top-down parsing
+2247,Parser combinator
+2248,Succinct data structure
+2249,Insider threat
+2250,Statistics
+2251,Cryptography
+2252,Double hashing
+2253,Medical classification
+2254,Coding (social sciences)
+2255,Comparative politics
+2256,Polarization (politics)
+2257,Political sociology
+2258,Political culture
+2259,Rule of inference
+2260,Evolutionary robotics
+2261,Control theory
+2262,Message passing
+2263,Coefficient matrix
+2264,Personalized search
+2265,STREAMS
+2266,Execution model
+2267,Closeness
+2268,Originality
+2269,CLARITY
+2270,Denial-of-service attack
+2271,Attack patterns
+2272,Pedestrian
+2273,Cross-domain interoperability
+2274,Interoperability
+2275,Information infrastructure
+2276,Tornado
+2277,Expert system
+2278,Formal language
+2279,Near-infrared spectroscopy
+2280,Real estate
+2281,Organic search
+2282,Business model
+2283,Collaborative information seeking
+2284,Search problem
+2285,F1 score
+2286,Reverse discrimination
+2287,Narrative
+2288,Brainstorming
+2289,Collaborative writing
+2290,Part of speech
+2291,Block matrix
+2292,Social circle
+2293,Predictive analytics
+2294,Triadic closure
+2295,Collective wisdom
+2296,Disinformation
+2297,Collocation
+2298,Brown clustering
+2299,Living lab
+2300,Requirements engineering
+2301,Open innovation
+2302,Database schema
+2303,Database engine
+2304,PSA Velocity
+2305,Prostate-specific antigen
+2306,Androgen deprivation therapy
+2307,Nadir
+2308,Inductive logic programming
+2309,Logic programming
+2310,k-medoids
+2311,Sine
+2312,Emotion classification
+2313,Bayesian statistics
+2314,Bayesian average
+2315,Bayesian linear regression
+2316,Coupling from the past
+2317,Rejection sampling
+2318,Sequential algorithm
+2319,Legal profession
+2320,Social relation
+2321,Supreme court
+2322,Lawsuit
+2323,Apartment
+2324,Use case
+2325,Technician
+2326,Human multitasking
+2327,Bigeye tuna
+2328,Threshold model
+2329,Approximation theory
+2330,Retail banking
+2331,Customer profitability
+2332,Workflow management system
+2333,Software agent
+2334,Data mart
+2335,Best practice
+2336,Sprint
+2337,Collaborative network
+2338,Traffic congestion
+2339,Traffic camera
+2340,Protein–protein interaction
+2341,Computational biology
+2342,Object graph
+2343,Trust metric
+2344,Authentication
+2345,Programming by example
+2346,Scoring algorithm
+2347,Cache
+2348,Deep linguistic processing
+2349,Empirical risk minimization
+2350,Conjunctive query
+2351,Computational advertising
+2352,Transaction processing
+2353,Orthogonality
+2354,MEDLINE
+2355,Mahalanobis distance
+2356,Geospatial analysis
+2357,Gaussian elimination
+2358,Voting
+2359,Grading (education)
+2360,Vocabulary mismatch
+2361,Cube
+2362,Search interface
+2363,Preference elicitation
+2364,Zest
+2365,Information filtering system
+2366,Field-programmable gate array
+2367,Memory footprint
+2368,Cellular automaton
+2369,3-dimensional matching
+2370,Null model
+2371,Smacker video
+2372,Video compression picture types
+2373,Conflict management
+2374,Complaint system
+2375,Cost approach
+2376,Real estate appraisal
+2377,Estate
+2378,Backlink
+2379,Cloaking
+2380,Digital watermarking
+2381,Mode choice
+2382,Open problem
+2383,Balanced scorecard
+2384,Bernoulli's principle
+2385,Transitive closure
+2386,Hit rate
+2387,Confidentiality
+2388,Microfinance
+2389,Prosocial behavior
+2390,Vendor
+2391,Human dynamics
+2392,Exhibition
+2393,Expected utility hypothesis
+2394,Attribute domain
+2395,Sentence extraction
+2396,Truncation
+2397,Disk formatting
+2398,Data diffusion machine
+2399,Data center
+2400,Helpfulness
+2401,Artificial lift
+2402,Condition monitoring
+2403,Web 2.0
+2404,New class
+2405,Open research
+2406,Signature recognition
+2407,Biometrics
+2408,Social behavior
+2409,Interpersonal influence
+2410,Dependency graph
+2411,Junction tree algorithm
+2412,Risk analysis (business)
+2413,Demonstrative
+2414,Sorting algorithm
+2415,Adaptive sort
+2416,sort
+2417,Maintainability
+2418,Graphics
+2419,Geographic information system
+2420,Dichotomy
+2421,Expediting
+2422,Materialized view
+2423,Euclidean space
+2424,Co-occurrence
+2425,Social sharing
+2426,Demand forecasting
+2427,Economic forecasting
+2428,Mass customization
+2429,Local consistency
+2430,Software regression
+2431,Test case
+2432,Pharmacovigilance
+2433,Algorithmic inference
+2434,Statistical theory
+2435,Fiducial inference
+2436,Statistical inference
+2437,Confidence distribution
+2438,Pruning
+2439,Probabilistic forecasting
+2440,Point estimation
+2441,Canonical analysis
+2442,Canonical correlation
+2443,Discounted cumulative gain
+2444,Monotonic function
+2445,Exact algorithm
+2446,LTE Advanced
+2447,Scheduling (computing)
+2448,Okapi BM25
+2449,Data retrieval
+2450,Quality function deployment
+2451,Automotive industry
+2452,Industrial engineering
+2453,Document Structure Description
+2454,Convex function
+2455,Electric distribution network
+2456,Smart meter
+2457,Target protein
+2458,DrugBank
+2459,In silico
+2460,Protein sequencing
+2461,Insider
+2462,Maximum satisfiability problem
+2463,Knowledge retrieval
+2464,Proper linear model
+2465,Regression diagnostic
+2466,Common value auction
+2467,Threat assessment
+2468,Loyalty business model
+2469,Operations security
+2470,Random regular graph
+2471,Great power
+2472,Polysemy
+2473,Rademacher complexity
+2474,OASIS SOA Reference Model
+2475,Service layer
+2476,Color histogram
+2477,Online search
+2478,Keystroke logging
+2479,Random search
+2480,Range constraint
+2481,Wavelet Tree
+2482,Swap (computer programming)
+2483,Organizational chart
+2484,Programmer
+2485,Program evaluation
+2486,Order of integration
+2487,Electronic discovery
+2488,Differential evolution
+2489,Behavioral targeting
+2490,SGML entity
+2491,Environmental data
+2492,Organism
+2493,Ionomics
+2494,Banner blindness
+2495,Interpersonal ties
+2496,Payment
+2497,Singular value
+2498,Line search
+2499,Collaborative method
+2500,Mobile robot
+2501,Grid computing
+2502,Robotics
+2503,Blind signal separation
+2504,Source separation
+2505,Frequency domain
+2506,Suggested Upper Merged Ontology
+2507,Knowledge organization
+2508,Scale-space segmentation
+2509,Segmentation-based object categorization
+2510,Kriging
+2511,Personalized medicine
+2512,Feature Dimension
+2513,Image texture
+2514,Image resolution
+2515,Gradient method
+2516,Dewey Decimal Classification
+2517,Ranging
+2518,Collective classification
+2519,Standardization
+2520,Medical record
+2521,Bioactive compound
+2522,Biochemical engineering
+2523,Coherence (physics)
+2524,News media
+2525,Spatial database
+2526,Skeletonization
+2527,Efficiency
+2528,Cluster hypothesis
+2529,Constraint logic programming
+2530,Concurrent constraint logic programming
+2531,Constraint satisfaction problem
+2532,Geometric networks
+2533,Early stopping
+2534,Launched
+2535,Moving target indication
+2536,Incident management (ITSM)
+2537,Viterbi algorithm
+2538,Forward–backward algorithm
+2539,Anytime algorithm
+2540,Transitive reduction
+2541,Interpersonal communication
+2542,Root cause
+2543,Sustainable transport
+2544,Zero emission
+2545,Unrest
+2546,Audit trail
+2547,Economic indicator
+2548,Table (information)
+2549,Color quantization
+2550,Color depth
+2551,Software design pattern
+2552,Design pattern
+2553,Pruning (decision trees)
+2554,Killer heuristic
+2555,Adversarial information retrieval
+2556,Content farm
+2557,Collaborative software
+2558,Tracing
+2559,Industrial organization
+2560,Human resources
+2561,Grey relational analysis
+2562,Gray (horse)
+2563,Cook's distance
+2564,Synchronization
+2565,Suffix tree
+2566,Description logic
+2567,Brooks–Iyengar algorithm
+2568,Visual sensor network
+2569,Key distribution in wireless sensor networks
+2570,Quality policy
+2571,Certified Quality Engineer
+2572,Higher education
+2573,Quality assurance
+2574,Early warning system
+2575,Flagging
+2576,Tree (graph theory)
+2577,Treebank
+2578,Scientific method
+2579,Surprise
+2580,Voting behavior
+2581,Distance
+2582,Shortest path problem
+2583,Constrained Shortest Path First
+2584,Citation graph
+2585,Sensemaking
+2586,MovieLens
+2587,Face-to-face
+2588,Column generation
+2589,Memory hierarchy
+2590,Multi-core processor
+2591,Stock market prediction
+2592,Trading strategy
+2593,Breadth-first search
+2594,Injective function
+2595,Snippet
+2596,Public interest
+2597,Magik
+2598,Answer set programming
+2599,Programming paradigm
+2600,Message Passing Interface
+2601,Crowdsource
+2602,Privacy policy
+2603,Broadcasting
+2604,Online encyclopedia
+2605,Information society
+2606,Informatics
+2607,Probabilistic method
+2608,Health indicator
+2609,Geriatrics
+2610,Economic graph
+2611,Extension method
+2612,Attribution
+2613,Weather forecasting
+2614,Spurious relationship
+2615,Router
+2616,Bibliometrics
+2617,Hamming distance
+2618,Hamming space
+2619,Semantic gap
+2620,Warning system
+2621,Temporal scales
+2622,Periodic graph (geometry)
+2623,Clinical trial
+2624,Advertising
+2625,Precision medicine
+2626,Reproducing kernel Hilbert space
+2627,Covering number
+2628,Serendipity
+2629,Isotonic regression
+2630,Kernel regression
+2631,Complex contagion
+2632,Parametric statistics
+2633,Mouse tracking
+2634,Gaze
+2635,Product classification
+2636,Homophily
+2637,Variance reduction
+2638,Co-occurrence networks
+2639,Tunable diode laser absorption spectroscopy
+2640,Iterative reconstruction
+2641,Combustion
+2642,Coreset
+2643,Kronecker product
+2644,Kronecker delta
+2645,Generalizability theory
+2646,Linkage (mechanical)
+2647,Pancreatic cancer
+2648,Camera phone
+2649,Information algebra
+2650,Information integration
+2651,Information mapping
+2652,RGB color space
+2653,Graph product
+2654,Forbidden graph characterization
+2655,Combination drug
+2656,Component-based software engineering
+2657,Semantic security
+2658,Attrition
+2659,Salary
+2660,Remuneration
+2661,Multinational corporation
+2662,Total revenue
+2663,Meta Data Services
+2664,Geospatial metadata
+2665,Data element
+2666,Equivalence of metrics
+2667,Foreign key
+2668,Supply chain optimization
+2669,Brick and mortar
+2670,Rewriting
+2671,Combinatorial optimization
+2672,Probably approximately correct learning
+2673,Self-organizing list
+2674,List update problem
+2675,Movie theater
+2676,Abductive reasoning
+2677,Joint entropy
+2678,Rényi entropy
+2679,Differential entropy
+2680,Transfer entropy
+2681,Information theory and measure theory
+2682,IR evaluation
+2683,Profit maximization
+2684,Soundness
+2685,Climate pattern
+2686,Thompson sampling
+2687,Hierarchical hidden Markov model
+2688,STAR model
+2689,Social media mining
+2690,Massive open online course
+2691,Investor profile
+2692,Investment decisions
+2693,Investment strategy
+2694,Accredited investor
+2695,Citizen science
+2696,Radio-frequency identification
+2697,Consumer behaviour
+2698,Design process
+2699,Knowledge engineering
+2700,Industrial production
+2701,Resource consumption
+2702,Foreign exchange market
+2703,Financial market
+2704,Currency
+2705,Non-linear least squares
+2706,Generalized least squares
+2707,Least mean squares filter
+2708,Biological neuron model
+2709,System call
+2710,Flocking (texture)
+2711,Closed captioning
+2712,Source text
+2713,Content management
+2714,Human morbidity
+2715,Multimedia search
+2716,Monetary policy
+2717,News analytics
+2718,Business cycle
+2719,Spatial data infrastructure
+2720,User journey
+2721,Multinomial logistic regression
+2722,Overhead (computing)
+2723,Data virtualization
+2724,Incremental build model
+2725,Monetization
+2726,Technical report
+2727,Stress (mechanics)
+2728,Spamming
+2729,Spambot
+2730,Forum spam
+2731,Referer spam
+2732,System evaluation
+2733,Need to know
+2734,Notification system
+2735,Principal curvature-based region detector
+2736,Bag-of-words model in computer vision
+2737,Group analysis
+2738,Cohort
+2739,Total variation denoising
+2740,Deblurring
+2741,Polygene
+2742,Long tail
+2743,Acceleration
+2744,Procedural knowledge
+2745,Time constraint
+2746,Structured content
+2747,Exchange rate
+2748,Exchange-rate regime
+2749,CHAID
+2750,Currency crisis
+2751,Classifier chains
+2752,Citizen journalism
+2753,CPCTC
+2754,Nested triangles graph
+2755,Parallel programming model
+2756,Credit history
+2757,Credit reference
+2758,China
+2759,Enterprise data management
+2760,Retrievability
+2761,Floating car data
+2762,Three-phase traffic theory
+2763,Traffic generation model
+2764,Traffic shaping
+2765,Reducer
+2766,Stochastic process
+2767,Persuasion
+2768,Natural language generation
+2769,Metagenomics
+2770,Pyrosequencing
+2771,Amplicon
+2772,Recursive least squares filter
+2773,Extreme learning machine
+2774,Assignment problem
+2775,Cellular network
+2776,Coal mining
+2777,Data envelopment analysis
+2778,Coal
+2779,Multi-user
+2780,De facto standard
+2781,Softmax function
+2782,Database marketing
+2783,Relationship marketing
+2784,Value chain
+2785,Domain analysis
+2786,Domain engineering
+2787,Statistical learning theory
+2788,VC dimension
+2789,Computational genomics
+2790,Theoretical ecology
+2791,Cloud storage
+2792,Inclusion and exclusion criteria
+2793,Surface reconstruction
+2794,Bézier surface
+2795,Radial basis function
+2796,Free surface
+2797,Hybrid system
+2798,Scientometrics
+2799,Counting problem
+2800,Authentication server
+2801,Password
+2802,Single sign-on
+2803,Cascading classifiers
+2804,Mathematical proof
+2805,String metric
+2806,Personal knowledge management
+2807,Professional development
+2808,Protein domain
+2809,Sequence analysis
+2810,Protein superfamily
+2811,False positive paradox
+2812,Priority queue
+2813,Computational epidemiology
+2814,Summary statistics
+2815,Herding
+2816,Mechanism (philosophy)
+2817,Demand-side platform
+2818,Web banner
+2819,Temporal difference learning
+2820,Opinion leadership
+2821,Online discussion
+2822,Rational choice theory
+2823,Finite set
+2824,Subjectivity
+2825,Voxel
+2826,Statistical parametric mapping
+2827,Functional magnetic resonance imaging
+2828,Adaptive system
+2829,Configuration management database
+2830,TREC Genomics
+2831,Joke
+2832,Satellite imagery
+2833,Group buying
+2834,Profit (economics)
+2835,Loyalty
+2836,Sweep line algorithm
+2837,Unit of time
+2838,Relational algebra
+2839,Lp space
+2840,Exact test
+2841,Manifold
+2842,Null distribution
+2843,Multiple comparisons problem
+2844,Principal variation search
+2845,Knowledge sharing
+2846,Evolutionary game theory
+2847,Disparate impact
+2848,Scrutiny
+2849,Service quality
+2850,Customer Service Assurance
+2851,Slice sampling
+2852,Sampling design
+2853,Metropolis–Hastings algorithm
+2854,Principle of least effort
+2855,Serial position effect
+2856,Display size
+2857,Randomized experiment
+2858,Biomedicine
+2859,Algorithmics
+2860,Overdispersion
+2861,Negative binomial distribution
+2862,Link Control Protocol
+2863,OSI model
+2864,General Inter-ORB Protocol
+2865,Communications protocol
+2866,Aggregate data
+2867,Data aggregator
+2868,Bundle
+2869,Talent management
+2870,Management system
+2871,Voter model
+2872,Hessian matrix
+2873,Time to live
+2874,Personal development
+2875,Rigour
+2876,Strengths and weaknesses
+2877,Excellence
+2878,Binary pattern
+2879,Cart
+2880,Shopping mall
+2881,Haar-like features
+2882,Prescription drug
+2883,Human Connectome
+2884,Diffusion MRI
+2885,Fractional anisotropy
+2886,Diffusion Tractography
+2887,Digital signature
+2888,Asynchronous Transfer Mode
+2889,Local algorithm
+2890,Heat kernel
+2891,Matrix exponential
+2892,Specification language
+2893,Selection bias
+2894,Commit
+2895,Clinical decision support system
+2896,Chronic condition
+2897,Buyer's remorse
+2898,Marketing
+2899,Confounding
+2900,Preventive healthcare
+2901,Developing country
+2902,Modular neural network
+2903,Fingerprint recognition
+2904,Physical system
+2905,Data flow diagram
+2906,Information and Computer Science
+2907,Library science
+2908,Generalized assignment problem
+2909,Search engine optimization
+2910,Maximum a posteriori estimation
+2911,Legislator
+2912,Representative democracy
+2913,Politics of the United States
+2914,Scaffold protein
+2915,Ubiquitin protein ligase binding
+2916,Scaffold
+2917,Interactome
+2918,UniProt
+2919,Astronomical survey
+2920,Radio telescope
+2921,Automated data processing
+2922,Telescope
+2923,Radio astronomy
+2924,Dynamic web page
+2925,Greenhouse gas
+2926,Kyoto Protocol
+2927,United Nations Framework Convention on Climate Change
+2928,Global warming
+2929,Biology and political orientation
+2930,Quadratic sieve
+2931,Dixon's factorization method
+2932,Medical research
+2933,Divide and conquer algorithms
+2934,K shortest path routing
+2935,Shortest Path Faster Algorithm
+2936,Global shipping network
+2937,Introduced species
+2938,Power iteration
+2939,Effective dimension
+2940,Poisson sampling
+2941,Wait-for graph
+2942,Matrix representation
+2943,IP address management
+2944,Graph center
+2945,Complex event processing
+2946,Turn-by-turn navigation
+2947,Cognitive load
+2948,Information discovery
+2949,Infobox
+2950,Social theory
+2951,Routing table
+2952,Star schema
+2953,Information schema
+2954,Ontology alignment
+2955,Rootkit
+2956,Obfuscation
+2957,Inline function
+2958,Social comparison theory
+2959,Trial and error
+2960,Nonparametric regression
+2961,Urban area
+2962,Streak
+2963,Subset and superset
+2964,Stratified sampling
+2965,Greedy randomized adaptive search procedure
+2966,Set cover problem
+2967,Calculator
+2968,Road networks
+2969,Search-oriented architecture
+2970,Interactive advertising
+2971,Cuboid
+2972,Geographic mobility
+2973,Fukushima Nuclear Accident
+2974,Additional concerns
+2975,Individual mobility
+2976,Place identity
+2977,Placemaking
+2978,Distributed hash table
+2979,Torrent file
+2980,Cryptovirology
+2981,Internet security
+2982,Counterfactual thinking
+2983,Pedestrian detection
+2984,Business logic
+2985,Multidimensional analysis
+2986,Optimal matching
+2987,Approximate string matching
+2988,Template matching
+2989,State pattern
+2990,Granularity
+2991,Convex hull
+2992,Output-sensitive algorithm
+2993,Hull
+2994,Page layout
+2995,Spanner
+2996,Data parallelism
+2997,Stream processing
+2998,Renewal theory
+2999,Pocket Cube
+3000,Know-how
+3001,Criticism
+3002,Social policy
+3003,Uninterpretable
+3004,Sequence labeling
+3005,Truth value
+3006,Knowledge space
+3007,String (computer science)
+3008,Ternary search tree
+3009,Commentz-Walter algorithm
+3010,Bitwise operation
+3011,Animation
+3012,Identifier
+3013,Co-training
+3014,Random coordinate descent
+3015,Probability mass function
+3016,Geometric modeling
+3017,Antenna diversity
+3018,Performance tuning
+3019,Dynamic Extension
+3020,Item bank
+3021,Customer delight
+3022,Group information management
+3023,Project team
+3024,Background subtraction
+3025,Median filter
+3026,Noise reduction
+3027,Product innovation
+3028,Innovation management
+3029,Product engineering
+3030,Operationalization
+3031,Transformative research
+3032,Transformative learning
+3033,Sarcasm
+3034,Optimal discriminant analysis
+3035,Personal experience
+3036,Gas chromatography–mass spectrometry
+3037,Laboratory technique
+3038,Pairwise independence
+3039,Inductive programming
+3040,Nuclear technology
+3041,National security
+3042,Crash
+3043,Skid (automobile)
+3044,Road surface
+3045,Risk assessment
+3046,Return on marketing investment
+3047,Marketing research
+3048,Marketing effectiveness
+3049,Marketing management
+3050,Multicollinearity
+3051,Disgust
+3052,De Bruijn graph
+3053,Eulerian path
+3054,Access method
+3055,Check-in
+3056,Pharmaceutical industry
+3057,Financial services
+3058,Cognitive development
+3059,Child development
+3060,Speaker diarisation
+3061,Speaker recognition
+3062,Speech processing
+3063,Mel-frequency cepstrum
+3064,Decision list
+3065,Black box (phreaking)
+3066,Conventional wisdom
+3067,Net profit
+3068,Full Relation
+3069,Argumentative
+3070,Codebase
+3071,Schema migration
+3072,Code generation
+3073,Web design
+3074,Rate of convergence
+3075,Probit model
+3076,Sequence clustering
+3077,Lexical item
+3078,Bivariate analysis
+3079,Candidate gene
+3080,Modularity (networks)
+3081,Geocoding
+3082,Word search
+3083,Ontology language
+3084,Logical consequence
+3085,Unified Model
+3086,Behavioural sciences
+3087,Dykstra's projection algorithm
+3088,Batch processing
+3089,Image fusion
+3090,Public opinion
+3091,Neutrality
+3092,Enforcement
+3093,Cilk
+3094,Compiler
+3095,Domain-specific language
+3096,E-Government
+3097,NoSQL
+3098,Milestone (project management)
+3099,Confidence and prediction bands
+3100,Intensive care unit
+3101,User-centered design
+3102,Wheelchair
+3103,Accelerometer
+3104,Smart device
+3105,Cut
+3106,Cognitive network
+3107,Situational ethics
+3108,Information asymmetry
+3109,Property rights
+3110,Moral hazard
+3111,Adverse selection
+3112,Multiple criteria
+3113,Cloud computing security
+3114,Axiom
+3115,Voice analysis
+3116,Human voice
+3117,Cholesterol
+3118,Human brain
+3119,Sterol regulatory element-binding protein
+3120,Alzheimer's disease
+3121,Metabolism
+3122,Writing style
+3123,Preparedness
+3124,Online transaction processing
+3125,Metis
+3126,Public health surveillance
+3127,Coronary arteries
+3128,Coronary artery disease
+3129,Grid file
+3130,Law enforcement
+3131,Web image
+3132,Ternary relation
+3133,Transcription (linguistics)
+3134,Prosody
+3135,Price elasticity of demand
+3136,Service desk
+3137,Multidisciplinary approach
+3138,Entropy estimation
+3139,Maximum entropy spectral estimation
+3140,Cybercrime
+3141,Reconstruction conjecture
+3142,Passive monitoring
+3143,Networking hardware
+3144,Computer memory
+3145,Random access
+3146,Statistical parsing
+3147,Controlled natural language
+3148,Likelihood function
+3149,Software development
+3150,Application programming interface
+3151,Spot market
+3152,Digital television
+3153,Liberian dollar
+3154,Set top box
+3155,Path (graph theory)
+3156,Symbolic data analysis
+3157,Steiner tree problem
+3158,Athletes
+3159,Applied psychology
+3160,Proxy (climate)
+3161,Dementia
+3162,Mini–Mental State Examination
+3163,XML Base
+3164,Incremental search
+3165,View
+3166,Management information systems
+3167,Temporal lobe
+3168,Identification (information)
+3169,Algebraic expression
+3170,Collaboration graph
+3171,Multigraph
+3172,Variable and attribute
+3173,Attractor
+3174,Dynamical system
+3175,Mobile service
+3176,Scram
+3177,Route assignment
+3178,Folksonomy
+3179,Position paper
+3180,Training set
+3181,Information gain
+3182,Meaningful learning
+3183,Social entrepreneurship
+3184,Mathematics education
+3185,Drug resistance
+3186,Lapatinib
+3187,Data integrity
+3188,Lag
+3189,Sensory cue
+3190,Computational humor
+3191,Linguistics
+3192,Event monitoring
+3193,Diffusion process
+3194,Text segmentation
+3195,Assemblers
+3196,Bias–variance tradeoff
+3197,User control
+3198,Transparency (graphic)
+3199,Data Corruption
+3200,Web science
+3201,Feature (machine learning)
+3202,Time-series segmentation
+3203,Patient satisfaction
+3204,Survey data collection
+3205,Family medicine
+3206,Weighted voting
+3207,Information geometry
+3208,Linear dynamical system
+3209,Nearest-neighbor chain algorithm
+3210,Partially ordered set
+3211,Conceptual model
+3212,Job shop scheduling
+3213,Hoist (device)
+3214,Representativeness heuristic
+3215,Dijkstra's algorithm
+3216,Bus network
+3217,Schedule
+3218,Robust optimization
+3219,CVAR
+3220,False positives and false negatives
+3221,Multivariate kernel density estimation
+3222,Baseline (configuration management)
+3223,Deep belief network
+3224,Jamming
+3225,Rush hour
+3226,Adaptive algorithm
+3227,Bulk synchronous parallel
+3228,Demotion
+3229,Approximation error
+3230,Linear space
+3231,Event cascade
+3232,Cox process
+3233,Massively parallel
+3234,Graphics processing unit
+3235,Memory bandwidth
+3236,Compromise
+3237,Shopkeeper
+3238,Solid-state drive
+3239,Operating system
+3240,Autocorrection
+3241,eMix
+3242,Knowledge integration
+3243,Coreference
+3244,iDistance
+3245,Protein tertiary structure
+3246,Database search engine
+3247,NIST
+3248,Personality
+3249,Big Five personality traits
+3250,Trait
+3251,Workforce
+3252,Emerging markets
+3253,Rand index
+3254,Blood lead level
+3255,Public policy
+3256,Lead poisoning
+3257,Hard coding
+3258,Team composition
+3259,Teamwork
+3260,Standard language
+3261,Information repository
+3262,Patent valuation
+3263,Cuckoo hashing
+3264,Hopscotch hashing
+3265,Analogy
+3266,Media event
+3267,Mascot
+3268,Query throughput
+3269,Probabilistic analysis of algorithms
+3270,Enterprise systems engineering
+3271,Matroid
+3272,Multiplexing
+3273,Relay
+3274,Intelligent agent
+3275,Specification
+3276,Pivot language
+3277,Coaching
+3278,Scan statistic
+3279,Multi-objective optimization
+3280,Cardinal voting systems
+3281,Anti-plurality voting
+3282,Calculus of voting
+3283,Business marketing
+3284,Home advantage
+3285,Chunking (psychology)
+3286,Category management
+3287,Product (category theory)
+3288,GIS and public health
+3289,Criminal law
+3290,Tag system
+3291,Hybrid algorithm
+3292,Critical infrastructure
+3293,Guard (information security)
+3294,Reference architecture
+3295,Sequential analysis
+3296,Statistical power
+3297,Markup language
+3298,Distribution fitting
+3299,Heavy-tailed distribution
+3300,Log-normal distribution
+3301,Floyd–Warshall algorithm
+3302,Brain tumor
+3303,Magnetic resonance imaging
+3304,Neurophysiology
+3305,Proximal Gradient Methods
+3306,Proximal gradient methods for learning
+3307,Microarray databases
+3308,Gene chip analysis
+3309,Index term
+3310,Subject indexing
+3311,Controlled vocabulary
+3312,Social responsibility
+3313,Functional approach
+3314,Ontology learning
+3315,Neuroimaging
+3316,Positron emission tomography
+3317,Energy management
+3318,Power management
+3319,HVAC
+3320,Absolute risk reduction
+3321,Business rule
+3322,Variogram
+3323,Digital media
+3324,Workflow engine
+3325,Workflow technology
+3326,Social actions
+3327,Group decision-making
+3328,Loop (graph theory)
+3329,Edge contraction
+3330,Cipher
+3331,Transposition cipher
+3332,Stream cipher attack
+3333,Distinguishing attack
+3334,CBC-MAC
+3335,Chebyshev distance
+3336,Square (algebra)
+3337,Metre
+3338,Frequentist inference
+3339,Data acquisition
+3340,Altruism
+3341,Network formation
+3342,Graph coloring
+3343,Crime analysis
+3344,Hotspot (Wi-Fi)
+3345,Influential observation
+3346,Pattern clustering
+3347,Global optimization
+3348,Of the form
+3349,Hjorth parameters
+3350,Facial expression
+3351,Social movement
+3352,Mistake
+3353,Singing
+3354,Production quality
+3355,Social identity theory
+3356,Sociality
+3357,Light curve
+3358,Resolver
+3359,Bigram
+3360,Empirical probability
+3361,Concurrency
+3362,Semantic interpretation
+3363,Autocorrelation
+3364,Permission
+3365,Organizational structure
+3366,Participatory media
+3367,Database theory
+3368,Perpetual inventory
+3369,Inventory theory
+3370,Inventory control
+3371,Stock-taking
+3372,Patent application
+3373,Random walker algorithm
+3374,HTML
+3375,De-anonymization
+3376,Desk
+3377,Compass
+3378,Pearson product-moment correlation coefficient
+3379,Software versioning
+3380,Semantic data model
+3381,Interactive visualization
+3382,Hough transform
+3383,Weight-balanced tree
+3384,Diffusion of innovations
+3385,Obfuscation (software)
+3386,Sort-merge join
+3387,Hash join
+3388,Recursive join
+3389,Pseudolikelihood
+3390,Breast cancer
+3391,Gene expression profiling
+3392,Triple-negative breast cancer
+3393,Survival analysis
+3394,Tourism
+3395,XQuery
+3396,Program slicing
+3397,Customer lifetime value
+3398,Reliability theory
+3399,Aerospace
+3400,Reliability engineering
+3401,Political communication
+3402,Structural risk minimization
+3403,Computation tree logic
+3404,Rotation formalisms in three dimensions
+3405,Structured product
+3406,Maximum coverage problem
+3407,Support group
+3408,Mental health
+3409,Team software process
+3410,Ontology Inference Layer
+3411,Temporal annotation
+3412,Computer access control
+3413,Access control
+3414,Cryptographic protocol
+3415,Database index
+3416,Standard test image
+3417,Land transport
+3418,Destinations
+3419,Private sector
+3420,Electronic data capture
+3421,Data Standard
+3422,Semantic interoperability
+3423,Generalized additive model
+3424,Business decision mapping
+3425,Graph isomorphism
+3426,Confluence
+3427,Multi-agent system
+3428,Freedom of information
+3429,Computer-supported collaborative learning
+3430,Technological evolution
+3431,GRASP
+3432,Road traffic
+3433,Traffic prediction
+3434,Offensive
+3435,Transpose
+3436,Dynamic priority scheduling
+3437,Earliest deadline first scheduling
+3438,Deadline-monotonic scheduling
+3439,Rate-monotonic scheduling
+3440,Stable marriage problem
+3441,Anchoring
+3442,Urban studies
+3443,Social system
+3444,Hedge (finance)
+3445,Penalty method
+3446,Negentropy
+3447,Spectrogram
+3448,Bankruptcy prediction
+3449,Financial ratio
+3450,Logarithm
+3451,Information model
+3452,Latent semantic indexing
+3453,Gaussian function
+3454,Luck
+3455,Foreign language
+3456,Eye movement
+3457,Distortion
+3458,Row and column spaces
+3459,Linked data structure
+3460,Genome-wide association study
+3461,Bonferroni correction
+3462,Decision engineering
+3463,Model-driven architecture
+3464,Iterative and incremental development
+3465,Decidability
+3466,Affinity analysis
+3467,Market basket
+3468,Natural experiment
+3469,Spurious correlation
+3470,Organizational learning
+3471,Knowledge economy
+3472,Tacit knowledge
+3473,Protein function prediction
+3474,Containment
+3475,Transmission Time Interval
+3476,Telecommunications link
+3477,Chip
+3478,Information retrieval applications
+3479,Cyberinfrastructure
+3480,Data efficiency
+3481,Social change
+3482,Query string
+3483,Operator (computer programming)
+3484,Blog network
+3485,Copying
+3486,Sequential consistency
+3487,Personalized marketing
+3488,Clique percolation method
+3489,Information foraging
+3490,Visual search
+3491,Online presence management
+3492,Online participation
+3493,Issuing bank
+3494,Chinese financial system
+3495,External financing
+3496,Cache algorithms
+3497,Cache invalidation
+3498,Cache coloring
+3499,Forgetting curve
+3500,noindex
+3501,Spell
+3502,Spatial epidemiology
+3503,Residence
+3504,Markov property
+3505,Expander graph
+3506,Yen's algorithm
+3507,Bluetooth
+3508,Journalism
+3509,Multipartite
+3510,Giant component
+3511,Asymmetry
+3512,Absolute value
+3513,Foreign portfolio investment
+3514,Open-ended investment company
+3515,Separately managed account
+3516,Amortized analysis
+3517,Time domain
+3518,Bisection method
+3519,Hadamard matrix
+3520,Web mapping
+3521,Security awareness
+3522,Markov random field
+3523,Conditional independence
+3524,Scientific progress
+3525,Impromptu
+3526,Biological database
+3527,Negative transfer
+3528,Sphinx
+3529,Glyph
+3530,Optical character recognition
+3531,Co-occurrence matrix
+3532,Computational sociology
+3533,Verification and validation
+3534,Computer network programming
+3535,Interactive programming
+3536,Service discovery
+3537,Datalog
+3538,Crowding
+3539,Overcrowding
+3540,Staffing
+3541,Internationalization
+3542,eHealth
+3543,Information technology operations
+3544,Planner
+3545,Learning sciences
+3546,JSON-LD
+3547,OWL-S
+3548,Semantic Web Rule Language
+3549,Social science education
+3550,Science education
+3551,Outline of social science
+3552,Travel behavior
+3553,Crowd simulation
+3554,Tracking system
+3555,NetFlow
+3556,Technology forecasting
+3557,Commercial finance
+3558,Interrogative
+3559,Social venture capital
+3560,Pre-money valuation
+3561,Robust regression
+3562,Findability
+3563,Formal grammar
+3564,Salience (language)
+3565,Generalized Dirichlet distribution
+3566,Pachinko allocation
+3567,Consumer spending
+3568,Algorithmic game theory
+3569,Mechanism design
+3570,Market orientation
+3571,Childhood obesity
+3572,Obesity
+3573,Data redundancy
+3574,Xeon
+3575,Convex analysis
+3576,Absolutely convex set
+3577,Proper convex function
+3578,Structural linguistics
+3579,Syntagmatic analysis
+3580,Renewable energy
+3581,Database normalization
+3582,Adversarial machine learning
+3583,Avionics
+3584,Crime prevention
+3585,Prediction market
+3586,Bureaucracy
+3587,Mobility management
+3588,Sample (statistics)
+3589,Toll road
+3590,Energy accounting
+3591,Energy informatics
+3592,Conjugate gradient method
+3593,Free energy principle
+3594,Subgradient method
+3595,Telecommunications network
+3596,Logging
+3597,Computer hardware
+3598,Errors-in-variables models
+3599,Nonlinear programming
+3600,Continuous optimization
+3601,Ocean dynamics
+3602,Sea surface temperature
+3603,Vulnerability
+3604,Volunteered geographic information
+3605,Dwell time
+3606,Casual
+3607,Silence
+3608,Churning
+3609,Cost principle
+3610,Constructive fraud
+3611,Internet fraud
+3612,Procurement
+3613,Tree-depth
+3614,Organizational culture
+3615,Heredity
+3616,Sequential access
+3617,Simple Knowledge Organization System
+3618,Intellectual property
+3619,Hierarchical classifier
+3620,Algorithmic efficiency
+3621,Adaptive sampling
+3622,Autonomous agent
+3623,Additive model
+3624,Dyslexia
+3625,Block code
+3626,Filter bubble
+3627,Accountability
+3628,Privacy laws of the United States
+3629,Conceptual schema
+3630,Semantic heterogeneity
+3631,Information leakage
+3632,Product type
+3633,Urban design
+3634,Vision
+3635,Architecture
+3636,Environmental ethics
+3637,Projection (mathematics)
+3638,Knowledge Search
+3639,Polynomial
+3640,Revealed comparative advantage
+3641,Comparative advantage
+3642,CPU time
+3643,Trusted third party
+3644,Complexity of constraint satisfaction
+3645,Error detection and correction
+3646,Digital Earth
+3647,Conceptualization
+3648,Eye tracking
+3649,Fixation (visual)
+3650,DPLL algorithm
+3651,Conjunctive normal form
+3652,Satisfiability
+3653,Data source
+3654,Open data
+3655,Slogan
+3656,Gossip
+3657,Cover tree
+3658,Bregman divergence
+3659,Speed of service
+3660,Video game design
+3661,Game mechanics
+3662,Game Developer
+3663,Video game development
+3664,Game design
+3665,Harmonic function
+3666,Incomplete LU factorization
+3667,Association mapping
+3668,Genetic association
+3669,Locus (genetics)
+3670,Exponential random graph models
+3671,Sufficient statistic
+3672,Fixed-radius near neighbors
+3673,Benchmark (computing)
+3674,Choropleth map
+3675,Turbo
+3676,Vertex cover
+3677,Epidemic model
+3678,Spatial ecology
+3679,Prognostics
+3680,Site map
+3681,Praise
+3682,Snowball sampling
+3683,Root cause analysis
+3684,Congruence (geometry)
+3685,Google Brain
+3686,Battle
+3687,Standardized test
+3688,Named graph
+3689,Documentary evidence
+3690,Switchover
+3691,Mobile broadband
+3692,Social dynamics
+3693,Language technology
+3694,Digitization
+3695,Cultural heritage
+3696,Generative grammar
+3697,Cultural artifact
+3698,Circle of Friends
+3699,Black swan theory
+3700,Degree matrix
+3701,Hollow matrix
+3702,Diagonal matrix
+3703,Clef
+3704,Green computing
+3705,Search engine results page
+3706,Correspondence problem
+3707,Mobile social network
+3708,Foreign direct investment
+3709,Facial paralysis
+3710,Paralysis
+3711,Edge detection
+3712,Euros
+3713,MathML
+3714,Stress management
+3715,Occupational stress
+3716,Protocol analysis
+3717,Decision process
+3718,Stored procedure
+3719,HSL and HSV
+3720,Image noise
+3721,Triangulation (social science)
+3722,Method of steepest descent
+3723,Interpolation
+3724,Protein family
+3725,Architecture domain
+3726,Structural motif
+3727,Maximal set
+3728,Nowcasting
+3729,Commercial Sources
+3730,Real-time data
+3731,Cognitive model
+3732,Dialog system
+3733,Voice search
+3734,Globalization
+3735,Bilinear interpolation
+3736,Geoweb
+3737,Visitor pattern
+3738,Distributed shared memory
+3739,Uniform memory access
+3740,Memory architecture
+3741,Memory map
+3742,Registered memory
+3743,Train
+3744,Demand patterns
+3745,Service level
+3746,Eight-point algorithm
+3747,Database administrator
+3748,Community network
+3749,Converged storage
+3750,Provisioning
+3751,Distributed Computing Environment
+3752,Euclidean minimum spanning tree
+3753,Distributed minimum spanning tree
+3754,Common Type System
+3755,Rolling hash
+3756,Hash buster
+3757,Primary clustering
+3758,Causal reasoning
+3759,Islam
+3760,Indirect fire
+3761,Economy
+3762,Rating scale
+3763,Video capture
+3764,Information Technology Infrastructure Library
+3765,Cost reduction
+3766,Blacklist
+3767,Pornography
+3768,Multivariate interpolation
+3769,Commuting matrices
+3770,Open science
+3771,Collaborative interaction
+3772,Online and offline
+3773,Solid-state storage
+3774,Flash memory
+3775,Control logic
+3776,Incentive compatibility
+3777,Bounce rate
+3778,Mobile news
+3779,Discounting
+3780,Singleton
+3781,Ingredient
+3782,Screen reader
+3783,Disaster Victims
+3784,Civil society
+3785,Built environment
+3786,Network management application
+3787,Activity-based costing
+3788,Environmental economics
+3789,Management science
+3790,Mashup
+3791,Mirroring
+3792,Kuramoto model
+3793,CORA dataset
+3794,Haven
+3795,Salient
+3796,Theoretical models
+3797,Reservation
+3798,Championship
+3799,Homeland security
+3800,Physical computing
+3801,Strategic thinking
+3802,Strategic planning
+3803,Domain-specific learning
+3804,Obama
+3805,Time horizon
+3806,Expected value
+3807,Pointwise mutual information
+3808,Audience analysis
+3809,Trademark
+3810,Toolbox
+3811,Metadata modeling
+3812,Default
+3813,Partial least squares regression
+3814,Dummy variable
+3815,Slang
+3816,Spatial justice
+3817,Digitality
+3818,Corporate governance
+3819,Democratization
+3820,City region
+3821,Ordinal Scale
+3822,Landmark
+3823,Medical terminology
+3824,Neighbourhood (graph theory)
+3825,Path graph
+3826,Distributed File System
+3827,Client-side scripting
+3828,Factor regression model
+3829,Pricing schedule
+3830,Rational pricing
+3831,Combinatorial auction
+3832,Mobile deep linking
+3833,First-class citizen
+3834,Censored regression model
+3835,Structural bioinformatics
+3836,Change data capture
+3837,Learning effect
+3838,Range tree
+3839,Income fund
+3840,Feeder fund
+3841,Open-end fund
+3842,Fund administration
+3843,Closed-end fund
+3844,Hybrid Monte Carlo
+3845,Data governance
+3846,Valuation (finance)
+3847,Business information
+3848,Moderation system
+3849,LPBoost
+3850,Cholesky decomposition
+3851,Binary tree
+3852,JSON
+3853,Rete algorithm
+3854,Media consumption
+3855,Bernoulli sampling
+3856,Entertainment industry
+3857,Null-move heuristic
+3858,Consistent heuristic
+3859,Min-conflicts algorithm
+3860,Query plan
+3861,Hash filter
+3862,Printer-friendly
+3863,Watts and Strogatz model
+3864,Beacon
+3865,Distributed data store
+3866,Poisson point process
+3867,Brain atlas
+3868,Dutch auction
+3869,English auction
+3870,Revenue equivalence
+3871,Vickrey auction
+3872,Reservation price
+3873,Forward kinematics
+3874,Coupling
+3875,Lateral ventricles
+3876,Ventricular system
+3877,Language Integrated Query
+3878,L-attributed grammar
+3879,Standard algorithms
+3880,Social emotions
+3881,Evolution of emotion
+3882,Cheating
+3883,Black box
+3884,USable
+3885,Alcove
+3886,Concept learning
+3887,Structural equation modeling
+3888,Product (business)
+3889,Correlation function
+3890,Requirements traceability
+3891,Systems Modeling Language
+3892,Prediction by partial matching
+3893,Job hunting
+3894,Trend prediction
+3895,Chromatin structure remodeling (RSC) complex
+3896,Oil droplet
+3897,Marine pollution
+3898,Petroleum engineering
+3899,Thermoelectric generator
+3900,Thermoelectric effect
+3901,Air conditioning
+3902,Heat transfer
+3903,Fin (extended surface)
+3904,Hostname
+3905,Narrative structure
+3906,Distributed design patterns
+3907,Formal specification
+3908,License
+3909,Temporal resolution
+3910,Typography
+3911,Incidence matrix
+3912,Curve fitting
+3913,Maxima and minima
+3914,Hardness of approximation
+3915,Applied engineering
+3916,Harmony search
+3917,Tie strength
+3918,Attention management
+3919,Type 2 diabetes
+3920,Risk of mortality
+3921,Lung cancer
+3922,Embedded software
+3923,Subjective video quality
+3924,Bridging (networking)
+3925,Business valuation
+3926,Restructuring
+3927,Socialist market economy
+3928,Network effect
+3929,Invariant (mathematics)
+3930,Ephemeral key
+3931,Convention
+3932,Real image
+3933,ID3 algorithm
+3934,Decision stump
+3935,Mutual exclusion
+3936,Interference (wave propagation)
+3937,Data mapping
+3938,Market manipulation
+3939,Glaucoma
+3940,Stationary wavelet transform
+3941,Direct marketing
+3942,Cloud management
+3943,eXtended WordNet
+3944,Multimedia information retrieval
+3945,Alternating decision tree
+3946,Multiple-criteria decision analysis
+3947,Dependence logic
+3948,Fleet management
+3949,Example-based machine translation
+3950,Decision analysis
+3951,Query by humming
+3952,Arity
+3953,Local optimum
+3954,Lexeme
+3955,Abstract data type
+3956,Smart grid
+3957,Adaptive simulated annealing
+3958,Medoid
+3959,Modern Standard Arabic
+3960,Generalization
+3961,Mixed model
+3962,Augmented matrix
+3963,Corporate taxonomy
+3964,ACM Computing Classification System
+3965,Early childhood
+3966,Geometric graph theory
+3967,Statistical manifold
+3968,Divergence (statistics)
+3969,Fisher information metric
+3970,Patterns of evolution
+3971,Dominance-based rough set approach
+3972,Data migration
+3973,Debugging
+3974,Diabetes Complication
+3975,Specialty
+3976,Thriving
+3977,Cloud data management
+3978,Recurrence plot
+3979,Object model
+3980,Learning object
+3981,Objectivity (philosophy)
+3982,Gray (unit)
+3983,Symmetric tensor
+3984,Tensor product of Hilbert spaces
+3985,Scareware
+3986,Temporality
+3987,Context management
+3988,Commission
+3989,Public relations
+3990,Opposition (planets)
+3991,Computer society
+3992,Security domain
+3993,Cyber-attack
+3994,Geodesic
+3995,Subroutine
+3996,Endowment
+3997,Health policy
+3998,Health education
+3999,Coherent information
+4000,Democracy
+4001,Visual appearance
+4002,Word lists by frequency
+4003,Machine olfaction
+4004,Semantic query
+4005,Parallelizable manifold
+4006,Degree of a polynomial
+4007,Monomial
+4008,Tree rearrangement
+4009,k-d tree
+4010,Order statistic tree
+4011,Audio signal processing
+4012,Concurrency control
+4013,Multithreading
+4014,Business rule management system
+4015,Decision management
+4016,Operational efficiency
+4017,Linear matrix inequality
+4018,Probabilistic CTL
+4019,Formalism (philosophy)
+4020,Early warning score
+4021,Medical emergency
+4022,FLAGS register
+4023,Consistency model
+4024,Public engagement
+4025,Middleware
+4026,Page fault
+4027,Data buffer
+4028,Reduct
+4029,Download
+4030,Price analysis
+4031,Road pricing
+4032,Hemodialysis
+4033,Indri
+4034,Hadamard transform
+4035,Variable elimination
+4036,Probabilistic logic network
+4037,Proof calculus
+4038,Business service provider
+4039,Degree of parallelism
+4040,Reason maintenance
+4041,Mediation (Marxist theory and media studies)
+4042,SNP genotyping
+4043,Communication design
+4044,Monte Carlo integration
+4045,Discourse relation
+4046,Schema evolution
+4047,Market share
+4048,Graph Layout
+4049,Slicing
+4050,Robust statistics
+4051,Social CRM
+4052,Carpal tunnel syndrome
+4053,Connectome
+4054,User space
+4055,Individuation
+4056,Sleep spindle
+4057,Imperative mood
+4058,Website architecture
+4059,Potentially all pairwise rankings of all possible alternatives
+4060,Pointwise
+4061,Quadratic function
+4062,Mobile technology
+4063,System of linear equations
+4064,Network controllability
+4065,Embarrassingly parallel
+4066,Task parallelism
+4067,User identifier
+4068,Norm (social)
+4069,Diffusion equation
+4070,Hypertext
+4071,Knowledge worker
+4072,Countermeasure
+4073,Pipeline transport
+4074,Software Process simulation
+4075,Personal software process
+4076,Package development process
+4077,Software project management
+4078,Simulations and games in economics education
+4079,Game complexity
+4080,Location
+4081,Economics
+4082,Early adopter
+4083,User requirements document
+4084,Price level
+4085,True quantified Boolean formula
+4086,Mobile database
+4087,Wrong direction
+4088,Carelessness
+4089,Galois connection
+4090,Finite field
+4091,Distributed concurrency control
+4092,Storytelling
+4093,Cheminformatics
+4094,Quantitative Constraint
+4095,Causation
+4096,Asset allocation
+4097,Skewness
+4098,Risk aversion
+4099,Cluttering
+4100,Nash equilibrium
+4101,Pricing strategies
+4102,Quantization (physics)
+4103,Anecdotal evidence
+4104,Accounting information system
+4105,Scientific modelling
+4106,Genetic architecture
+4107,Genetic correlation
+4108,Quantitative trait locus
+4109,Heritability
+4110,Genetic variation
+4111,Social choice theory
+4112,Learning rule
+4113,Descent direction
+4114,Consumer debt
+4115,Impulsivity
+4116,Site manager
+4117,Visual search engine
+4118,Time lag
+4119,Chirp
+4120,Role theory
+4121,Positive-definite matrix
+4122,Affine transformation
+4123,Canonical form
+4124,Preferential attachment
+4125,Microeconomics
+4126,Ant colony
+4127,Artificial immune system
+4128,URL normalization
+4129,Rewrite engine
+4130,Partially observable Markov decision process
+4131,Hyperparameter optimization
+4132,Hyperparameter
+4133,Bayesian optimization
+4134,Orthogonalization
+4135,Jacobi method
+4136,Girvan–Newman algorithm
+4137,Assortative mixing
+4138,Coprocessor
+4139,Chaining
+4140,Interactive kiosk
+4141,Information structure
+4142,Graph algorithms
+4143,Network complexity
+4144,Unimodular matrix
+4145,Branch and cut
+4146,Free parameter
+4147,Auction algorithm
+4148,Template
+4149,Statistical parameter
+4150,Genome project
+4151,Natural language understanding
+4152,Immediacy
+4153,Drawback
+4154,Coding theory
+4155,Isolation (database systems)
+4156,Optimistic concurrency control
+4157,Clique-width
+4158,Machine vision
+4159,Pseudorandom binary sequence
+4160,Edge device
+4161,Damerau–Levenshtein distance
+4162,Jaro–Winkler distance
+4163,Log-linear model
+4164,Stochastic simulation
+4165,Security policy
+4166,Certainty
+4167,Curvature
+4168,Maxima
+4169,Symbol
+4170,Multiple sequence alignment
+4171,Computational problem
+4172,Metabolic pathway
+4173,Human leukocyte antigen
+4174,Linkage disequilibrium
+4175,Haplotype
+4176,Radiative forcing
+4177,Climatology
+4178,Money laundering
+4179,Investment banking
+4180,Terrorism
+4181,Spam blog
+4182,Disparate system
+4183,Referral
+4184,Normalized compression distance
+4185,Information gain ratio
+4186,Performance metric
+4187,Comprehension
+4188,Data Protection Act 1998
+4189,Electric energy consumption
+4190,Mains electricity
+4191,Sustainability
+4192,Globe
+4193,Urban spatial structure
+4194,Urban structure
+4195,Log-linear analysis
+4196,Deep packet inspection
+4197,Combinatorial method
+4198,Incident report
+4199,Collections management
+4200,Debt
+4201,Fuzzy number
+4202,Initial public offering
+4203,Space partitioning
+4204,Database tuning
+4205,Discovery science
+4206,Scientific theory
+4207,Honesty
+4208,External sorting
+4209,Bitonic sorter
+4210,Data transfer object
+4211,Method
+4212,Iterative refinement
+4213,Backus–Gilbert method
+4214,Street network
+4215,Paraphrase
+4216,Odds
+4217,Semantic domain
+4218,Structure matching
+4219,Competition model
+4220,Learning Management
+4221,User Friendly
+4222,Information bottleneck method
+4223,Degeneracy (mathematics)
+4224,Automata theory
+4225,Information networks
+4226,Corrective maintenance
+4227,Proactive maintenance
+4228,Maintenance testing
+4229,Temporal diversity
+4230,Depth-first search
+4231,Filtering problem
+4232,Local convergence
+4233,Demise
+4234,Context tree weighting
+4235,Force-directed graph drawing
+4236,Context-aware pervasive systems
+4237,Context-dependent memory
+4238,Rocchio algorithm
+4239,Digital Video Broadcasting
+4240,Floodlight
+4241,Narrative criticism
+4242,Lot quality assurance sampling
+4243,Cluster sampling
+4244,Dataflow
+4245,Quality of life
+4246,Sociological theory of diffusion
+4247,Semantic mapping
+4248,Heat pump
+4249,Gossip protocol
+4250,Central limit theorem
+4251,Alignment-free sequence analysis
+4252,Reference genome
+4253,Brute-force search
+4254,Computer cluster
+4255,Heap (data structure)
+4256,Binomial heap
+4257,Binary heap
+4258,Garbage
+4259,Memory leak
+4260,Enterprise information integration
+4261,Enterprise GIS
+4262,Existential quantification
+4263,Drift detection
+4264,Location transparency
+4265,Tandem repeat
+4266,Hybrid genome assembly
+4267,Variable number tandem repeat
+4268,Human genome
+4269,Brand loyalty
+4270,Clothing
+4271,Self-insurance
+4272,Auto insurance risk selection
+4273,Key person insurance
+4274,Sequence learning
+4275,Boilerplate text
+4276,Gait analysis
+4277,Gait
+4278,Windows Workflow Foundation
+4279,Network intrusion detection
+4280,Mass communication
+4281,Sampling distribution
+4282,Data editing
+4283,Web presence
+4284,Logistic function
+4285,Normalized Difference Vegetation Index
+4286,Vegetation
+4287,Moderate-resolution imaging spectroradiometer
+4288,Phenology
+4289,LabelMe
+4290,ENCODE
+4291,Community organization
+4292,Written language
+4293,Thumbnail
+4294,Computability
+4295,Verifiable secret sharing
+4296,Crowdsourcing software development
+4297,Item response theory
+4298,Metabolic network
+4299,Cuthill–McKee algorithm
+4300,Band matrix
+4301,Random field
+4302,Enthusiasm
+4303,Influence propagation
+4304,Transcriptional regulation
+4305,Response bias
+4306,Input device
+4307,Probabilistic argumentation
+4308,Feedback vertex set
+4309,occam
+4310,Standard Boolean model
+4311,Matrix-free methods
+4312,Goal modeling
+4313,Markdown
+4314,Event study
+4315,MinHash
+4316,Heterogeneous random walk in one dimension
+4317,Loop-erased random walk
+4318,Network performance
+4319,Interdisciplinarity
+4320,Modern portfolio theory
+4321,Computational geometry
+4322,Structuring
+4323,Distributed workforce
+4324,Measurement uncertainty
+4325,Cost contingency
+4326,Relevant cost
+4327,Cost estimate
+4328,Variable cost
+4329,Search cost
+4330,Conceptual framework
+4331,Linear approximation
+4332,Lexical choice
+4333,Ideology
+4334,Cognitive psychology
+4335,Semantic compression
+4336,w-shingling
+4337,Image stabilization
+4338,Phase correlation
+4339,Quality costs
+4340,Market game
+4341,Computer-mediated communication
+4342,Credit card interest
+4343,Simple linear regression
+4344,Black hole
+4345,Fiber
+4346,Adaptive neuro fuzzy inference system
+4347,Sleep Stages
+4348,Hypopnea
+4349,Variance (land use)
+4350,Graph minor
+4351,Solid modeling
+4352,Probabilistic relevance model
+4353,Polling
+4354,Multilinear principal component analysis
+4355,Computer-assisted translation
+4356,Machine translation software usability
+4357,Product description
+4358,Computer graphics
+4359,Brain activity and meditation
+4360,Priming (psychology)
+4361,Stimulus (physiology)
+4362,Bond market
+4363,Disaster recovery
+4364,Computer-mediated reality
+4365,Augmented reality
+4366,Combinatorial search
+4367,Additive smoothing
+4368,Slightly worse
+4369,Lattice Miner
+4370,Default mode network
+4371,Hitting time
+4372,Business continuity
+4373,Visual approach
+4374,Uncorrelated
+4375,Wide area multilateration
+4376,Automatic dependent surveillance-broadcast
+4377,Airspace class
+4378,Ground control station
+4379,Random function
+4380,Navigability
+4381,Point process
+4382,Compression ratio
+4383,Outbreak
+4384,Affordance
+4385,TrustRank
+4386,Transmission time
+4387,ST segment
+4388,Electrocardiography
+4389,Repolarization
+4390,Myocardial infarction
+4391,Sample space
+4392,Continuous-time Markov chain
+4393,Markov chain mixing time
+4394,COPD
+4395,Subtyping
+4396,Local color
+4397,Color image
+4398,Airfield traffic pattern
+4399,New media
+4400,Public domain
+4401,String-to-string correction problem
+4402,Wagner–Fischer algorithm
+4403,Unique user
+4404,Biplot
+4405,Indonesian
+4406,Biotechnology
+4407,Tipping point (climatology)
+4408,LogitBoost
+4409,NOMINATE
+4410,Wavelet packet decomposition
+4411,Discrete wavelet transform
+4412,Top-down and bottom-up design
+4413,Metamodeling
+4414,Stock market bubble
+4415,Small-world network
+4416,Middle East
+4417,Key distribution
+4418,Key generation
+4419,Secure communication
+4420,Mobile wireless sensor network
+4421,Lexicographical order
+4422,Software measurement
+4423,Bot herder
+4424,Click fraud
+4425,Scheduling (production processes)
+4426,Production control
+4427,Effective method
+4428,Hash tree
+4429,Principal component regression
+4430,Trusted Computing
+4431,Basic block
+4432,Predictive text
+4433,Biorepository
+4434,Non-classical logic
+4435,Linear temporal logic
+4436,Logical framework
+4437,Advantage
+4438,Geographical distance
+4439,Collective routing
+4440,Dynamic Source Routing
+4441,Multipath routing
+4442,Destination-Sequenced Distance Vector routing
+4443,Cardinal point
+4444,Watershed
+4445,Monsoon
+4446,Spatio-Temporal Analysis
+4447,Green Information Technology
+4448,Beneficial insects
+4449,Entomology
+4450,Seekers
+4451,Hedge fund
+4452,Capital asset pricing model
+4453,Metric k-center
+4454,Word metric
+4455,Aggregate function
+4456,Template method pattern
+4457,Real versus nominal value
+4458,Attraction
+4459,Database testing
+4460,Competitive analysis
+4461,Explanation module
+4462,Factoring
+4463,Fact table
+4464,Generalized additive model for location; scale and shape
+4465,Harmony (color)
+4466,Cognitive dissonance
+4467,Synonym
+4468,Veterans Affairs
+4469,Ebidding
+4470,Minimum-cost flow problem
+4471,Maximum flow problem
+4472,Directional statistics
+4473,Rhetorical Structure Theory
+4474,Mobile phone tracking
+4475,Encoder
+4476,Space time
+4477,Normal distribution
+4478,Teleconnection
+4479,Seasonality
+4480,Huber loss
+4481,Sigmoid function
+4482,Online database
+4483,Graphics hardware
+4484,Referential integrity
+4485,Pidgin
+4486,Interlingua
+4487,C dynamic memory allocation
+4488,Goldilocks principle
+4489,Minimum-variance unbiased estimator
+4490,Economic model
+4491,Microprocessor
+4492,American English
+4493,Earnings
+4494,Earnings response coefficient
+4495,Contextual design
+4496,Spatial contextual awareness
+4497,Technical documentation
+4498,Postcondition
+4499,Persona
+4500,Student's t-distribution
+4501,Java applet
+4502,System software
+4503,Conversion marketing
+4504,Urban sprawl
+4505,Memphis
+4506,Scopus
+4507,Single pass
+4508,Association rule discovery
+4509,Scaled correlation
+4510,Intelligence analysis
+4511,Marshalling
+4512,Drosophila embryogenesis
+4513,Clinical Practice
+4514,Bias of an estimator
+4515,Recreation
+4516,Air interface
+4517,Data control language
+4518,Text normalization
+4519,Multilingualism
+4520,Incentive
+4521,Level of service
+4522,Interdiction
+4523,Electronic countermeasure
+4524,Universal graph
+4525,Positive-definite kernel
+4526,1-center problem
+4527,Base station
+4528,Utility maximization
+4529,Background noise
+4530,Massive parallel sequencing
+4531,Reverse index
+4532,Precomputation
+4533,Bitmap
+4534,First language
+4535,Advanced manufacturing
+4536,Symmetric multiprocessor system
+4537,GSM services
+4538,GSM
+4539,Bid price
+4540,Unique bid auction
+4541,Bid shading
+4542,Terrain
+4543,e-Science
+4544,Lipschitz continuity
+4545,R-CAST
+4546,Evidential reasoning approach
+4547,Statistical potential
+4548,Equivalence relation
+4549,Traffic analysis
+4550,Literature citation
+4551,Source lines of code
+4552,Data verification
+4553,Function point
+4554,Project management
+4555,Large numbers
+4556,Relational data mining
+4557,Storm
+4558,Storm-scale
+4559,XML Schema (W3C)
+4560,Decomposition method (constraint satisfaction)
+4561,Meta-optimization
+4562,In-Memory Processing
+4563,Population statistics
+4564,Data reduction
+4565,Petascale computing
+4566,Forgetting
+4567,Software analysis pattern
+4568,Program analysis
+4569,Heuristic evaluation
+4570,Electronic media
+4571,Citation index
+4572,Nonlinear regression
+4573,Peer feedback
+4574,Well-formed document
+4575,Edge cover
+4576,Source credibility
+4577,Welding
+4578,Laser beam welding
+4579,Vog
+4580,Air pollution
+4581,Atmospheric model
+4582,Cultural economics
+4583,Social studies
+4584,Task analysis
+4585,General partnership
+4586,Confidence interval
+4587,Vector projection
+4588,Multivariate adaptive regression splines
+4589,Computer file
+4590,Indexed file
+4591,Versioning file system
+4592,Unix file types
+4593,Virtual file system
+4594,Upsampling
+4595,Decimation
+4596,Vector field
+4597,Linear function
+4598,Dependency network
+4599,Numerical analysis
+4600,Dempster–Shafer theory
+4601,Desktop search
+4602,Value of information
+4603,Vector clock
+4604,Fault tree analysis
+4605,Minimum bounding rectangle
+4606,Jensen–Shannon divergence
+4607,Program synthesis
+4608,Sociogram
+4609,Continuous-time stochastic process
+4610,Sequential game
+4611,Sublinear function
+4612,Winner-take-all
+4613,Perfect competition
+4614,Cancer cell
+4615,Topotecan
+4616,Cytotoxic T cell
+4617,Osteosarcoma
+4618,Open platform
+4619,Debugger
+4620,Estimation of covariance matrices
+4621,Covariance function
+4622,Hardware architecture
+4623,Instruction set
+4624,Lexical similarity
+4625,Short Message Service
+4626,Coronal plane
+4627,Transverse plane
+4628,Multiple data
+4629,Mobile payment
+4630,Pattern language
+4631,Multidimensional scaling
+4632,Procrustes analysis
+4633,Solar irradiance
+4634,Solar energy
+4635,Cache language model
+4636,Riemannian manifold
+4637,Riemannian geometry
+4638,Learning object metadata
+4639,Variational Bayesian methods
+4640,State variable
+4641,Quadratic assignment problem
+4642,Software framework
+4643,Combinatorial map
+4644,Gomory–Hu tree
+4645,Quasi-open map
+4646,Football
+4647,Traffic conflict
+4648,Vehicle Information and Communication System
+4649,Reputation system
+4650,URL shortening
+4651,Sophistication
+4652,Offline learning
+4653,Process patterns
+4654,Severe weather
+4655,Partial k-tree
+4656,Financial modeling
+4657,Auction sniping
+4658,Diagnosis code
+4659,Proportional hazards model
+4660,Health administration
+4661,Maximum likelihood sequence estimation
+4662,Surrogate model
+4663,Scenario testing
+4664,Jackknife resampling
+4665,Patentability
+4666,Predictive medicine
+4667,Step function
+4668,Equity (finance)
+4669,Conditional mutual information
+4670,Cultural group selection
+4671,Identity matrix
+4672,Learning curve
+4673,Environmental resource management
+4674,Weighted Majority Algorithm
+4675,Cascading failure
+4676,Colors of noise
+4677,Eigengap
+4678,Organizational behavior
+4679,Job attitude
+4680,Job design
+4681,Job performance
+4682,Job shadow
+4683,Normality
+4684,Relational calculus
+4685,Business-to-business
+4686,Shared memory
+4687,Mean-shift
+4688,Heapsort
+4689,Language change
+4690,Philosophy of language
+4691,Geotargeting
+4692,Research ethics
+4693,Nonintrusive load monitoring
+4694,Factorial
+4695,Social equality
+4696,Economic mobility
+4697,Social mobility
+4698,Budget allocation
+4699,Intransitivity
+4700,Preference relation
+4701,Mobile commerce
+4702,Affective computing
+4703,Discoverability
+4704,Psychographic
+4705,Road map
+4706,Political methodology
+4707,Reverse engineering
+4708,Quantum computer
+4709,Moving-average model
+4710,SETAR
+4711,Nonlinear autoregressive exogenous model
+4712,Certificate
+4713,Concurrent computing
+4714,Group conflict
+4715,Dyslipidemia
+4716,Kidney disease
+4717,Communications system
+4718,Econometric model
+4719,Java
+4720,Market analysis
+4721,Species richness
+4722,Cartography
+4723,Whale
+4724,Water resources
+4725,Second screen
+4726,Market maker
+4727,Privacy law
+4728,Computer-aided diagnosis
+4729,Percentile rank
+4730,Typology
+4731,Endovascular aneurysm repair
+4732,Aortic aneurysm
+4733,Aneurysm
+4734,Intensive care medicine
+4735,Harm
+4736,Supply and demand
+4737,Solar phenomena
+4738,Spatiotemporal pattern
+4739,Solar physics
+4740,Orthonormal basis
+4741,State-transition matrix
+4742,Pop music automation
+4743,Classical music
+4744,Spectral space
+4745,Software visualization
+4746,Sequential data
+4747,Motion capture
+4748,Hospitality
+4749,Likelihood-ratio test
+4750,Hotspot (geology)
+4751,Human–machine system
+4752,Radicalization
+4753,Religious identity
+4754,Cultural anthropology
+4755,Transnationalism
+4756,Unified Modeling Language
+4757,Digital art
+4758,Multimodal learning
+4759,Abductive logic programming
+4760,Non-monotonic logic
+4761,Approved drug
+4762,Cost accounting
+4763,Sight
+4764,Lexis
+4765,Smallest grammar problem
+4766,Data retention
+4767,Pagoda
+4768,Squish
+4769,Transportation planning
+4770,Transport network
+4771,Cash
+4772,Strategic management
+4773,Email address
+4774,Urban geography
+4775,Spatial intelligence
+4776,Churn rate
+4777,Structure from motion
+4778,Implied volatility
+4779,Common Vulnerabilities and Exposures
+4780,Vulnerability (computing)
+4781,Advanced persistent threat
+4782,Coordinate system
+4783,Kraken
+4784,Effort heuristic
+4785,Stakeholder analysis
+4786,Social software
+4787,Workforce planning
+4788,History
+4789,Spaced repetition
+4790,Flashcard
+4791,Memory model
+4792,Focal point
+4793,Model predictive control
+4794,Building automation
+4795,Thermal comfort
+4796,Nervous system network models
+4797,Prescription costs
+4798,Lesson plan
+4799,Enterprise information security architecture
+4800,Enterprise private network
+4801,Travelling salesman problem
+4802,Exploratory research
+4803,Proximity sensor
+4804,Core network
+4805,Network management
+4806,Optimal stopping
+4807,Stock and flow
+4808,Cycles per instruction
+4809,Footprint
+4810,Social skills
+4811,Nursing
+4812,Lidar
+4813,National park
+4814,Threatened species
+4815,Habitat
+4816,Investment value
+4817,Microservices
+4818,Oil shale
+4819,Shale oil
+4820,Fossil fuel
+4821,Melody
+4822,Algorithmic composition
+4823,Data preparation
+4824,Health technology
+4825,Fire protection
+4826,Flame-Sim
+4827,Atlanta
+4828,Relation (database)
+4829,Internet video
+4830,Auction theory
+4831,General election
+4832,Social effects
+4833,Moving average
+4834,Order by
+4835,Ball tree
+4836,Content centric networking
+4837,Information-centric networking
+4838,Cancer genome sequencing
+4839,Identifiability
+4840,League
+4841,Laplace distribution
+4842,Vector Laplacian
+4843,Simple LR parser
+4844,Normative
+4845,Symbolic regression
+4846,Parade
+4847,Goal orientation
+4848,Winnowing
+4849,Digital data
+4850,Audience segmentation
+4851,Open mail relay
+4852,Grid network
+4853,Last mile
+4854,Nephropathy
+4855,Risk factor
+4856,Standard ML
+4857,Fisher kernel
+4858,Entropy maximization
+4859,Backbone network
+4860,Multiplication
+4861,Real number
+4862,Food prices
+4863,Latin Americans
+4864,Camouflage
+4865,Headline
+4866,Concave function
+4867,Document analysis
+4868,Human error
+4869,Partial derivative
+4870,Comprehensive layout
+4871,Probability matching
+4872,Vehicle routing problem
+4873,Causal structure
+4874,James–Stein estimator
+4875,Regimen
+4876,Covariance intersection
+4877,Optimal estimation
+4878,Degeneracy (graph theory)
+4879,Chopper
+4880,Chebyshev polynomials
+4881,Chebyshev filter
+4882,Network dynamics
+4883,Cannibalization
+4884,Branching process
+4885,Exponential function
+4886,Digital mapping
+4887,Scale (map)
+4888,OPTICS algorithm
+4889,Symmetric game
+4890,Discrete cosine transform
+4891,Fault management
+4892,Invariant (physics)
+4893,Test design
+4894,Data consistency
+4895,Monopoly price
+4896,Learning theory
+4897,Email address harvesting
+4898,Mailing list
+4899,Asymmetric graph
+4900,Vehicle-to-vehicle
+4901,False discovery rate
+4902,Testing hypotheses suggested by the data
+4903,Per-comparison error rate
+4904,Basis (linear algebra)
+4905,Binge-watching
+4906,Visibility
+4907,Succinctness
+4908,Goodness of fit
+4909,Topological sorting
+4910,Serialization
+4911,Social impact theory
+4912,Information hiding
+4913,Credence
+4914,Clicker
+4915,Principal stratification
+4916,Sign language
+4917,Business
+4918,Medical imaging
+4919,Linear map
+4920,Order of magnitude
+4921,Texture compression
+4922,Synchronicity
+4923,Undersampling
+4924,Sampling (signal processing)
+4925,Metalearning
+4926,Mixture distribution
+4927,Challenge point framework
+4928,Seidel adjacency matrix
+4929,Time limit
+4930,Orthogonal basis
+4931,Subspace clustering
+4932,Bicubic interpolation
+4933,Quadratically constrained quadratic program
+4934,Adaptive resonance theory
+4935,Music emotion recognition
+4936,Token passing
+4937,Engineering
+4938,Mining industry
+4939,Tail dependence
+4940,Vine copula
+4941,Climate model
+4942,Garbage collection
+4943,Job scheduler
+4944,Vector autoregression
+4945,Syllabus
+4946,Autism
+4947,Spectrum disorder
+4948,Duality (optimization)
+4949,Schur complement
+4950,Footprinting
+4951,Static analysis
+4952,Critical point (set theory)
+4953,Remote sensing
+4954,Code (cryptography)
+4955,Nonparametric bayesian
+4956,Underdetermined system
+4957,Linear equation
+4958,Ordered pair
+4959,Interval tree
+4960,Segment tree
+4961,Iterative deepening depth-first search
+4962,Interpolation search
+4963,Indoor positioning system
+4964,Carrying capacity
+4965,Lexicographic breadth-first search
+4966,Unevenly spaced time series
+4967,Exceptional model mining
+4968,Multiple experts
+4969,Meteorology
+4970,Multiple discriminant analysis
+4971,Recursive Bayesian estimation
+4972,Digital learning
+4973,Learning standards
+4974,Academic standards
+4975,Educational program
+4976,Maximum-entropy Markov model
+4977,Cricket
+4978,Sonar
+4979,Abacus (architecture)
+4980,Patent infringement
+4981,Kernel Bandwidth
+4982,Sparse grid
+4983,Cognitive science
+4984,Social exclusion
+4985,Pareto principle
+4986,Physician Decision
+4987,Jumping
+4988,Neighbourhood components analysis
+4989,Curse
+4990,Resource Management System
+4991,Border Security
+4992,Phenomenological model
+4993,Visual space
+4994,Trace (linear algebra)
+4995,Linear separability
+4996,Collinearity
+4997,Contrast set
+4998,House mouse
+4999,Communication
+5000,Chinese speech synthesis
+5001,Speech synthesis
+5002,Utterance
+5003,Location awareness
+5004,Polynomial and rational function modeling
+5005,Applied mathematics
+5006,Mathematics
+5007,Cost database
+5008,Market risk
+5009,Radiation hybrid mapping
+5010,Yukawa potential
+5011,Statistical physics
+5012,Prospectivity mapping
+5013,Parameter identification problem
+5014,Matrix similarity
+5015,Heart rate
+5016,Biomarker (medicine)
+5017,Cardiology
+5018,Algebra
+5019,Time sensitive
+5020,Behavioral data
+5021,Scientific collaboration network
+5022,Conic optimization
+5023,Normal
+5024,Detector
+5025,Normed vector space
+5026,Function space
+5027,Inner product space
+5028,Label propagation
+5029,Gamma distribution
+5030,Broyden–Fletcher–Goldfarb–Shanno algorithm
+5031,Environmental exposure
+5032,Stressor
+5033,Knot theory
+5034,Surrogate data
+5035,Kernel (image processing)
+5036,Personal information manager
+5037,Integral equation
+5038,Homogeneous space
+5039,Butterfly
+5040,Auditory scene analysis
+5041,Prolog
+5042,Consumption tax
+5043,Monetary economics
+5044,Heteroscedasticity
+5045,Atmosphere (unit)
+5046,PRESS statistic
+5047,Descriptive statistics
+5048,Phase space
+5049,Positioning system
+5050,Sports analytics
+5051,Optical tracking
+5052,Credit risk
+5053,Strategy
+5054,LASIK
+5055,Keratomileusis
+5056,Refractive error
+5057,Astigmatism
+5058,Visual acuity
+5059,Automatic vehicle location
+5060,Friedman test
+5061,Urbanization
+5062,And-inverter graph
+5063,Testability
+5064,Service system
+5065,Algorithmic trading
+5066,Autoregressive conditional heteroskedasticity
+5067,Graph enumeration
+5068,Beta distribution
+5069,Transducer
+5070,Opt-in email
+5071,Radial basis function network
+5072,Liver transplantation
+5073,Severity of illness
+5074,Runtime system
+5075,Advisory system
+5076,Finance
+5077,Stemming
+5078,Reduplication
+5079,Malay
+5080,Intelligence quotient
+5081,Cultural algorithm
+5082,Population-based incremental learning
+5083,Stroke
+5084,Triage
+5085,Neurological examination
+5086,Helmholtz equation
+5087,Equation solving
+5088,Convolution
+5089,Fast Fourier transform
+5090,Euler's formula
+5091,Corporate social responsibility
+5092,Local community
+5093,DNA sequencing
+5094,Adapter (computing)
+5095,Karush–Kuhn–Tucker conditions
+5096,Keystroke dynamics
+5097,Fingerprint
+5098,Measurement and Verification
+5099,Energy conservation measure
+5100,Available energy
+5101,Port (computer networking)
+5102,Symmetric graph
+5103,Creativity
+5104,Information and Communications Technology
+5105,Technology management
+5106,C4.5 algorithm
+5107,Predictive learning
+5108,Forest cover
+5109,Paragraph
+5110,Function word
+5111,Microcomputer
+5112,KEGG
+5113,Data transmission
+5114,Byte
+5115,Data independence
+5116,Homothetic transformation
+5117,Storage model
+5118,Data security
+5119,Location prediction
+5120,Self representation
+5121,Semiparametric regression
+5122,Correlative
+5123,Corporate Real Estate
+5124,Real estate development
+5125,Market liquidity
+5126,Symmetric difference
+5127,RAID
+5128,Kolmogorov–Smirnov test
+5129,Group testing
+5130,Sextant (astronomical)
+5131,Electronic engineering
+5132,Drug target
+5133,Multi domain
+5134,Computing with Memory
+5135,User experience evaluation
+5136,Legislation
+5137,Gun control
+5138,Snapshot isolation
+5139,Significance testing
+5140,Social capital
+5141,Externality
+5142,Intrinsic metric
+5143,Convex metric space
+5144,Video denoising
+5145,Non-local means
+5146,Convolutional code
+5147,Dark triad
+5148,Machiavellianism
+5149,Psychopathy
+5150,Predictive Model Markup Language
+5151,Opinion spam
+5152,Security through obscurity
+5153,Security information and event management
+5154,Asset (computer security)
+5155,Security testing
+5156,Flight planning
+5157,Air traffic management
+5158,Systemic risk
+5159,Cortical dysplasia
+5160,Epilepsy
+5161,Advanced driver assistance systems
+5162,SAFER
+5163,Automatic programming
+5164,First impression (psychology)
+5165,Image quality
+5166,Litigation risk analysis
+5167,Unfair competition
+5168,Market value
+5169,Adaptability
+5170,Structure (mathematical logic)
+5171,Viewport
+5172,Stochastic control
+5173,Procrustes
+5174,Market trend
+5175,Cliché
+5176,Federal funds
+5177,Cataloging
+5178,Purchase order
+5179,Multi dimensional
+5180,Design space exploration
+5181,Aerodynamics
+5182,Complete bipartite graph
+5183,Edge-transitive graph
+5184,Assembly language
+5185,Lagrangian relaxation
+5186,Data sequences
+5187,Possession (law)
+5188,Racial profiling
+5189,Officer
+5190,Gibbs algorithm
+5191,Product differentiation
+5192,Calibration
+5193,Portuguese
+5194,Nuts and bolts
+5195,Frequency analysis
+5196,Dance
+5197,IPTV
+5198,Sylvester equation
+5199,Obsolescence
+5200,Hindsight bias
+5201,Concept Relationship
+5202,Concept map
+5203,Precalculus
+5204,Capacity management
+5205,Capacity planning
+5206,Software product line
+5207,Software requirements specification
+5208,Feature-oriented domain analysis
+5209,Software requirements
+5210,Database security
+5211,Memory errors
+5212,Physical layer
+5213,Musical instrument
+5214,Musical instrument classification
+5215,Timbre
+5216,Music information retrieval
+5217,Optic disk
+5218,Retinal
+5219,Constraint learning
+5220,Derivative work
+5221,Aspect-oriented programming
+5222,Noisy channel model
+5223,Trypanosoma brucei
+5224,Flagellum
+5225,Optimal decision
+5226,Local language
+5227,Student dropout
+5228,Social determinants of health
+5229,Tinder
+5230,Ideal number
+5231,Backup battery
+5232,Battery (electricity)
+5233,Neglect
+5234,Value-added service
+5235,Internet access
+5236,Social collaboration
+5237,Harassment
+5238,Honeypot
+5239,Superkey
+5240,Boyce–Codd normal form
+5241,Science of team science
+5242,Research question
+5243,JavaScript
+5244,Non-cooperative game
+5245,Repeated game
+5246,Known-plaintext attack
+5247,Creativity technique
+5248,Scientific enterprise
+5249,Active networking
+5250,Internet research
+5251,Engineering ethics
+5252,Web log analysis software
+5253,Code review
+5254,KPI-driven code analysis
+5255,Software build
+5256,Pagination
+5257,Stiefel manifold
+5258,Requirements management
+5259,Requirements analysis
+5260,Fatigue limit
+5261,Materials informatics
+5262,Network embedding
+5263,Medical algorithm
+5264,Orienteering
+5265,Cross-platform
+5266,User agent
+5267,Optimal control
+5268,Hoax
+5269,Quadtree
+5270,Language barrier
+5271,Well logging
+5272,Location Description
+5273,Geodemographic segmentation
+5274,Nearest-neighbor interpolation
+5275,Fuel efficiency
+5276,Arborescence
+5277,Panel discussion
+5278,CLTC
+5279,Fusion
+5280,Lambda
+5281,Full virtualization
+5282,Hardware virtualization
+5283,Metadata management
+5284,Disequilibrium
+5285,Partial evaluation
+5286,Polygon
+5287,Linear-fractional programming
+5288,Linearization
+5289,Translational bioinformatics
+5290,Human genetic variation
+5291,Translational medicine
+5292,Navigation system
+5293,Microscopy
+5294,Electronic design automation
+5295,Medical procedure
+5296,Spline interpolation
+5297,Monotone cubic interpolation
+5298,STRIDE
+5299,QUIET
+5300,Narrative inquiry
+5301,Qualitative research
+5302,Health management system
+5303,Peer assessment
+5304,Subscriber identity module
+5305,Turnaround time
+5306,Embodied cognition
+5307,Raster graphics
+5308,Inference attack
+5309,Argumentation framework
+5310,Tessellation
+5311,Modeling and simulation
+5312,Connected-component labeling
+5313,Student activities
+5314,Network virtualization
+5315,Multiprotocol Label Switching
+5316,Computer stereo vision
+5317,RANSAC
+5318,Line segment
+5319,Wine
+5320,Delta Debugging
+5321,Algorithmic program debugging
+5322,Fuzz testing
+5323,Financial statement
+5324,Multivariate t-distribution
+5325,Cauchy distribution
+5326,Mobile QoS
+5327,Thinking processes
+5328,Externalization
+5329,Computer-aided software engineering
+5330,Agora
+5331,Cryptocurrency
+5332,Organised crime
+5333,Fair comment
+5334,Fast path
+5335,Fast wavelet transform
+5336,Force platform
+5337,Center of pressure (fluid mechanics)
+5338,Exponent
+5339,Exponential growth
+5340,Static random-access memory
+5341,Leakage (electronics)
+5342,Halo
+5343,Power dividers and directional couplers
+5344,Carbon nanotube
+5345,Liquid-crystal display
+5346,Chemical vapor deposition
+5347,Cable gland
+5348,Stable manifold
+5349,Instant answer
+5350,Social activity
+5351,Event type
+5352,Gigabyte
+5353,Microcontroller
+5354,Leak
+5355,Electrical engineering
+5356,Polypharmacy
+5357,Drug allergy
+5358,Medical history
+5359,Boolean data type
+5360,Logical disjunction
+5361,Digital forensics
+5362,Friendship graph
+5363,Generalized canonical correlation
+5364,Stylometry
+5365,Spoofing attack
+5366,Identity theft
+5367,Internal communications
+5368,Generalized beta distribution
+5369,Nationality
+5370,Country of origin
+5371,Personal network
+5372,Assisted GPS
+5373,Lexical analysis
+5374,Functional data analysis
+5375,Sire
+5376,Ice calving
+5377,Consumer choice
+5378,Computational economics
+5379,LU decomposition
+5380,Life expectancy
+5381,Best response
+5382,Minimum degree algorithm
+5383,Topological algebra
+5384,Global analysis
+5385,Theory
+5386,Cepstrum
+5387,Microphone array
+5388,Contextual learning
+5389,Identity fraud
+5390,Information Card
+5391,Word count
+5392,Language translation
+5393,Challenge–response authentication
+5394,Replay attack
+5395,Maximum common subgraph isomorphism problem
+5396,Transfer market
+5397,Club
+5398,Bit array
+5399,Color-coding
+5400,Water filling algorithm
+5401,Multiplicative noise
+5402,Thresholding
+5403,Insurance fraud
+5404,Restricted stock
+5405,Rounding
+5406,Decorrelation
+5407,Conjecture
+5408,Arithmetic
+5409,Contour line
+5410,Eating disorders
+5411,Irony
+5412,Propensity score matching
+5413,Line of business
+5414,Business opportunity
+5415,Cognitive rehabilitation therapy
+5416,Traumatic brain injury
+5417,Zika virus
+5418,Dengue fever
+5419,Vehicle dynamics
+5420,Pollution
+5421,Wind direction
+5422,Pollutant
+5423,Charging station
+5424,Electric vehicle
+5425,Bilevel optimization
+5426,Concordance
+5427,Jacobian matrix and determinant
+5428,Product of experts
+5429,Archetype
+5430,Takeoff
+5431,Automated proof checking
+5432,Automated theorem proving
+5433,Fundamental theorem
+5434,Calculus
+5435,Commercialization
+5436,Knowledge value
+5437,German grammar
+5438,Brexit
+5439,Anger
+5440,Computer-aided
+5441,Programming language
+5442,Periodization
+5443,Information space
+5444,Mathematical software
+5445,Lévy flight
+5446,Systemic inflammatory response syndrome
+5447,Organ dysfunction
+5448,Sepsis
+5449,Local variable
+5450,Global variable
+5451,Metadata discovery
+5452,Convergence problem
+5453,Time perception
+5454,European union
+5455,Referendum
+5456,DECIPHER
+5457,Restricted randomization
+5458,Delta method
+5459,Regression testing
+5460,Hebe
+5461,New Right
+5462,Correspondence analysis
+5463,Outerplanar graph
+5464,Unavailability
+5465,Subsidy
+5466,Information protection policy
+5467,Turing
+5468,Quarter (United States coin)
+5469,Inpatient care
+5470,Static program analysis
+5471,Temporal pattern mining
+5472,Foundations of geometry
+5473,Euclidean geometry
+5474,Space syntax
+5475,Mobile mapping
+5476,Bradley–Terry model
+5477,Analysis of parallel algorithms
+5478,Quality control and genetic algorithms
+5479,Event scheduling
+5480,Minority influence
+5481,Logical topology
+5482,Decision matrix
+5483,Nuisance variable
+5484,Software engineering
+5485,Chatbot
+5486,Auxiliary memory
+5487,Virtual screening
+5488,Protein ligand
+5489,Business domain
+5490,Automated theorem provers
+5491,Data file
+5492,Fractal
+5493,Seed money
+5494,Physical information
+5495,Retargeting
+5496,Buying decision process
+5497,Classical logic
+5498,GLR parser
+5499,Recursive descent parser
+5500,LR parser
+5501,Hierarchical temporal memory
+5502,WYSIWYG
+5503,Radix tree
+5504,Density functional theory
+5505,Electron density
+5506,Anxiety
+5507,Inverted pendulum
+5508,Control system
+5509,Islanding
+5510,Lemma (mathematics)
+5511,Steinhaus–Moser notation
+5512,X-ray notation
+5513,Recursive definition
+5514,Natural language programming
+5515,Low-level programming language
+5516,First-generation programming language
+5517,High-level programming language
+5518,Very high-level programming language
+5519,Inertial measurement unit
+5520,Strategic design
+5521,Self-diagnosis
+5522,Network information system
+5523,Supply network
+5524,Service management
+5525,Facilitator
+5526,Product marketing
+5527,Rate of return
+5528,CPU cache
+5529,Sample and hold
+5530,Laplace transform
+5531,Future value
+5532,Hungarian algorithm
+5533,Comparative effectiveness research
+5534,Revenue management
+5535,Network segmentation
+5536,Cost per impression
+5537,Cost per mille
+5538,Downscaling
+5539,Spartan
+5540,Network alignment
+5541,Branch and price
+5542,Gaussian network model
+5543,Data breach
+5544,Digital rights management
+5545,Circumstantial evidence
+5546,Driving safety
+5547,Classification scheme
+5548,Horizontal and vertical
+5549,Cross-sectional regression
+5550,Propositional variable
+5551,Well-formed formula
+5552,Propositional formula
+5553,Complete-linkage clustering
+5554,Simplicial complex
+5555,Positive definiteness
+5556,Arboricity
+5557,Voter registration
+5558,Jazz
+5559,Addiction
+5560,Software release life cycle
+5561,Prosperity
+5562,Social issues
+5563,Filmmaking
+5564,Simplified Acute Physiology Score
+5565,Glasgow Coma Scale
+5566,Heterophily
+5567,Cryptanalysis
+5568,Fitting algorithm
+5569,Monte Carlo algorithm
+5570,Automatic Content Extraction
+5571,Exponential distribution
+5572,Unified Process
+5573,Epigraph
+5574,Bilingual lexicon
+5575,Structured text
+5576,Final product
+5577,Land use
+5578,MNIST database
+5579,Centroidal Voronoi tessellation
+5580,Lloyd's algorithm
+5581,Multiple treatments
+5582,Smoothness
+5583,Financial fraud
+5584,Brain network
+5585,Chemogenomics
+5586,Online learning
+5587,Deflation
+5588,Renting
+5589,Hypergeometric distribution
+5590,Likert scale
+5591,Stochastic complexity
+5592,Belief structure
+5593,Basketball
+5594,Absenteeism
+5595,Transition modeling
+5596,Incremental learning
+5597,Oblique case
+5598,Human-in-the-loop
+5599,Computational science
+5600,Margin distribution
+5601,Fading
+5602,von Mises yield criterion
+5603,Conscience
+5604,Seriation (archaeology)
+5605,Non-convexity
+5606,Amazon rainforest
+5607,Parkinson's disease
+5608,Functional networks
+5609,Gleaning
+5610,Bike lane
+5611,Cycling
+5612,Treap
+5613,Diesel engine
+5614,Tobler's first law of geography
+5615,Data validation
+5616,Shore
+5617,First-order logic
+5618,Postmarketing surveillance
+5619,Language proficiency
+5620,Informal learning
+5621,Formal learning
+5622,Meteorological disasters
+5623,Landslide
+5624,InfiniBand
+5625,Remote direct memory access
+5626,Datagram
+5627,Online help
+5628,Statistical analysis
+5629,Spectral bands
+5630,Absorption band
+5631,Industry 4.0
+5632,Internet Architecture Board
+5633,Internet appliance
+5634,Inflow
+5635,Local binary patterns
+5636,Virtual learning environment
+5637,Travel survey
+5638,Trip generation
+5639,Traditional education
+5640,Participant observation
+5641,Veterinary medicine
+5642,Synonym (database)
+5643,Search-based software engineering
+5644,Science Citation Index
+5645,Ignition system
+5646,Data as a service
+5647,Fuzzy control system
+5648,Multiple integral
+5649,Diligence
+5650,Faculty development
+5651,Medical education
+5652,Microgrid
+5653,Vehicle-to-grid
+5654,Water supply
+5655,Local government
+5656,Water quality
+5657,Type 2 Diabetes Mellitus
+5658,Lifestyle management
+5659,Linde–Buzo–Gray algorithm
+5660,Acknowledgement
+5661,Power law
+5662,Network service
+5663,Constellation
+5664,Graph labeling
+5665,Open-pit mining
+5666,Operating cost
+5667,Utilization
+5668,Sterile insect technique
+5669,Chikungunya
+5670,Global health
+5671,Brain disorder diagnosis
+5672,Intelligent computer network
+5673,Applications of artificial intelligence
+5674,Everyday life
+5675,Sandbox (computer security)
+5676,Domino
+5677,Compound annual growth rate
+5678,Greeks
+5679,Design for testing
+5680,Behavior management
+5681,Behavioral systems analysis
+5682,Behavior change methods
+5683,Tailored Intervention
+5684,Hansard
+5685,Detect and avoid
+5686,Glue code
+5687,Technical debt
+5688,Cognitive decline
+5689,High-frequency trading
+5690,Pairs trade
+5691,Fourier transform
+5692,Optical coherence tomography
+5693,Internet traffic engineering
+5694,Internet traffic
+5695,Adverse drug reaction
+5696,Adaptive hypermedia
+5697,Hydraulic fracturing
+5698,Tera-
+5699,Dangerous goods
+5700,Nuclear weapon
+5701,Benford's law
+5702,Phenomenon
+5703,Airspeed
+5704,Flight inspection
+5705,Crew
+5706,mHealth
+5707,Spline (mathematics)
+5708,Coupon
+5709,National bank
+5710,Ornstein–Uhlenbeck process
+5711,White noise
+5712,Brownian motion
+5713,Signal compression
+5714,Automated essay scoring
+5715,Quadratic equation
+5716,Autonomous system (Internet)
+5717,Sharing economy
+5718,If and only if
+5719,Diabetes management
+5720,Myotonic dystrophy
+5721,Muscular dystrophy
+5722,Neurogenetics
+5723,Web API
+5724,Inefficiency
+5725,Control variable
+5726,Tabu search
+5727,Chemical database
+5728,Input method
+5729,Water column
+5730,Algal bloom
+5731,Stratification (seeds)
+5732,Oceanography
+5733,Coherence (statistics)
+5734,Functional logic programming
+5735,Digital pathology
+5736,Semantic change
+5737,System safety
+5738,Critical infrastructure protection
+5739,SCADA
+5740,Cyberspace
+5741,Vector space
+5742,Digital history
+5743,Queue
+5744,Dynamism
+5745,Signal processing
+5746,Thrashing
+5747,Pathfinder
+5748,Entropy encoding
+5749,Numeral system
+5750,Panorama
+5751,Linux kernel
+5752,Rank of an abelian group
+5753,Elementary abelian group
+5754,G-module
+5755,Education theory
+5756,Automatic sequence
+5757,GenBank
+5758,Tensor completion
+5759,Text simplification
+5760,Grammaticality
+5761,Dyadic interaction
+5762,Insurance policy
+5763,Summit
+5764,Deliberation
+5765,FNET
+5766,General knowledge
+5767,Installation
+5768,Fidelity
+5769,Face detection
+5770,Lattice (order)
+5771,Heroin
+5772,Blank
+5773,Book embedding
+5774,Sybil attack
+5775,Legal information retrieval
+5776,Legal citation
+5777,Syllable
+5778,Declaration
+5779,Conflict of interest
+5780,Weight loss
+5781,Lexical semantics
+5782,Endurability
+5783,Word recognition
+5784,Perfect hash function
+5785,Information transfer
+5786,Datafication
+5787,Automatic identification and data capture
+5788,Nand flash memory
+5789,Execution time
+5790,Poisson regression
+5791,Attention economy
+5792,Medical literature retrieval
+5793,Common Data Format
+5794,User-defined function
+5795,SAP HANA
+5796,Database application
+5797,Object-relational mapping
+5798,Urbanity
+5799,Text annotation
+5800,Product topology
+5801,MCDRAM
+5802,Xeon Phi
+5803,SHA-2
+5804,Public service
+5805,PICO process
+5806,Systematic review
+5807,Boolean conjunctive query
+5808,Scratch
+5809,Difference-map algorithm
+5810,Physical data model
+5811,Opinion dynamics
+5812,Job description
+5813,Textual entailment
+5814,Digital subscriber line
+5815,Chiller boiler system
+5816,Water chiller
+5817,Chiller
+5818,Blacklisting
+5819,Ad blocking
+5820,Difference in differences
+5821,Promotion (rank)
+5822,Work experience
+5823,Wasserstein metric
+5824,Tangent bundle
+5825,Strangeness
+5826,Geographic coordinate system
+5827,Hoeffding's inequality
+5828,Asymptotically optimal algorithm
+5829,Risk management framework
+5830,Coefficient of determination
+5831,Respite care
+5832,Burnout
+5833,Institutionalisation
+5834,Actigraphy
+5835,Aggression
+5836,Traumatic stress
+5837,Scalar multiplication
+5838,Hilbert space
+5839,Ergodic theory
+5840,Industry classification
+5841,Intermediary
+5842,Automatic Generation Control
+5843,Arctic
+5844,Arctic vegetation
+5845,Hyperspectral imaging
+5846,Load management
+5847,Network architecture
+5848,Conditional dependence
+5849,Information good
+5850,Clinical Dementia Rating
+5851,Verbal fluency test
+5852,Cognitive test
+5853,Discrete space
+5854,Eddy covariance
+5855,Annual cycle
+5856,Driving simulator
+5857,Vehicle tracking system
+5858,Hamming weight
+5859,First class
+5860,TIMIT
+5861,Rectangle
+5862,Eye tracking on the ISS
+5863,Maintenance engineering
+5864,Wishart distribution
+5865,Distraction
+5866,Continuous partial attention
+5867,Virtual research environment
+5868,Causal Markov condition
+5869,Apollo
+5870,Domain Name System
+5871,Social trading
+5872,Digital currency
+5873,Mycin
+5874,Connectomics
+5875,Business Process Model and Notation
+5876,Fracture mechanics
+5877,Coalescence (physics)
+5878,Brittleness
+5879,Continuous training
+5880,Guitar
+5881,Classical guitar
+5882,Social robot
+5883,Closest pair of points problem
+5884,Kruskal's algorithm
+5885,Heart beat
+5886,Fungibility
+5887,Complex dynamics
+5888,Plain English
+5889,Good governance
+5890,Partitioned global address space
+5891,Minimum bounding box
+5892,Site selection
+5893,Media bias
+5894,Framing effect
+5895,Indirect speech
+5896,Krylov subspace
+5897,Numerical linear algebra
+5898,Instruction prefetch
+5899,Medical knowledge
+5900,Malaria
+5901,Shuffling
+5902,Suicide Risk
+5903,Star network
+5904,Complementary good
+5905,Language construct
+5906,Exemplar theory
+5907,User intent
+5908,Random matrix
+5909,Stationary point
+5910,Cognitive bias
+5911,Logit
+5912,Determinantal point process
+5913,Multimodal search
+5914,Binary logarithm
+5915,Mark and recapture
+5916,User expectations
+5917,Uncertainty quantification
+5918,Communication in small groups
+5919,Spacecraft
+5920,Microsoft Office
+5921,Knowledge graph
+5922,Ethical issues
+5923,Comparative historical research
+5924,Disparate treatment
+5925,Psychological resilience
+5926,Vector calculus
+5927,Negative feedback
+5928,Search box
+5929,Constructed language
+5930,Type of service
+5931,Diffusion wavelets
+5932,Aviation accident
+5933,Recidivism
+5934,Inversion (meteorology)
+5935,Derivative-free optimization
+5936,Patent classification
+5937,Time series classification
+5938,Flow (psychology)
+5939,Regular polygon
+5940,Vectorization (mathematics)
+5941,Approximations of π
+5942,Deterministic algorithm
+5943,Jump
+5944,Hilbert curve
+5945,Keyword search
+5946,Computer engineering
+5947,Power grid
+5948,Stray light
+5949,Optics
+5950,Multi label learning
+5951,Expectation propagation
+5952,Atrial fibrillation
+5953,Cardiac arrhythmia
+5954,Photoplethysmogram
+5955,Estimation of distribution algorithm
+5956,Cooperative learning
+5957,Webometrics
+5958,East Asia
+5959,OpenTag
+5960,Closed-world assumption
+5961,Medical treatment
+5962,Third party
+5963,Software factory
+5964,Spotlighting
+5965,Common Criteria
+5966,Sustainable development
+5967,Graphic communication
+5968,Rare disease
+5969,Exploratory factor analysis
+5970,Psychosocial
+5971,External variable
+5972,Explained variation
+5973,P system
+5974,Organizational performance
+5975,Operating expense
+5976,Indoor bioaerosol
+5977,Bioaerosol
+5978,Relative humidity
+5979,Savings account
+5980,National Development Plan
+5981,Digital divide
+5982,Sociocybernetics
+5983,Occupational science
+5984,Routing protocol
+5985,Gini coefficient
+5986,Flatness (systems theory)
+5987,Response surface methodology
+5988,Central composite design
+5989,Accident analysis
+5990,Electricity generation
+5991,Agricultural economics
+5992,Epidemiology of leprosy
+5993,Leprosy
+5994,Epidemiology
+5995,Performance measurement
+5996,Management control system
+5997,Manufacturing engineering
+5998,Directive
+5999,Cognitive impairment
+6000,Environmental planning
+6001,Vitamin
+6002,Retinol
+6003,Vitamin A deficiency
+6004,Zinc
+6005,Multivitamin
+6006,Manual annotation
+6007,Global Rating
+6008,Design methods
+6009,Co-creation
+6010,Cold start (automotive)
+6011,Neutral network
+6012,Cadastre
+6013,SWOT analysis
+6014,Tax revenue
+6015,Impact factor
+6016,Standard error
+6017,Large networks
+6018,Computational logic
+6019,Knoop hardness test
+6020,Utility model
+6021,Industrial design
+6022,Regional science
+6023,Sewerage
+6024,Design tool
+6025,Visual inspection
+6026,MATLAB
+6027,Technology acceptance model
+6028,Carbon
+6029,Carbon dioxide
+6030,Environmental engineering
+6031,Construct validity
+6032,Engineering education
+6033,Linear algebra
+6034,Social business
+6035,Social promotion
+6036,Market sentiment
+6037,Triangle counting
+6038,Phrase structure rules
+6039,Deconvolution
+6040,Blood Glucose Measurement
+6041,Touchscreen
+6042,Complete linkage
+6043,Reliability (computer networking)
+6044,Pathfinding
+6045,Traverse
+6046,Food waste
+6047,Economic cost
+6048,Real line
+6049,Financial risk
+6050,Hazardous waste
+6051,Data exploration
+6052,Distributed representation
+6053,Hardware acceleration
+6054,AP Physics
+6055,Situated
+6056,Reading comprehension
+6057,Workforce development
+6058,Liability
+6059,Rationality
+6060,Rule mining
+6061,Network analytics
+6062,Network traffic measurement
+6063,Mile
+6064,Dynamic pricing
+6065,Price optimization
+6066,Demand curve
+6067,Monte Carlo tree search
+6068,Idle
+6069,Winner's curse
+6070,CAD
+6071,Computer Aided Design
+6072,Next Generation Air Transportation System
+6073,Estimated time of arrival
+6074,Level of measurement
+6075,Use of force
+6076,Complaint
+6077,Push technology
+6078,Induced metric
+6079,Aquaculture
+6080,Agriculture
+6081,Agricultural engineering
+6082,Vulnerability assessment
+6083,Crowd psychology
+6084,Image translation
+6085,Sleep apnea
+6086,Traffic signal
+6087,Rotation matrix
+6088,Customer analytics
+6089,Region of interest
+6090,Paywall
+6091,Taxonomy (biology)
+6092,Reverse logistics
+6093,Heartbeat
+6094,Rating of perceived exertion
+6095,Domain adaptation
+6096,Out of memory
+6097,Approx
+6098,Multilevel model
+6099,Unimodality
+6100,Oscillation
+6101,Corrosion
+6102,Civil engineering
+6103,Bayesian nonparametrics
+6104,Algorithm engineering
+6105,Parking lot
+6106,Bottle
+6107,Alcoholic spirits
+6108,Regression discontinuity design
+6109,Discontinuity (linguistics)
+6110,Computational resource
+6111,Asymptotic analysis
+6112,Average treatment effect
+6113,Action selection
+6114,Pan-assay interference compounds
+6115,Fixed-point iteration
+6116,Web browsing history
+6117,Generalized game
+6118,Onboarding
+6119,Musical composition
+6120,Chord (music)
+6121,Popular music
+6122,Rhythm
+6123,Fairness measure
+6124,Inequality
+6125,Building envelope
+6126,Form of the Good
+6127,Grand Challenges
+6128,Apathy
+6129,Emotional blunting
+6130,Audio mixing (recorded music)
+6131,Subtitle
+6132,Software construction
+6133,Societal impact of nanotechnology
+6134,Remote patient monitoring
+6135,Continuous monitoring
+6136,Vital signs
+6137,Hierarchical neural network
+6138,Lifelong learning
+6139,Problem statement
+6140,Safeguard
+6141,Software walkthrough
+6142,Spillover effect
+6143,Block Lanczos algorithm
+6144,Lanczos algorithm
+6145,Probabilistic causation
+6146,Bailout
+6147,White box
+6148,Gene prediction
+6149,Text retrieval
+6150,Intelligent tutoring system
+6151,Differentiable function
+6152,Reservoir sampling
+6153,Bernoulli process
+6154,Malware analysis
+6155,Commonsense reasoning
+6156,Public key infrastructure
+6157,Public-key cryptography
+6158,Public key certificate
+6159,Certification
+6160,Continuation
+6161,Boiler (power generation)
+6162,Flue
+6163,Multiset
+6164,Open educational resources
+6165,Future interests
+6166,Frequency scaling
+6167,Author name
+6168,Edge coloring
+6169,Temporal logic
+6170,Knowledge assessment
+6171,Corporation
+6172,Judgement
+6173,Episodic memory
+6174,Through-the-lens metering
+6175,Binary Independence Model
+6176,Trustworthiness
+6177,Rubric
+6178,Prime (order theory)
+6179,Cross lingual
+6180,Electric power transmission
+6181,Contextual information
+6182,Similarity query
+6183,Interpreter
+6184,Copernicus
+6185,Administrative services organization
+6186,Document representation
+6187,Projection (set theory)
+6188,Quantum
+6189,Digital preservation
+6190,Activity tracker
+6191,Canonicalization
+6192,Historical linguistics
+6193,DSM-5
+6194,Enabling
+6195,Stock price
+6196,Rankit
+6197,Academic achievement
+6198,Accounts receivable
+6199,Instrumental and intrinsic value
+6200,Collision avoidance system
+6201,Collision
+6202,Kiss
+6203,Computer-assisted web interviewing
+6204,Cognitive style
+6205,Rankers
+6206,Science journalism
+6207,Discriminator
+6208,Inverse relation
+6209,Process management
+6210,Lyapunov function
+6211,Meta-analysis
+6212,Computer Go
+6213,Electrical equipment
+6214,Point cloud
+6215,Email management
+6216,Task management
+6217,Audience measurement
+6218,Root mean square
+6219,Photovoltaic system
+6220,Solar power
+6221,Server-side
+6222,Client-side
+6223,Organizational intelligence
+6224,Cryptographic hash function
+6225,Whitelist
+6226,MD5
+6227,CAN bus
+6228,Payload
+6229,Prudence
+6230,Order book
+6231,Hydroelectricity
+6232,Hydrograph
+6233,Extremum estimator
+6234,Mobile banking
+6235,Numerical models
+6236,Rational function
+6237,Spoken word
+6238,Minimization problem
+6239,Embedding problem
+6240,Horn clause
+6241,Fact checking
+6242,Time–frequency analysis
+6243,Opportunity cost
+6244,Pleasure
+6245,Majority opinion
+6246,Spiral of silence
+6247,Convex polytope
+6248,Complex instruction set computing
+6249,Integer sequence
+6250,Harmonic
+6251,Front and back ends
+6252,Monad (category theory)
+6253,Unified field theory
+6254,Service (economics)
+6255,Geovisualization
+6256,Accelerated failure time model
+6257,Blockchain
+6258,Orthogonal transformation
+6259,Learnability
+6260,Memory module
+6261,Discourse analysis
+6262,Bayesian Knowledge Tracing
+6263,Raw audio format
+6264,Voice activity detection
+6265,Disease Screening
+6266,Decision quality
+6267,Sketch recognition
+6268,Centralized computing
+6269,Probability vector
+6270,Software quality assurance
+6271,Transformation matrix
+6272,Identity management
+6273,Digital identity
+6274,Health information
+6275,Parallels
+6276,Confidence region
+6277,Handover
+6278,Tukey's range test
+6279,Analysis of variance
+6280,Peak signal-to-noise ratio
+6281,Computer security model
+6282,QR decomposition
+6283,Noise pollution
+6284,Cover (topology)
+6285,Certificate authority
+6286,Revocation list
+6287,Smart contract
+6288,Ransomware
+6289,Extortion
+6290,Internet of Things
+6291,International airport
+6292,Street light
+6293,Instrumental variable
+6294,Innovation game
+6295,Paraconsistent logic
+6296,Verifiable computing
+6297,Declarative programming
+6298,Sea ice
+6299,Canadian Ice Service
+6300,Synthetic aperture radar
+6301,Treasury
+6302,Centralisation
+6303,Fake news
+6304,Analysis tools
+6305,Virtual currency
+6306,House of Representatives
+6307,Operating budget
+6308,Single-machine scheduling
+6309,Investor relations
+6310,Processor affinity
+6311,Tumor progression
+6312,Carcinogenesis
+6313,Cervical cancer
+6314,Social cognition
+6315,Load profile
+6316,Artistic rendering
+6317,Social preferences
+6318,System development
+6319,Resting state fMRI
+6320,Sørensen–Dice coefficient
+6321,Adaptive representation
+6322,Mental illness
+6323,Abstract syntax tree
+6324,Digital evidence
+6325,Visual modeling
+6326,Korean grammar
+6327,Human rights
+6328,Negotiation
+6329,Amyotrophic lateral sclerosis
+6330,Respiratory failure
+6331,Disease Presentation
+6332,Bisimulation
+6333,Function approximation
+6334,TOPSIS
+6335,Ideal solution
+6336,Cognitive computing
+6337,Connectionism
+6338,Network congestion
+6339,Descriptive research
+6340,Granular computing
+6341,Prasad
+6342,Image stitching
+6343,Scale-invariant feature transform
+6344,Requirement
+6345,Traceability
+6346,Trend analysis
+6347,Mode of transport
+6348,Mean absolute percentage error
+6349,Boolean network
+6350,Signalling
+6351,Singular spectrum analysis
+6352,Software development process
+6353,Hidden variable theory
+6354,Deliverable
+6355,Cutoff
+6356,Single phase
+6357,Transactional leadership
+6358,Possible world
+6359,Spacetime
+6360,Electronic business
+6361,Dynamic memory network
+6362,Sequential model
+6363,Group object
+6364,A-weighting
+6365,Salience (neuroscience)
+6366,Gamma process
+6367,Cashier's check
+6368,Temporal learning
+6369,Network structure
+6370,Pretopological space
+6371,Id; ego and super-ego
+6372,Empirical comparison
+6373,CAPTCHA
+6374,Turing test
+6375,Tweedie distribution
+6376,Contiguity
+6377,Fusion mechanism
+6378,Long-term prediction
+6379,Labeled data
+6380,Mass cytometry
+6381,Silhouette
+6382,One-shot learning
+6383,3D city models
+6384,Link level
+6385,Design space
+6386,Attention model
+6387,Committee machine
+6388,Gram
+6389,Tensor decomposition
+6390,Customer reviews
+6391,Partition (number theory)
+6392,Causal relations
+6393,Heart failure
+6394,Venn diagram
+6395,Event sequence
+6396,Spectral geometry
+6397,Spectral signature
+6398,Knowledge level
+6399,ROUGE
+6400,Ethical dilemma
+6401,Packing problems
+6402,Bin packing problem
+6403,Forced migration
+6404,Figuring
+6405,MIT License
+6406,Smartwatch
+6407,Visual field
+6408,Patient privacy
+6409,Ode
+6410,Distribution function
+6411,Interactive search
+6412,Roundabout
+6413,Computational sustainability
+6414,Shrinkage
+6415,Retinopathy of prematurity
+6416,Optometry
+6417,Income distribution
+6418,Generative adversarial network
+6419,Microsoft Visual Studio
+6420,Abstract syntax
+6421,Virtual economy
+6422,Vanishing gradient problem
+6423,True anomaly
+6424,Operational system
+6425,Von Neumann entropy
+6426,Social relationship
+6427,Lightning
+6428,Lying
+6429,Accommodation
+6430,Gating
+6431,Internal model
+6432,Project plan
+6433,Job interview
+6434,Purchase funnel
+6435,Funnel
+6436,NumPy
+6437,Standard operating procedure
+6438,SCALE-UP
+6439,Space exploration
+6440,Jupiter
+6441,Clipper (electronics)
+6442,Pattern formation
+6443,Perturbation (astronomy)
+6444,Noise detection
+6445,GPS signals
+6446,Mutual fund
+6447,Quantum state
+6448,Amplitude amplification
+6449,Estrus Detection
+6450,Roof
+6451,Technical indicator
+6452,Header
+6453,Failure rate
+6454,Market price
+6455,Inverse probability weighting
+6456,Digital health
+6457,Nature versus nurture
+6458,Mobility prediction
+6459,Contour tree
+6460,Inductive set
+6461,Logical conjunction
+6462,Marketing mix modeling
+6463,Shopper marketing
+6464,Drug culture
+6465,Recreational Drug
+6466,Substance abuse
+6467,Peer learning
+6468,Geographical cluster
+6469,Ecosystem
+6470,Seasonal adjustment
+6471,Policy learning
+6472,Crowdsourced testing
+6473,Frank–Wolfe algorithm
+6474,Social stratification
+6475,Training system
+6476,Tuberculosis
+6477,Signal reconstruction
+6478,Many-to-many (data model)
+6479,Network representation learning
+6480,Tertiary sector of the economy
+6481,City block
+6482,Spectral properties
+6483,Per capita
+6484,Latitude
+6485,Locality of reference
+6486,Public economics
+6487,Hyperbola
+6488,Mathematical model
+6489,Simpson's paradox
+6490,Small and medium-sized enterprises
+6491,Generalized inverse
+6492,Information distance
+6493,Autoregressive–moving-average model
+6494,Customer engagement
+6495,Service robot
+6496,Multiplier (economics)
+6497,Spatial distribution
+6498,Radio galaxy
+6499,Galaxy
+6500,Organizing principle
+6501,Interactive analysis
+6502,Type theory
+6503,Medication prescription
+6504,BQP
+6505,Power engineering
+6506,Voltage sag
+6507,Heart disorder
+6508,Brier score
+6509,Multifunction cardiogram
+6510,Computational musicology
+6511,Music technology
+6512,Musicology
+6513,Indirect Transmission
+6514,Emerging infectious disease
+6515,Susceptible individual
+6516,Metamathematics
+6517,Propositional calculus
+6518,Gödel's completeness theorem
+6519,Formal system
+6520,Spectral radius
+6521,Dynamic treatment regime
+6522,Online chat
+6523,Quantitative research
+6524,Social analysis
+6525,Fast-moving consumer goods
+6526,Hacker
+6527,Homomorphism
+6528,Multiple correlation
+6529,Chernoff bound
+6530,Binomial distribution
+6531,Polyglot
+6532,Language family
+6533,Numerical weather prediction
+6534,Memorization
+6535,Interaction history
+6536,System on a chip
+6537,PSoC
+6538,Inductive bias
+6539,Product reviews
+6540,Network delay
+6541,Propagation delay
+6542,Single molecule real time sequencing
+6543,Fundamental human needs
+6544,Invariant subspace
+6545,Indicator vector
+6546,Digital goods
+6547,Mood disorders
+6548,Crop yield
+6549,Tillage
+6550,Spatial variability
+6551,Irrigation
+6552,Digital transformation
+6553,Minimum cut
+6554,Mission critical
+6555,Maximal information coefficient
+6556,Boolean matrix factorization
+6557,Prime number theorem
+6558,Machine perception
+6559,Poacher
+6560,Poaching
+6561,Wildlife
+6562,Pressure control
+6563,Welfare
+6564,Natural resource
+6565,Risk–return spectrum
+6566,Statistical mechanics
+6567,Empirical distribution function
+6568,Video annotation
+6569,Geostationary orbit
+6570,AC power
+6571,Power factor
+6572,Natural hazard
+6573,Pinwheel
+6574,Spinning
+6575,Engineering drawing
+6576,Zeroth law of thermodynamics
+6577,Indecomposability
+6578,Dialog act
+6579,Elasticity (economics)
+6580,CLIPS
+6581,Theano
+6582,Gratitude
+6583,Retrofitting
+6584,Multimodality
+6585,Context analysis
+6586,Ethnic group
+6587,Automatic target recognition
+6588,Long short term memory
+6589,Spike sorting
+6590,FLOPS
+6591,Floating point
+6592,Intelligence-led policing
+6593,Design thinking
+6594,Multilinear algebra
+6595,Image generation
+6596,Auto encoders
+6597,Graph neural networks
+6598,Transversal (geometry)
+6599,Temporal context
+6600,Adaptive routing
+6601,Ask question
+6602,Text recognition
+6603,Augment
+6604,Learning network
+6605,On demand
+6606,Deep neural networks
+6607,Battlefield
+6608,Travel time
+6609,Load forecasting
+6610,Interaction
+6611,Spatial behavior
+6612,Spatial knowledge
+6613,Naturalism
+6614,Transformer
+6615,Derivative (finance)
+6616,Trajectory clustering
+6617,Longitudinal study
+6618,Context based
+6619,Data reconstruction
+6620,Plug-in
+6621,Relation classification
+6622,Multi camera tracking
+6623,Name resolution
+6624,Transport Layer Security
+6625,Cuckoo
+6626,Autonomous system (mathematics)
+6627,Probability model
+6628,Nice
+6629,Crowdsensing
+6630,Iterated function
+6631,Project portfolio management
+6632,Feature aggregation
+6633,Text generation
+6634,Pareto optimal
+6635,Graph patterns
+6636,Graph classification
+6637,Tuner
+6638,Fine-tuning
+6639,Open knowledge
+6640,Action recognition
+6641,WAR
+6642,Pinyin
+6643,Kernel ridge regression
+6644,Empowerment
+6645,Graphene
+6646,Machine reading
+6647,Dirt
+6648,Exoneration
+6649,Rectification
+6650,Emotional contagion
+6651,Community search
+6652,Graph similarity
+6653,Suicidal ideation
+6654,Clinical psychology
+6655,High Bandwidth Memory
+6656,Computer architecture
+6657,Sales forecasting
+6658,NAD+ kinase
+6659,Textile
+6660,Self improvement
+6661,Alcohol
+6662,Probabilistic logic programming
+6663,Visual interpretation
+6664,Computing Methodologies
+6665,Labelling
+6666,Sequence modeling
+6667,Divergence
+6668,Feature fusion
+6669,Traffic accident
+6670,Consumer health
+6671,Location data
+6672,User awareness
+6673,Sequence prediction
+6674,Extractor
+6675,Privacy awareness
+6676,Interpersonal deception theory
+6677,Social engineering (security)
+6678,Personal Attribute
+6679,Stacking
+6680,Concept hierarchy
+6681,Educational robotics
+6682,Sentence similarity
+6683,Typing
+6684,Distillation
+6685,Model compression
+6686,Data patterns
+6687,Polarization (waves)
+6688,Graph Edge
+6689,PERQ
+6690,Classification of mental disorders
+6691,User assistance
+6692,Sociology
+6693,Self
+6694,Hubble Deep Field
+6695,Sequential modeling
+6696,Valuation of options
+6697,End-to-end principle
+6698,Click model
+6699,Medical physics
+6700,Maximum likelihood
+6701,Oncology
+6702,Medicine
+6703,Internal medicine
+6704,Real-time strategy
+6705,Hyperbolic space
+6706,Electrode array
+6707,Vintage
+6708,NAPA
+6709,Telecommunications service
+6710,Contact lens
+6711,Refining (metallurgy)
+6712,Automatic speaker recognition
+6713,Common gene
+6714,Expression Signature
+6715,Sewage treatment
+6716,Grease
+6717,Public sphere
+6718,Diaspora
+6719,Structural break
+6720,Weather radar
+6721,Art criticism
+6722,Painting
+6723,Abstract art
+6724,Visual arts
+6725,Nuclear power plant
+6726,Speech enhancement
+6727,Intelligibility (communication)
+6728,PESQ
+6729,Signal-to-noise ratio
+6730,Facilitation
+6731,Image restoration
+6732,Data assimilation
+6733,Ecosystem model
+6734,Ising model
+6735,Incivility
+6736,Is-a
+6737,Intelligent control
+6738,Control engineering
+6739,Drone
+6740,Altitude
+6741,Cognitive radio
+6742,Phase-shift keying
+6743,Power transmission
+6744,Upgrade
+6745,Trend following
+6746,Autism Diagnostic Observation Schedule
+6747,Autism spectrum disorder
+6748,Language acquisition
+6749,Vegetation classification
+6750,Topological data analysis
+6751,Suicide prevention
+6752,Generalized extreme value distribution
+6753,Primary production
+6754,Carbon cycle
+6755,Atmospheric sciences
+6756,Biogeochemistry
+6757,Mating pool
+6758,Clan
+6759,nobody
+6760,Abstract logic
+6761,Logical reasoning
+6762,As is
+6763,Minimum weight
+6764,Magnetic flux
+6765,Speculation
+6766,Market capitalization
+6767,Waveform
+6768,Wind power forecasting
+6769,Economic power
+6770,Track (rail transport)
+6771,Order picking
+6772,Topology optimization
+6773,Engineering design process
+6774,Morphing
+6775,Computer-aided engineering
+6776,Wald test
+6777,Class discrimination
+6778,Odometry
+6779,Motion analysis
+6780,Gross domestic product
+6781,Nuclear power
+6782,Spatiotemporal database
+6783,Doppler radar
+6784,NEXRAD
+6785,World wide
+6786,3d shapes
+6787,Boltzmann constant
+6788,Technological change
+6789,Capreolus
+6790,General Data Protection Regulation
+6791,Multi source data
+6792,Intersection graph
+6793,Hydraulic machinery
+6794,Reinforcement
+6795,Data dependency
+6796,Event recognition
+6797,System dynamics
+6798,Financial networks
+6799,Persistent homology
+6800,Hop (networking)
+6801,Sequence matching
+6802,Knowledge base question answering
+6803,Original meaning
+6804,GPU cluster
+6805,Two-graph
+6806,Handshake
+6807,Matroid intersection
+6808,Total correlation
+6809,Efficient estimator
+6810,Stress test
+6811,Exclusive or
+6812,Multiplication operator
+6813,Point (typography)
+6814,Audio signal
+6815,Computer facial animation
+6816,Optical flow
+6817,Computational neuroscience
+6818,Semantic information
+6819,Aftershock
+6820,Seismic wave
+6821,Multi layer network
+6822,Intermediate layer
+6823,CVSS
+6824,Collective protection
+6825,Prioritization
+6826,Erythromycin
+6827,Computational topology
+6828,Nonlinear conjugate gradient method
+6829,Ad hoc wireless distribution service
+6830,Membership function
+6831,Database querying
+6832,Data access layer
+6833,Activity diagram
+6834,Class diagram
+6835,Decimal floating point
+6836,decimal32 floating-point format
+6837,decimal64 floating-point format
+6838,Decimal
+6839,Double-precision floating-point format
+6840,Knowledge value chain
+6841,Knowledge broker
+6842,Digital asset management
+6843,Speech segmentation
+6844,Information diagram
+6845,Sample entropy
+6846,Topological entropy
+6847,Approximate entropy
+6848,Parallel metaheuristic
+6849,River delta
+6850,Systems medicine
+6851,Solution architecture
+6852,Enterprise architecture framework
+6853,Information technology architecture
+6854,Parent company
+6855,Fréchet distance
+6856,Automatic parallelization
+6857,Conceptual graph
+6858,IDEF1X
+6859,Fixed price
+6860,Telematics
+6861,Cutting-plane method
+6862,Integrated logistics support
+6863,Financial econometrics
+6864,Endogeneity
+6865,Eager learning
+6866,Test script
+6867,Messaging pattern
+6868,Nyström method
+6869,HIV-1 protease
+6870,Protease
+6871,Vagueness
+6872,Possibility theory
+6873,Model-based reasoning
+6874,Security informatics
+6875,Explicit memory
+6876,Web data mining
+6877,Total harmonic distortion
+6878,Electromagnetic interference
+6879,Voltage
+6880,iPath
+6881,Design objective
+6882,Eager evaluation
+6883,Lazy evaluation
+6884,Dual tree
+6885,Covert
+6886,Codd's theorem
+6887,Algebraic number
+6888,Possibilistic logic
