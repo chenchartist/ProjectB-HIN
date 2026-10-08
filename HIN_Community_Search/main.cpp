@@ -178,11 +178,35 @@ int getGlobalNodeID(
 //   forward=true  reads from hin.rowPointers (outgoing edges)
 //   forward=false reads from hin.reverseRowPointers (incoming)
 
+// =========================================================
+// QUERY NODE RESTRICTION (e.g. query topics)
+// =========================================================
+// Restricts one node type inside a meta-path to a chosen set.
+// Example: APTPA with 3 query topics -> the T step may only
+// pass through those 3 topic nodes, so every link in the
+// community comes from one of the chosen topics.
+// lo/hi = global ID range of the restricted node type.
+struct NodeRestriction
+{
+    string nodeType;
+    int lo = -1;
+    int hi = -1;
+    unordered_set<int> allowed;
+
+    bool active() const { return lo >= 0; }
+    bool inType(int node) const { return node >= lo && node < hi; }
+    bool blocks(int node) const
+    {
+        return active() && inType(node) && allowed.count(node) == 0;
+    }
+};
+
 vector<int> followMetaPath(
     int startNode,
     const vector<MetaPathStep>& path,
     const HIN& hin,
-    int maxFanout = 0)            // 0 = unlimited
+    int maxFanout = 0,            // 0 = unlimited
+    const NodeRestriction* restriction = nullptr)
 {
     vector<int> currentNodes;
     currentNodes.push_back(startNode);
@@ -202,8 +226,12 @@ vector<int> followMetaPath(
             int end   = rp[node + 1];
 
             // Hub filter: skip intermediate nodes (not the start node)
-            // whose fan-out on this relation exceeds the limit
-            if (maxFanout > 0 && s > 0)
+            // whose fan-out on this relation exceeds the limit.
+            // Query nodes chosen by the user (e.g. query topics)
+            // are never filtered as hubs.
+            bool chosenQueryNode =
+                restriction && restriction->active() && restriction->inType(node);
+            if (maxFanout > 0 && s > 0 && !chosenQueryNode)
             {
                 int fanout = 0;
                 for (int i = start; i < end; i++)
@@ -214,7 +242,12 @@ vector<int> followMetaPath(
 
             for (int i = start; i < end; i++)
                 if (rt[i] == step.relationTypeID)
+                {
+                    // Query restriction: only pass through chosen nodes
+                    if (restriction && restriction->blocks(ci[i]))
+                        continue;
                     nextSet.insert(ci[i]);
+                }
         }
 
         currentNodes.assign(nextSet.begin(), nextSet.end());
@@ -251,7 +284,8 @@ void buildDerivedGraph(
     vector<int>& derivedNodes,
     vector<vector<int>>& derivedAdjacency,
     unordered_map<int, int>& globalToDerived,
-    int maxFanout = 0)
+    int maxFanout = 0,
+    const NodeRestriction* restriction = nullptr)
 { 
     derivedNodes.clear(); 
     derivedNodes.push_back(queryNode); 
@@ -277,7 +311,7 @@ void buildDerivedGraph(
     {
         int globalNode = derivedNodes[i];
  
-        vector<int> neighbours = followMetaPath(globalNode, metaPath, hin, maxFanout);
+        vector<int> neighbours = followMetaPath(globalNode, metaPath, hin, maxFanout, restriction);
  
         for (int globalNeighbour : neighbours)
         {
@@ -309,6 +343,64 @@ void buildDerivedGraph(
 // ========================================================= 
 // Removes all nodes whose degree falls below k.
  
+// =========================================================
+// CORE NUMBERS (Batagelj-Zaversnik, O(V + E))
+// =========================================================
+// coreNumber[v] = the largest k for which v is still in the
+// k-core. Used to suggest a sensible k range for the query:
+// any k above the query's core number removes the query.
+vector<int> computeCoreNumbers(const vector<vector<int>>& adjacency)
+{
+    int n = static_cast<int>(adjacency.size());
+    vector<int> degree(n), position(n), order(n);
+    int maxDegree = 0;
+    for (int v = 0; v < n; v++)
+    {
+        degree[v] = static_cast<int>(adjacency[v].size());
+        maxDegree = max(maxDegree, degree[v]);
+    }
+    vector<int> bin(maxDegree + 1, 0);
+    for (int v = 0; v < n; v++) bin[degree[v]]++;
+    int startPos = 0;
+    for (int d = 0; d <= maxDegree; d++)
+    {
+        int count = bin[d];
+        bin[d] = startPos;
+        startPos += count;
+    }
+    for (int v = 0; v < n; v++)
+    {
+        position[v] = bin[degree[v]];
+        order[position[v]] = v;
+        bin[degree[v]]++;
+    }
+    for (int d = maxDegree; d > 0; d--) bin[d] = bin[d - 1];
+    if (maxDegree >= 0 && !bin.empty()) bin[0] = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        int v = order[i];
+        for (int u : adjacency[v])
+        {
+            if (degree[u] > degree[v])
+            {
+                int du = degree[u];
+                int pu = position[u];
+                int pw = bin[du];
+                int w = order[pw];
+                if (u != w)
+                {
+                    position[u] = pw; order[pu] = w;
+                    position[w] = pu; order[pw] = u;
+                }
+                bin[du]++;
+                degree[u]--;
+            }
+        }
+    }
+    return degree;
+}
+
 vector<bool> performKCorePeeling( 
     const vector<vector<int>>& adjacency, 
     int k, 
@@ -445,7 +537,11 @@ int main( int argc, char* argv[] )
     // The primary HIN data structure.
     // Populated progressively across Stages 1 to 8.
     HIN hin;
- 
+    
+    // Dataset folder chosen at runtime (7th argument).
+    // Default keeps the original OGB-MAG behaviour.
+    string dataRoot = (argc > 7) ? argv[7] : "data/mag";
+    cout << "Dataset folder: " << dataRoot << "\n\n";
  
     // =====================================================
     // PHASE 1 - HIN SCHEMA DEFINITION
@@ -453,7 +549,6 @@ int main( int argc, char* argv[] )
     // Discovers node types, relationship rules, and
     // assigns global integer IDs to all nodes.
     // =====================================================
- 
  
     // =====================================================
     // STAGE 1 - NODE TYPE DISCOVERY
@@ -465,7 +560,7 @@ int main( int argc, char* argv[] )
     cout << "STAGE 1 - NODE TYPE DISCOVERY\n";
     cout << "----------------------------------------\n";
 
-    string nodeFilePath = "data/mag/raw/num-node-dict.csv";
+    string nodeFilePath = dataRoot + "/raw/num-node-dict.csv";
     ifstream nodeFile(nodeFilePath);
 
     if (!nodeFile.is_open())
@@ -524,7 +619,7 @@ int main( int argc, char* argv[] )
     cout << "\n\nSTAGE 2 - HIN SCHEMA DISCOVERY\n";
     cout << "----------------------------------------\n";
 
-    string tripletFilePath = "data/mag/raw/triplet-type-list.csv";
+    string tripletFilePath = dataRoot + "/raw/triplet-type-list.csv";
     ifstream tripletFile(tripletFilePath);
 
     if (!tripletFile.is_open())
@@ -617,17 +712,11 @@ int main( int argc, char* argv[] )
 
     map<int, string> nodeNames;
 
-    map<string, string> mappingFiles =
-    {
-        {"author",
-        "data/mag/mapping/author_entidx2name.csv"},
-        {"paper",
-        "data/mag/mapping/paper_entidx2name.csv"},
-        {"institution",
-        "data/mag/mapping/institution_entidx2name.csv"},
-        {"field_of_study",
-        "data/mag/mapping/field_of_study_entidx2name.csv"}
-    };
+    // One name file per node type discovered in Stage 1.
+    map<string, string> mappingFiles;
+    for (const auto& entry : hin.nodeTypeCounts)
+        mappingFiles[entry.first] =
+            dataRoot + "/mapping/" + entry.first + "_entidx2name.csv";
 
     for (const auto& entry : mappingFiles)
     {
@@ -712,7 +801,7 @@ int main( int argc, char* argv[] )
             relation.targetType;
 
         string edgeFilePath =
-            "data/mag/raw/relations/" + folderName + "/edge.csv";
+            dataRoot + "/raw/relations/" + folderName + "/edge.csv";
 
         cout << "\nLoading "
              << relation.sourceType 
@@ -1093,6 +1182,86 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
+    // ---------------------------------------------------------
+    // Query nodes for an intermediate type (8th argument)
+    // Format:  type:item|item|item
+    //   item = a local ID (number) or an exact name
+    // e.g.  "field_of_study:Anomaly detection|Outlier|Time series"
+    // The meta-path may then only pass through these nodes
+    // for that type, e.g. APTPA restricted to 3 query topics.
+    // ---------------------------------------------------------
+    NodeRestriction queryRestriction;
+    string restrictionSpec = (argc > 8) ? argv[8] : "";
+    if (!restrictionSpec.empty())
+    {
+        size_t colon = restrictionSpec.find(':');
+        if (colon == string::npos)
+        {
+            cerr << "ERROR: Query nodes must look like type:item|item|item\n";
+            return 1;
+        }
+        string rType = trim(restrictionSpec.substr(0, colon));
+        if (hin.nodeTypeCounts.find(rType) == hin.nodeTypeCounts.end())
+        {
+            cerr << "ERROR: Unknown query node type: " << rType << endl;
+            return 1;
+        }
+        queryRestriction.nodeType = rType;
+        queryRestriction.lo = hin.nodeTypeOffsets[rType];
+        queryRestriction.hi = queryRestriction.lo + hin.nodeTypeCounts[rType];
+
+        auto lowerCase = [](string text)
+        {
+            transform(text.begin(), text.end(), text.begin(), ::tolower);
+            return text;
+        };
+
+        stringstream items(restrictionSpec.substr(colon + 1));
+        string item;
+        while (getline(items, item, '|'))
+        {
+            item = trim(item);
+            if (item.empty()) continue;
+
+            int globalID = -1;
+            bool numeric = all_of(item.begin(), item.end(), ::isdigit);
+            if (numeric)
+            {
+                int localID = stoi(item);
+                if (localID >= 0 && localID < hin.nodeTypeCounts[rType])
+                    globalID = queryRestriction.lo + localID;
+            }
+            else
+            {
+                string wanted = lowerCase(item);
+                for (int g = queryRestriction.lo; g < queryRestriction.hi; g++)
+                {
+                    auto nm = nodeNames.find(g);
+                    if (nm != nodeNames.end() && lowerCase(nm->second) == wanted)
+                    {
+                        globalID = g;
+                        break;
+                    }
+                }
+            }
+
+            if (globalID < 0)
+            {
+                cerr << "ERROR: Query node not found in " << rType << ": " << item << endl;
+                return 1;
+            }
+            queryRestriction.allowed.insert(globalID);
+        }
+
+        if (queryRestriction.allowed.empty())
+        {
+            cerr << "ERROR: No query nodes given after " << rType << ":\n";
+            return 1;
+        }
+    }
+    const NodeRestriction* restriction =
+        queryRestriction.active() ? &queryRestriction : nullptr;
+
 // Parse and validate meta-path against discovered schema
     auto parsePath = [&](
         const string& spec,
@@ -1200,6 +1369,9 @@ int main( int argc, char* argv[] )
 
         {"writes:F,has_topic:F,has_topic:R,writes:R",
         "APTPA (Author-Paper-Topic-Paper-Author)"},
+        
+        {"writes:F,published_in:F,published_in:R,writes:R",
+        "APVPA (Author-Paper-Venue-Paper-Author)"},
 
         {"cites:F,cites:R",
         "PCP (Paper-Citation-Paper)"},
@@ -1219,6 +1391,27 @@ int main( int argc, char* argv[] )
     cout << "Selected p:      " << p              << endl;
     cout << "Path Spec:       " << pathSpec       << endl;
     cout << "Resolved Path:\n  " << readablePath  << endl;
+
+    if (restriction)
+    {
+        cout << "\nQuery " << restriction->nodeType << " nodes ("
+             << restriction->allowed.size() << "): the path may only pass through these\n";
+        vector<int> chosen(restriction->allowed.begin(), restriction->allowed.end());
+        sort(chosen.begin(), chosen.end());
+        for (int g : chosen)
+        {
+            int links = hin.reverseRowPointers[g + 1] - hin.reverseRowPointers[g];
+            cout << "  Local ID " << g - restriction->lo;
+            auto nm = nodeNames.find(g);
+            if (nm != nodeNames.end()) cout << " | " << nm->second;
+            cout << " | incoming links: " << links << endl;
+        }
+        cout << "  (Query nodes are exempt from the maxFanout hub filter.)\n";
+    }
+    else
+    {
+        cout << "\nQuery nodes: none (only the start node is fixed)\n";
+    }
 
 
     // =====================================================
@@ -1255,7 +1448,7 @@ int main( int argc, char* argv[] )
         }
 
         queryNode = startTypeOffset + localID;
-        metaPathNeighbours = followMetaPath(queryNode, metaPath, hin, maxFanout);
+        metaPathNeighbours = followMetaPath(queryNode, metaPath, hin, maxFanout, restriction);
     }
     else
     {
@@ -1265,7 +1458,7 @@ int main( int argc, char* argv[] )
         for (int localID = 0; localID < searchLimit; localID++)
         {
             int candidate = startTypeOffset + localID;
-            vector<int> result = followMetaPath(candidate, metaPath, hin, maxFanout);
+            vector<int> result = followMetaPath(candidate, metaPath, hin, maxFanout, restriction);
  
             if (!result.empty())
             {
@@ -1367,7 +1560,7 @@ int main( int argc, char* argv[] )
 
     buildDerivedGraph(
         queryNode, metaPathNeighbours, metaPath, hin,
-        derivedNodes, derivedAdjacency, globalToDerived, maxFanout);
+        derivedNodes, derivedAdjacency, globalToDerived, maxFanout, restriction);
 
     auto derivedEnd = chrono::high_resolution_clock::now();
     double derivedSeconds = chrono::duration<double>(derivedEnd - derivedStart).count();
@@ -1411,7 +1604,26 @@ int main( int argc, char* argv[] )
     cout << "\n\nSTAGE 14 - MULTIPLE K-CORE TESTING\n";
     cout << "========================================\n";
 
+    // Core number of the query = the largest k that keeps it.
+    // Any k above this removes the query, so the useful k range
+    // for this query is 1 .. queryCore.
+    vector<int> coreNumbers = computeCoreNumbers(derivedAdjacency);
+    int queryCore = 0;
+    {
+        auto qIt = globalToDerived.find(queryNode);
+        if (qIt != globalToDerived.end()) queryCore = coreNumbers[qIt->second];
+    }
+    cout << "Query core number: " << queryCore
+         << "  (largest k that keeps the query; try k between 1 and "
+         << queryCore << ")\n\n";
+
     vector<int> kValues = {2, 3, 4, 5, 6};
+    for (int pct : {25, 50, 75, 100})
+    {
+        int suggested = max(1, queryCore * pct / 100);
+        kValues.push_back(suggested);
+    }
+    kValues.push_back(queryCore + 1);   // shows the query being removed
     if (find(kValues.begin(), kValues.end(), k) == kValues.end())
         kValues.push_back(k);
     sort(kValues.begin(), kValues.end());
@@ -1508,7 +1720,8 @@ int main( int argc, char* argv[] )
     if (communityIndices.empty())
     {
         cout << "Query node did NOT live after being peeled by k cores.\n";
-        cout << "Final query-centred community is empty.\n";
+    """_summary_
+    """        cout << "Final query-centred community is empty.\n";
     }
     else
     {
@@ -1558,7 +1771,7 @@ int main( int argc, char* argv[] )
                     halfSpec += (i ? "," : "") + tokens[i];
 
                 if (parsePath(halfSpec, startType, halfPath, midType, halfReadable))
-                    queryAttrs = followMetaPath(queryNode, halfPath, hin, maxFanout);
+                    queryAttrs = followMetaPath(queryNode, halfPath, hin, maxFanout, restriction);
             }
 
             auto printAttrs = [&](const vector<int>& ids, int limit)
@@ -1615,7 +1828,7 @@ int main( int argc, char* argv[] )
 
                 if (symmetric && !queryAttrs.empty())
                 {
-                    vector<int> memberAttrs = followMetaPath(globalID, halfPath, hin, maxFanout);
+                    vector<int> memberAttrs = followMetaPath(globalID, halfPath, hin, maxFanout, restriction);
                     vector<int> shared;
                     set_intersection(queryAttrs.begin(), queryAttrs.end(),
                                     memberAttrs.begin(), memberAttrs.end(),
@@ -1901,6 +2114,10 @@ int main( int argc, char* argv[] )
     cout << "  k:            " << k         << endl;
     cout << "  p:            " << p         << endl;
     cout << "  Max Fan-out:  " << (maxFanout ? to_string(maxFanout) : "unlimited") << endl;
+    cout << "  Query nodes:  ";
+    if (restriction) cout << restriction->allowed.size() << " " << restriction->nodeType << " node(s)" << endl;
+    else cout << "none" << endl;
+    cout << "  Query core #: " << queryCore << endl;
  
     cout << "\nDerived Graph:\n";
     cout << "  Nodes:           " << derivedNodes.size()      << endl;
@@ -1916,7 +2133,7 @@ int main( int argc, char* argv[] )
     cout << "\nTotal Program Time: " << totalSeconds << " sec\n";
  
     cout << "\nStatus:\n";
-    cout << "[DONE] Real MAG Dataset\n";
+    cout << "[DONE] Dataset: " << dataRoot << "\n";
     cout << "[DONE] Dynamic Schema Discovery\n";
     cout << "[DONE] struct HIN Data Structure\n";
     cout << "[DONE] Global Node ID Assignment\n";

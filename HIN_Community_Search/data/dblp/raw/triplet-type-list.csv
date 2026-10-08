@@ -1,0 +1,5 @@
+author,affiliated_with,institution
+author,writes,paper
+paper,cites,paper
+paper,has_topic,field_of_study
+paper,published_in,venue
