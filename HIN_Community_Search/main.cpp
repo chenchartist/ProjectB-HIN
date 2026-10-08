@@ -1720,7 +1720,7 @@ int main( int argc, char* argv[] )
     string additionalEndType;
     string additionalReadable;
     bool additionalPathValid = parsePath(
-        additionalSpec, startType, hin, additionalPath,
+        additionalSpec, startType, additionalPath,
         additionalEndType, additionalReadable);
 
     vector<int> additionalNeighbours;
