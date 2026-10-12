@@ -1720,8 +1720,7 @@ int main( int argc, char* argv[] )
     if (communityIndices.empty())
     {
         cout << "Query node did NOT live after being peeled by k cores.\n";
-    """_summary_
-    """        cout << "Final query-centred community is empty.\n";
+        cout << "Final query-centred community is empty.\n";
     }
     else
     {
