@@ -150,6 +150,7 @@ struct HIN
     vector<int> reverseRowPointers;
     vector<int> reverseColumnIndices;
     vector<int> reverseRelationTypeIDs;
+    vector<vector<TypeRange>> reverseTypeOffsetIndex;   // built in Stage 8
 };
 
  
@@ -201,29 +202,74 @@ struct NodeRestriction
     }
 };
 
-vector<int> followMetaPath(
-    int startNode,
-    const vector<MetaPathStep>& path,
-    const HIN& hin,
-    int maxFanout = 0,            // 0 = unlimited
-    const NodeRestriction* restriction = nullptr)
+// =========================================================
+// TYPE_OFFSET_INDEX HELPERS
+// =========================================================
+// Builds, for every node, the (relation, start, end) ranges of its
+// CSR block. Requires each node's block to be grouped by relation.
+void buildTypeOffsetIndex(
+    const vector<int>& rowPointers,
+    const vector<int>& relationTypeIDs,
+    int totalNodes,
+    vector<vector<TypeRange>>& index)
 {
-    vector<int> currentNodes;
-    currentNodes.push_back(startNode);
+    index.assign(totalNodes, {});
+    for (int node = 0; node < totalNodes; node++)
+    {
+        int pos = rowPointers[node];
+        int end = rowPointers[node + 1];
+        while (pos < end)
+        {
+            TypeRange range;
+            range.relationTypeID = relationTypeIDs[pos];
+            range.start = pos;
+            while (pos < end && relationTypeIDs[pos] == range.relationTypeID)
+                pos++;
+            range.end = pos;
+            index[node].push_back(range);
+        }
+    }
+}
 
-    for (size_t s = 0; s < path.size(); s++)
+// Returns the [start, end) block of `node`'s edges with one relation.
+// Jumps straight to the range instead of scanning the whole block.
+// A node has at most a few relation types, so this is effectively O(1).
+inline pair<int, int> relationRange(
+    const vector<vector<TypeRange>>& index, int node, int relationTypeID)
+{
+    for (const TypeRange& r : index[node])
+        if (r.relationTypeID == relationTypeID)
+            return {r.start, r.end};
+    return {0, 0};
+}
+
+// Walks steps [fromStep, toStep) of a meta-path from a set of nodes.
+// Step numbers stay those of the full path, so the hub filter treats
+// every node exactly as a walk from the start node would.
+//   forward step -> hin.typeOffsetIndex + forward CSR (outgoing edges)
+//   reverse step -> hin.reverseTypeOffsetIndex + reverse CSR (incoming)
+vector<int> walkMetaPathSteps(
+    vector<int> currentNodes,
+    const vector<MetaPathStep>& path,
+    size_t fromStep,
+    size_t toStep,
+    const HIN& hin,
+    int maxFanout,
+    const NodeRestriction* restriction)
+{
+    for (size_t s = fromStep; s < toStep && !currentNodes.empty(); s++)
     {
         const MetaPathStep& step = path[s];
-        const vector<int>& rp = step.forward ? hin.rowPointers        : hin.reverseRowPointers;
-        const vector<int>& ci = step.forward ? hin.columnIndices      : hin.reverseColumnIndices;
-        const vector<int>& rt = step.forward ? hin.relationTypeIDs    : hin.reverseRelationTypeIDs;
+        const vector<vector<TypeRange>>& index =
+            step.forward ? hin.typeOffsetIndex : hin.reverseTypeOffsetIndex;
+        const vector<int>& ci =
+            step.forward ? hin.columnIndices : hin.reverseColumnIndices;
 
         unordered_set<int> nextSet;
 
         for (int node : currentNodes)
         {
-            int start = rp[node];
-            int end   = rp[node + 1];
+            pair<int, int> range = relationRange(index, node, step.relationTypeID);
 
             // Hub filter: skip intermediate nodes (not the start node)
             // whose fan-out on this relation exceeds the limit.
@@ -231,29 +277,33 @@ vector<int> followMetaPath(
             // are never filtered as hubs.
             bool chosenQueryNode =
                 restriction && restriction->active() && restriction->inType(node);
-            if (maxFanout > 0 && s > 0 && !chosenQueryNode)
-            {
-                int fanout = 0;
-                for (int i = start; i < end; i++)
-                    if (rt[i] == step.relationTypeID) fanout++;
-                if (fanout > maxFanout)
-                    continue;
-            }
+            if (maxFanout > 0 && s > 0 && !chosenQueryNode &&
+                range.second - range.first > maxFanout)
+                continue;
 
-            for (int i = start; i < end; i++)
-                if (rt[i] == step.relationTypeID)
-                {
-                    // Query restriction: only pass through chosen nodes
-                    if (restriction && restriction->blocks(ci[i]))
-                        continue;
-                    nextSet.insert(ci[i]);
-                }
+            for (int i = range.first; i < range.second; i++)
+            {
+                // Query restriction: only pass through chosen nodes
+                if (restriction && restriction->blocks(ci[i]))
+                    continue;
+                nextSet.insert(ci[i]);
+            }
         }
 
         currentNodes.assign(nextSet.begin(), nextSet.end());
-        if (currentNodes.empty())
-            break;
     }
+    return currentNodes;
+}
+
+vector<int> followMetaPath(
+    int startNode,
+    const vector<MetaPathStep>& path,
+    const HIN& hin,
+    int maxFanout = 0,            // 0 = unlimited
+    const NodeRestriction* restriction = nullptr)
+{
+    vector<int> currentNodes = walkMetaPathSteps(
+        {startNode}, path, 0, path.size(), hin, maxFanout, restriction);
 
     currentNodes.erase(
         remove(currentNodes.begin(), currentNodes.end(), startNode),
@@ -261,6 +311,77 @@ vector<int> followMetaPath(
     sort(currentNodes.begin(), currentNodes.end());
     return currentNodes;
 }
+
+
+// =========================================================
+// CACHED META-PATH NEIGHBOURS
+// =========================================================
+// Building the derived graph needs the meta-path neighbours of every
+// candidate. Walking the full path from each candidate repeats the
+// same work: in APTPA every candidate who writes on a topic walks
+// T -> P -> A for that topic again.
+//
+// The finder splits the path at its middle (A-P-T | T-P-A):
+//   1. first half  from each candidate          -> middle nodes
+//   2. second half from each middle node, ONCE  -> cached end nodes
+// neighbours(v) = union of the cached end nodes of v's middle nodes.
+// The result is identical to followMetaPath(v, ...).
+struct MetaPathNeighbourFinder
+{
+    const vector<MetaPathStep>& path;
+    const HIN& hin;
+    int maxFanout;
+    const NodeRestriction* restriction;
+    size_t split;
+    unordered_map<int, vector<int>> secondHalfCache;
+    long long cacheHits = 0;
+    long long cacheMisses = 0;
+
+    // Stamp array: mark[w] == stamp means w is already in the result,
+    // a cheaper duplicate check than a hash set (one int per node).
+    vector<int> mark;
+    int stamp = 0;
+
+    MetaPathNeighbourFinder(
+        const vector<MetaPathStep>& path_, const HIN& hin_,
+        int maxFanout_, const NodeRestriction* restriction_)
+        : path(path_), hin(hin_), maxFanout(maxFanout_),
+          restriction(restriction_), split(path_.size() / 2),
+          mark(hin_.totalNodes, -1) {}
+
+    const vector<int>& secondHalf(int middleNode)
+    {
+        auto it = secondHalfCache.find(middleNode);
+        if (it != secondHalfCache.end())
+        {
+            cacheHits++;
+            return it->second;
+        }
+        cacheMisses++;
+        vector<int> ends = walkMetaPathSteps(
+            {middleNode}, path, split, path.size(), hin, maxFanout, restriction);
+        return secondHalfCache.emplace(middleNode, move(ends)).first->second;
+    }
+
+    vector<int> neighbours(int startNode)
+    {
+        vector<int> middles = walkMetaPathSteps(
+            {startNode}, path, 0, split, hin, maxFanout, restriction);
+
+        stamp++;
+        mark[startNode] = stamp;            // never return the start node
+        vector<int> out;
+        for (int m : middles)
+            for (int w : secondHalf(m))
+                if (mark[w] != stamp)
+                {
+                    mark[w] = stamp;
+                    out.push_back(w);
+                }
+        sort(out.begin(), out.end());
+        return out;
+    }
+};
 
  
 // ========================================================= 
@@ -279,13 +400,11 @@ vector<int> followMetaPath(
 void buildDerivedGraph(
     int queryNode,
     const vector<int>& queryNeighbours,
-    const vector<MetaPathStep>& metaPath,
-    const HIN& hin,
+    MetaPathNeighbourFinder& finder,
     vector<int>& derivedNodes,
     vector<vector<int>>& derivedAdjacency,
     unordered_map<int, int>& globalToDerived,
-    int maxFanout = 0,
-    const NodeRestriction* restriction = nullptr)
+    const unordered_map<int, vector<int>>* knownNeighbours = nullptr)
 { 
     derivedNodes.clear(); 
     derivedNodes.push_back(queryNode); 
@@ -305,35 +424,48 @@ void buildDerivedGraph(
     for (size_t i = 0; i < derivedNodes.size(); i++) 
         globalToDerived[derivedNodes[i]] = static_cast<int>(i); 
  
-    vector<unordered_set<int>> adjacencySets(derivedNodes.size()); 
+    // Position of each candidate by global ID (-1 = not a candidate)
+    vector<int> indexOf(finder.hin.totalNodes, -1);
+    for (size_t i = 0; i < derivedNodes.size(); i++)
+        indexOf[derivedNodes[i]] = static_cast<int>(i);
+
+    // Edges are appended in both directions, then sorted and
+    // de-duplicated once at the end (faster than hash sets).
+    vector<vector<int>> adjacencyLists(derivedNodes.size()); 
  
     for (size_t i = 0; i < derivedNodes.size(); i++)
     {
         int globalNode = derivedNodes[i];
  
-        vector<int> neighbours = followMetaPath(globalNode, metaPath, hin, maxFanout, restriction);
+        // Meta-path neighbours of this candidate: reuse a list already
+        // found (maximal mode), otherwise use the cached finder.
+        vector<int> neighbours;
+        auto known = knownNeighbours ? knownNeighbours->find(globalNode)
+                                     : unordered_map<int, vector<int>>::const_iterator();
+        if (knownNeighbours && known != knownNeighbours->end())
+            neighbours = known->second;
+        else
+            neighbours = finder.neighbours(globalNode);
  
         for (int globalNeighbour : neighbours)
         {
-            auto it = globalToDerived.find(globalNeighbour);
-            if (it == globalToDerived.end())
+            int neighbourIndex = indexOf[globalNeighbour];
+            if (neighbourIndex < 0 || neighbourIndex == static_cast<int>(i))
                 continue;
  
-            int neighbourIndex = it->second;
-            if (neighbourIndex == static_cast<int>(i))
-                continue;
- 
-            // APA is symmetric — derived graph is undirected
-            adjacencySets[i].insert(neighbourIndex);
-            adjacencySets[neighbourIndex].insert(static_cast<int>(i));
+            // The derived graph is undirected: store both directions
+            adjacencyLists[i].push_back(neighbourIndex);
+            adjacencyLists[neighbourIndex].push_back(static_cast<int>(i));
         }
     } 
  
     derivedAdjacency.assign(derivedNodes.size(), {}); 
-    for (size_t i = 0; i < adjacencySets.size(); i++) 
+    for (size_t i = 0; i < adjacencyLists.size(); i++) 
     { 
-        derivedAdjacency[i].assign(adjacencySets[i].begin(), adjacencySets[i].end()); 
-        sort(derivedAdjacency[i].begin(), derivedAdjacency[i].end()); 
+        vector<int>& list = adjacencyLists[i];
+        sort(list.begin(), list.end());
+        list.erase(unique(list.begin(), list.end()), list.end());
+        derivedAdjacency[i].swap(list);
     } 
 } 
  
@@ -961,29 +1093,8 @@ int main( int argc, char* argv[] )
     }
 
     // Build Type_Offset_Index
-    hin.typeOffsetIndex.resize(hin.totalNodes);
-    for (int node = 0; node < hin.totalNodes; node++)
-    {
-        int start = hin.rowPointers[node];
-        int end   = hin.rowPointers[node + 1];
-        int pos   = start;
- 
-        while (pos < end)
-        {
-            int type      = hin.relationTypeIDs[pos];
-            int typeStart = pos;
- 
-            while (pos < end && hin.relationTypeIDs[pos] == type)
-                pos++;
- 
-            TypeRange range;
-            range.relationTypeID = type;
-            range.start          = typeStart;
-            range.end            = pos;
- 
-            hin.typeOffsetIndex[node].push_back(range);
-        }
-    }
+    buildTypeOffsetIndex(hin.rowPointers, hin.relationTypeIDs,
+                         hin.totalNodes, hin.typeOffsetIndex);
 
     auto csrEnd = chrono::high_resolution_clock::now();
     double csrSeconds = chrono::duration<double>( csrEnd - csrStart).count();
@@ -1044,20 +1155,30 @@ int main( int argc, char* argv[] )
  
     vector<int> cursor = hin.reverseRowPointers;
 
-    for (int source = 0; source < hin.totalNodes; source++)
+    // Fill one relation type at a time, so each node's reverse block
+    // is grouped by relation (needed by reverseTypeOffsetIndex).
+    for (const auto& relationEntry : hin.idToRelationType)
     {
-        for (int i = hin.rowPointers[source];
-             i < hin.rowPointers[source + 1]; i++)
+        int relationID = relationEntry.first;
+        for (int source = 0; source < hin.totalNodes; source++)
         {
-            int target   = hin.columnIndices[i];
-            int position = cursor[target]++;
- 
-            hin.reverseColumnIndices[position]   = source;
-            hin.reverseRelationTypeIDs[position] = hin.relationTypeIDs[i];
+            pair<int, int> range = relationRange(hin.typeOffsetIndex, source, relationID);
+            for (int i = range.first; i < range.second; i++)
+            {
+                int target   = hin.columnIndices[i];
+                int position = cursor[target]++;
+
+                hin.reverseColumnIndices[position]   = source;
+                hin.reverseRelationTypeIDs[position] = relationID;
+            }
         }
     }
 
     vector<int>().swap(cursor);
+
+    // Reverse Type_Offset_Index: typed access for reverse (R) steps
+    buildTypeOffsetIndex(hin.reverseRowPointers, hin.reverseRelationTypeIDs,
+                         hin.totalNodes, hin.reverseTypeOffsetIndex);
  
     auto reverseEnd = chrono::high_resolution_clock::now();
     double reverseSeconds = chrono::duration<double>(reverseEnd - reverseStart).count();
@@ -1161,6 +1282,18 @@ int main( int argc, char* argv[] )
     if (maxFanout < 0)
     {
         cerr << "ERROR: maxFanout must be >= 0 (0 = unlimited).\n";
+        return 1;
+    }
+
+    // 9th argument: which authors become candidates before peeling
+    //   direct  = the query and its direct meta-path neighbours (default)
+    //   maximal = every author linked to the query through a chain of
+    //             meta-path neighbours, so the result is the largest
+    //             connected k-core community that contains the query
+    string candidateMode = (argc > 9) ? argv[9] : "direct";
+    if (candidateMode != "direct" && candidateMode != "maximal")
+    {
+        cerr << "ERROR: candidate mode (9th argument) must be direct or maximal.\n";
         return 1;
     }
 
@@ -1391,6 +1524,13 @@ int main( int argc, char* argv[] )
     cout << "Selected p:      " << p              << endl;
     cout << "Path Spec:       " << pathSpec       << endl;
     cout << "Resolved Path:\n  " << readablePath  << endl;
+    cout << "Candidate Mode:  " << candidateMode
+         << (candidateMode == "maximal"
+                 ? "  (all authors linked to the query through chains of meta-path neighbours)"
+                 : "  (the query and its direct meta-path neighbours)")
+         << endl;
+    cout << "Community rule:  connected, contains the query, every member has >= k\n"
+         << "                 meta-path neighbours inside it, and size >= p\n";
 
     if (restriction)
     {
@@ -1558,9 +1698,48 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
+    MetaPathNeighbourFinder finder(metaPath, hin, maxFanout, restriction);
+
+    // Candidates: direct mode uses the query's meta-path neighbours.
+    // Maximal mode grows them with a BFS over meta-path neighbours,
+    // so authors reachable only through a chain are included.
+    vector<int> candidates = metaPathNeighbours;
+    unordered_map<int, vector<int>> knownNeighbours;
+    if (candidateMode == "maximal")
+    {
+        unordered_set<int> seen = {queryNode};
+        queue<int> frontier;
+        frontier.push(queryNode);
+        candidates.clear();
+        while (!frontier.empty())
+        {
+            int u = frontier.front();
+            frontier.pop();
+            vector<int> neighboursOfU = finder.neighbours(u);
+            for (int w : neighboursOfU)
+            {
+                if (!seen.insert(w).second)
+                    continue;
+                if (seen.size() > maxCandidates + 1)
+                {
+                    cerr << "[ERROR] Maximal candidate set exceeds " << maxCandidates
+                         << " authors.\n        Add query topics or use a smaller maxFanout.\n";
+                    return 1;
+                }
+                candidates.push_back(w);
+                frontier.push(w);
+            }
+            knownNeighbours[u] = move(neighboursOfU);
+        }
+        cout << "Maximal mode: " << metaPathNeighbours.size()
+             << " direct neighbours grew to " << candidates.size()
+             << " linked authors\n";
+    }
+
     buildDerivedGraph(
-        queryNode, metaPathNeighbours, metaPath, hin,
-        derivedNodes, derivedAdjacency, globalToDerived, maxFanout, restriction);
+        queryNode, candidates, finder,
+        derivedNodes, derivedAdjacency, globalToDerived,
+        candidateMode == "maximal" ? &knownNeighbours : nullptr);
 
     auto derivedEnd = chrono::high_resolution_clock::now();
     double derivedSeconds = chrono::duration<double>(derivedEnd - derivedStart).count();
@@ -1574,6 +1753,8 @@ int main( int argc, char* argv[] )
     cout << "Derived Undirected Edges:  " << derivedEdges << endl;
     cout << "Construction Time:         "
          << fixed << setprecision(6) << derivedSeconds << " sec\n";
+    cout << "Cached second-half walks:  " << finder.cacheMisses
+         << " walked once, reused " << finder.cacheHits << " times\n";
  
     cout << "\nDerived Graph Sample:\n";
     for (size_t i = 0; i < derivedNodes.size() && i < 20; i++)
@@ -2008,6 +2189,8 @@ int main( int argc, char* argv[] )
     long long typeRangeCount = 0;
     for (const auto& ranges : hin.typeOffsetIndex)
         typeRangeCount += static_cast<long long>(ranges.size());
+    for (const auto& ranges : hin.reverseTypeOffsetIndex)
+        typeRangeCount += static_cast<long long>(ranges.size());
     long long typeRangeBytes = typeRangeCount * sizeof(TypeRange);
  
     long long derivedNodeBytes = static_cast<long long>(derivedNodes.capacity()) * sizeof(int);
@@ -2117,6 +2300,7 @@ int main( int argc, char* argv[] )
     if (restriction) cout << restriction->allowed.size() << " " << restriction->nodeType << " node(s)" << endl;
     else cout << "none" << endl;
     cout << "  Query core #: " << queryCore << endl;
+    cout << "  Candidates:   " << candidateMode << endl;
  
     cout << "\nDerived Graph:\n";
     cout << "  Nodes:           " << derivedNodes.size()      << endl;
@@ -2137,9 +2321,9 @@ int main( int argc, char* argv[] )
     cout << "[DONE] struct HIN Data Structure\n";
     cout << "[DONE] Global Node ID Assignment\n";
     cout << "[DONE] Forward Modified CSR + Type_Offset_Index\n";
-    cout << "[DONE] Reverse CSR\n";
+    cout << "[DONE] Reverse CSR + Reverse Type_Offset_Index\n";
     cout << "[DONE] Generic Runtime Meta-Path Configuration\n";
-    cout << "[DONE] Query-Centred Derived Graph\n";
+    cout << "[DONE] Query-Centred Derived Graph (cached meta-path walks)\n";
     cout << "[DONE] Multiple K Testing\n";
     cout << "[DONE] Iterative K-Core Peeling\n";
     cout << "[DONE] KP-Core Size Constraint\n";
@@ -2155,6 +2339,7 @@ int main( int argc, char* argv[] )
     cout << "  AIA custom:     ./main.exe author auto 3 affiliated_with:F,affiliated_with:R\n";
     cout << "  KP-Core (p=5):  ./main.exe author auto 2 writes:F,writes:R 5\n";
     cout << "  KP-Core (p=10): ./main.exe author auto 2 writes:F,writes:R 10\n";
+    cout << "  Maximal:        ./main.exe author 1607 187 writes:F,has_topic:F,has_topic:R,writes:R 1 0 data/dblp \"field_of_study:57|1252|563\" maximal\n";
  
     cout << "========================================\n";
     return 0;
