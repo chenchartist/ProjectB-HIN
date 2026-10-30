@@ -1,143 +1,77 @@
-# HIN Community Search System
+# HIN Community Search
 
-This project is a C++ program for finding strong communities in a Heterogeneous Information Network (HIN).
+A C++ program that finds connected research communities using meta-paths and k-core search. It can find authors connected through shared papers, institutions, or research topics, and explain their shared connections.
 
-The dataset contains:
+A k-core community requires every member to have at least `k` connections within the community.
 
-- Authors
-- Papers
-- Institutions
-- Fields of Study
+## Requirements
 
-The relationships include:
+- A compiler supporting C++17, such as g++ or clang++.
+- Git.
+- Around 8 GB RAM recommended for the large OGB-MAG dataset.
+- Python 3.8+ only for the optional topic helper.
 
-- `author --writes--> paper`
-- `author --affiliated_with--> institution`
-- `paper --cites--> paper`
-- `paper --has_topic--> field_of_study`
-
-The program uses meta-path search and k-core community search to find strongly connected groups.
-
-## Dataset Path
-
-The dataset must be placed here:
-
-```text
-HIN_Community_Search/data/mag/raw/
-```
-
-Required files:
-
-```text
-data/mag/raw/num-node-dict.csv
-data/mag/raw/triplet-type-list.csv
-data/mag/raw/relations/.../edge.csv
-```
-
-The dataset is ignored by Git because it is too large.
-
-## Compile
-
-Go to the C++ folder:
+## Download and Build
 
 ```bash
-cd HIN_Community_Search
+git clone https://github.com/chenchartist/ProjectB-HIN.git
+cd ProjectB-HIN/HIN_Community_Search
+g++ -O2 -std=c++17 main.cpp -o main.exe
 ```
 
-Compile the program:
+Run all commands below from `HIN_Community_Search`.
 
-```bash
-g++ main.cpp -o main.exe
-```
+## Datasets
+
+- **DBLP:** Included in `data/dblp/`. Smaller dataset with readable names, suitable for demonstrations.
+- **OGB-MAG:** Download separately and extract into `data/mag/`. Uncompress `.csv.gz` files before running.
+
+Each dataset needs `raw/num-node-dict.csv`, `raw/triplet-type-list.csv`, and `raw/relations/<source>___<relation>___<target>/edge.csv`. Files in `mapping/` provide node labels.
 
 ## Run
 
-Run with default settings:
+On macOS/Linux:
 
 ```bash
-./main.exe
+./main.exe author 1607 2 "writes:F,has_topic:F,has_topic:R,writes:R" 1 0 data/dblp "field_of_study:57|1252|563"
 ```
 
-Run with custom settings:
+On Windows PowerShell, use `.\main.exe` instead of `./main.exe`.
 
-```bash
-./main.exe startType queryNode k metaPath p
-```
+This example searches for an author community through selected research topics.
 
-Meaning:
+### Command Arguments
 
 ```text
-startType = node type to search from
-queryNode = local node ID or auto
-k = minimum degree for k-core
-metaPath = relationship path
-p = minimum community size
+./main.exe startType queryNode k metaPath p maxFanout datasetPath queryNodes
 ```
 
-## Example Commands
+| Argument | Meaning |
+|---|---|
+| `startType` | Starting node type, such as `author` or `paper` |
+| `queryNode` | Local node ID, or `auto` to select a node automatically |
+| `k` | Minimum connections per member within the community |
+| `metaPath` | Relationship sequence; `F` means forward, `R` means reverse |
+| `p` | Minimum community size |
+| `maxFanout` | Filters intermediate nodes with too many connections; `0` means unlimited |
+| `datasetPath` | Dataset folder; defaults to `data/mag` |
+| `queryNodes` | Optional restriction, such as `"field_of_study:57|1252|563"` |
 
-Find author communities through papers:
+### More Examples
 
 ```bash
-./main.exe author auto 2 writes:F,writes:R 1
+# APA: authors connected through shared papers
+./main.exe author auto 2 "writes:F,writes:R" 1 0 data/dblp
+
+# AIA: authors connected through shared institutions
+./main.exe author auto 2 "affiliated_with:F,affiliated_with:R" 1 100 data/dblp
+
+# Optional: list an author's topics before choosing topic IDs
+python3 scripts/author_topics.py 1607 data/dblp
 ```
 
-Find author communities through institutions:
+## Results and Updates
 
-```bash
-./main.exe author auto 2 affiliated_with:F,affiliated_with:R 1
-```
+The output includes community members, available node labels, shared attributes, runtime statistics, and validation checks. A query may return no community if its requirements are too strict.
 
-Find paper communities through citations:
-
-```bash
-./main.exe paper auto 2 cites:F,cites:R 1
-```
-
-Search using a specific author local ID:
-
-```bash
-./main.exe author 10 2 writes:F,writes:R 1
-```
-
-Use a stronger k-core requirement:
-
-```bash
-./main.exe author auto 5 writes:F,writes:R 1
-```
-
-## Meta-Path Examples
-
-APA means:
-
-```text
-Author -> Paper -> Author
-```
-
-In this program, APA is written as:
-
-```text
-writes:F,writes:R
-```
-
-Other useful meta-paths:
-
-```text
-APA: Author -> Paper -> Author
-writes:F,writes:R
-
-AIA: Author -> Institution -> Author
-affiliated_with:F,affiliated_with:R
-
-PCP: Paper -> Paper -> Paper through citations
-cites:F,cites:R
-
-PFP: Paper -> Field of Study -> Paper
-has_topic:F,has_topic:R
-```
-
-## Notes
-
-A k-core community means every node in the final group has at least `k` connections inside the group.
-
-The current main implementation is C++. The Python files are older reference/demo files and are not required to run the main project.
+After updating with `git pull`, rebuild the program using the compile command above.

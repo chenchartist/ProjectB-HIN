@@ -360,7 +360,7 @@ struct MetaPathNeighbourFinder
         cacheMisses++;
         vector<int> ends = walkMetaPathSteps(
             {middleNode}, path, split, path.size(), hin, maxFanout, restriction);
-        return secondHalfCache.emplace(middleNode, move(ends)).first->second;
+        return secondHalfCache.emplace(middleNode, std::move(ends)).first->second;
     }
 
     vector<int> neighbours(int startNode)
@@ -1729,7 +1729,7 @@ int main( int argc, char* argv[] )
                 candidates.push_back(w);
                 frontier.push(w);
             }
-            knownNeighbours[u] = move(neighboursOfU);
+            knownNeighbours[u] = std::move(neighboursOfU);
         }
         cout << "Maximal mode: " << metaPathNeighbours.size()
              << " direct neighbours grew to " << candidates.size()
